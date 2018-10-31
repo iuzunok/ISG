@@ -26,5 +26,12 @@ namespace ISGWebSite.Controllers
 
             return View();
         }
+
+        public ActionResult Deneme()
+        {
+            ViewBag.Message = "Deneme sayfa.";
+
+            return View();
+        }
     }
 }
