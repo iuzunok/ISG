@@ -1,0 +1,64 @@
+﻿@using ISGWebSite.Models
+@model IEnumerable<Personel>
+
+<table class="table borderless">
+    <tbody>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label for="email">Sicil No:</label>
+                    <asp:TextBox class="form-control" ID="txtSicilNo" runat="server"></asp:TextBox>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="email">Ad :</label>
+                    <asp:TextBox class="form-control" ID="txtAd" runat="server"></asp:TextBox>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label for="email">Soyad :</label>
+                    <asp:TextBox class="form-control" ID="txtSoyad" runat="server"></asp:TextBox>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td>
+                <asp:LinkButton ID="lnkAra" runat="server" Text="Ara" CssClass="btn btn-primary" OnClick="lnkAra_Click"></asp:LinkButton>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Sicil No</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@i</td>
+                <td>@Html.DisplayFor(modelItem => item.PersonelKey)</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ad)
+                </td>
+                <td>@Html.DisplayFor(modelItem => item.Soyad)</td>
+            </tr>
+            i++;
+        }
+
+    </tbody>
+</table>
+
