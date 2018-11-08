@@ -1,0 +1,94 @@
+﻿@model List<ISGWebSite.Models.Yetki.Kullanici.KullaniciModel>
+
+@{
+    ViewBag.Title = "Kullanıcı İşlemleri";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Kullanıcı İşlemleri</h2>
+
+<div>
+    @Html.ActionLink("Kullanici Kayıt", "KullaniciKayit", "Kullanici", new { area = "Yetki" }, new { })
+</div>
+
+
+@using (Html.BeginForm("KullaniciAra", "Kullanici", FormMethod.Post))
+{
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <table class="table table-borderless">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="txtKullaniciAd">Kullanıcı Adı :</label>
+                        <input type="text" class="form-control" name="txtKullaniciAd" />
+                        @Html.ValidationMessage("txtKullaniciAd", "*")
+                        @*Html.ValidationMessageFor(c => c.)*@
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="txtAd">Ad :</label>
+                        <input type="text" class="form-control" name="txtAd" />
+                        @Html.ValidationMessage("txtAd", "*")
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="txtSoyad">Soyad :</label>
+                        <input type="text" class="form-control" name="txtSoyad" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="email">Personel Tipi :</label>
+                        <input type="text" class="form-control" name="txtSicilNo" />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td>
+                    <input type="submit" name="Ara" value="Ara" class="btn btn-primary" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+}
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Kullanici Ad</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Kullanıcı Tipi</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int i = 1;
+            if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@i</td>
+                        <td>@Html.DisplayFor(modelItem => item.KullaniciAd)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Ad)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Soyad)</td>
+                        <td>@Html.DisplayFor(modelItem => item.KullaniciTipNoUzunAd)</td>
+                    </tr>
+                    i++;
+                }
+            }
+        }
+    </tbody>
+</table>

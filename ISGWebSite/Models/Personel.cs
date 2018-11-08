@@ -7,7 +7,6 @@ using System.Web;
 
 namespace ISGWebSite.Models
 {
-    [Table("PERSONEL", Schema = "public")]
     public class Personel
     {
         [Key]

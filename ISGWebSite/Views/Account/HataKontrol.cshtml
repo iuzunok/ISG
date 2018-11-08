@@ -1,12 +1,12 @@
 ﻿@model System.Web.Mvc.HandleErrorInfo
 
 @{
-    ViewBag.Title = "Error";
+    ViewBag.Title = "HataKontrol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="text-danger">Sistem Hatası</h1>
+<h1 class="text-danger">Sistem Hatası Hata</h1>
 <h2 class="text-danger">Beklenmedik bir sistem hatası oluştu.</h2>
-
 
 @if (Model != null)
 {
@@ -32,7 +32,9 @@
             @if (Model.Exception.InnerException != null)
             {
                 @Model.Exception.InnerException.ToString()
-            }            
+            }
+
+            @Model.Exception.InnerException.ToString()
         </h3>
         <h2>Source :</h2>
         <h3>

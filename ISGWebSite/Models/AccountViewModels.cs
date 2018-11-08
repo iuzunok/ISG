@@ -49,17 +49,17 @@ namespace ISGWebSite.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
+        [Display(Name = "Kullanıcı Adı")]
         [EmailAddress]
-        public string Email { get; set; }
+        public string KullaniciAd { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
+        [Display(Name = "Şifre")]
+        public string Sifre { get; set; }
 
-        [Display(Name = "Remember me?")]
-        public bool RememberMe { get; set; }
+        [Display(Name = "Kullanıcı adımı hatırla")]
+        public bool KullaniciAdimiHatirla { get; set; }
     }
 
     public class RegisterViewModel

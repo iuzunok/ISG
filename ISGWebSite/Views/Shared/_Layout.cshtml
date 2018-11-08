@@ -17,16 +17,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Argem İSG", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("Argem İSG", "AnaSayfa", "Account", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Ana Sayfa", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Personel", "Personel", "Personel")</li>
-                    <li>@Html.ActionLink("Deneme ", "Deneme", "Home")</li>
-                    <li>@Html.ActionLink("Deneme 2", "Deneme2", "Personel")</li>
+                    <li>@Html.ActionLink("Hata sayfa", "HataKontrol2", "Home", new { area = "" }, new { })</li>
+                    <li>@Html.ActionLink("Kullanici Ara", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { })</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
