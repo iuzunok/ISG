@@ -24,6 +24,11 @@ textarea {
 }
 
 
+img
+{
+    cursor:pointer;
+}
+
 .table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,
@@ -31,4 +36,22 @@ textarea {
 .table-borderless > thead > tr > td,
 .table-borderless > thead > tr > th {
     border: none;
+}
+
+.modal-dialog
+{
+    width:800px;
+    height:600px;
+    max-height:600px;
+}
+
+.modal-header
+{
+    background-color:#0480be;
+}
+
+.modal-body
+{
+    max-height:calc(100vh-200px);
+    overflow:auto;
 }

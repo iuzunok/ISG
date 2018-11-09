@@ -146,8 +146,16 @@ namespace ISGWebSite.Areas.Yetki.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
-            // AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Login", "Account");
+        }
+
+        private IAuthenticationManager AuthenticationManager
+        {
+            get
+            {
+                return HttpContext.GetOwinContext().Authentication;
+            }
         }
 
         #endregion

@@ -230,6 +230,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Resim\Ortak\Detay.png" />
+    <Content Include="Resim\Ortak\Guncelle.png" />
+    <Content Include="Resim\Ortak\PopUp.png" />
+    <Content Include="Resim\Ortak\PopUpTree.png" />
+    <Content Include="Resim\Ortak\Sec.png" />
+    <Content Include="Resim\Ortak\SecSol.png" />
+    <Content Include="Resim\Ortak\Sil.png" />
     <Content Include="Scripts\ai.0.22.9-build00167.js" />
     <Content Include="Scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -242,7 +249,9 @@
     <Content Include="Areas\Yetki\Views\Kullanici\KullaniciAra.cshtml" />
     <Content Include="Areas\Yetki\Views\Kullanici\KullaniciKayit.cshtml" />
     <Content Include="Areas\Yetki\Views\Kullanici\Unauthorised.cshtml" />
+    <Content Include="Areas\Yetki\Views\Kullanici\KullaniciOku.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\Genel.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

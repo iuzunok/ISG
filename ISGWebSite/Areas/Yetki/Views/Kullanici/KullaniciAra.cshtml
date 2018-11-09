@@ -1,16 +1,20 @@
 ﻿@model List<ISGWebSite.Models.Yetki.Kullanici.KullaniciModel>
-
 @{
     ViewBag.Title = "Kullanıcı İşlemleri";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Kullanıcı İşlemleri</h2>
-
-<div>
-    @Html.ActionLink("Kullanici Kayıt", "KullaniciKayit", "Kullanici", new { area = "Yetki" }, new { })
-</div>
-
+<nav class="navbar navbar-default">
+    <ul class="nav navbar-nav">
+        <li>
+            @Html.ActionLink("Yeni Kullanici Kayıt", "KullaniciKayit", "Kullanici", new { area = "Yetki" }, new { @class = "text-white" })
+        </li>
+        <li>&nbsp;&nbsp;&nbsp;</li>
+        <li class="navbar-text">
+            Kullanıcı İşlemleri
+        </li>
+    </ul>
+</nav>
 
 @using (Html.BeginForm("KullaniciAra", "Kullanici", FormMethod.Post))
 {
@@ -24,7 +28,6 @@
                         <label for="txtKullaniciAd">Kullanıcı Adı :</label>
                         <input type="text" class="form-control" name="txtKullaniciAd" />
                         @Html.ValidationMessage("txtKullaniciAd", "*")
-                        @*Html.ValidationMessageFor(c => c.)*@
                     </div>
                 </td>
                 <td>
@@ -44,7 +47,7 @@
             <tr>
                 <td>
                     <div class="form-group">
-                        <label for="email">Personel Tipi :</label>
+                        <label for="email">Kullanıcı Tipi :</label>
                         <input type="text" class="form-control" name="txtSicilNo" />
                     </div>
                 </td>
@@ -58,9 +61,7 @@
             </tr>
         </tbody>
     </table>
-
 }
-
 
 <table class="table">
     <thead>
@@ -70,6 +71,7 @@
             <th>Ad</th>
             <th>Soyad</th>
             <th>Kullanıcı Tipi</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -85,6 +87,11 @@
                         <td>@Html.DisplayFor(modelItem => item.Ad)</td>
                         <td>@Html.DisplayFor(modelItem => item.Soyad)</td>
                         <td>@Html.DisplayFor(modelItem => item.KullaniciTipNoUzunAd)</td>
+                        <td>
+                            <img src="~/Resim/Ortak/Guncelle.png" class="anchorGuncelle" data-id="@item.KullaniciKey" />
+                            <img src="~/Resim/Ortak/Detay.png" class="anchorOku" data-id="@item.KullaniciKey" />
+                            <img src="~/Resim/Ortak/Sil.png" class="anchorOku" data-durum="Sil" data-id="@item.KullaniciKey" />
+                        </td>
                     </tr>
                     i++;
                 }
@@ -92,3 +99,14 @@
         }
     </tbody>
 </table>
+
+
+@section scripts
+{
+    <script>
+        var URLOku = '/Yetki/Kullanici/KullaniciOku';
+        var URLGuncelle = '/Yetki/Kullanici/KullaniciOku';
+                                                                // alert($('[name="Ara"]').length);
+                                                                // $('[name="Ara"]').click();
+    </script>
+}
