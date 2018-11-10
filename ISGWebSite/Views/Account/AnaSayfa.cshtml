@@ -5,24 +5,19 @@
 @{
     if (User != null && User.Identity.IsAuthenticated)
     {
-        <h3>Sayın @User.Identity.Name hoşgeldiniz...</h3>
+        <h4>Sayın @User.Identity.Name hoşgeldiniz...</h4>
     }
     else
     {
-        <h1>User yok</h1>
+        <h4>User yok</h4>
     }
 }
 
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+        <h3>Favoriler</h3>
+        @Html.ActionLink("Kullanıcı İşlemleri", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
     </div>
     <div class="col-md-4">
         <h2>Get more libraries</h2>

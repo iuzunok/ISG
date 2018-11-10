@@ -10,5 +10,6 @@ namespace ISGWebSite
         {
             ConfigureAuth(app);
         }
+
     }
 }

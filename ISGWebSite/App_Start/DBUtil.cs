@@ -6,7 +6,7 @@ namespace VeriTabani
 {
     public class DBUtil
     {
-        static string connstrPersonel = "Server=localhost;Port=5432;User Id=denemeUser1;Password=123ecr45;Database=PERSONEL;";
+        // static string connstrPersonel = "Server=localhost;Port=5432;User Id=denemeUser1;Password=123ecr45;Database=PERSONEL;";
         static string connstrYetki = "Server=localhost;Port=5432;User Id=denemeUser1;Password=123ecr45;Database=ARGEM_YETKI;";
 
         public static DataTable VeriGetirDT(string sSQL)

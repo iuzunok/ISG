@@ -1,7 +1,7 @@
 ﻿@model ISGWebSite.Models.Yetki.Kullanici.KullaniciModel
 
 @{
-    if (Model != null)
+    if (Model != null && Model.IslemDurum!="H")
     {
         <div>
             <dl class="dl-horizontal">
@@ -33,7 +33,7 @@
                     @Html.DisplayFor(model => model.KullaniciTipNoUzunAd)
                 </dd>
 
-                @if (Model.IslemDurum == "Sil")
+                @if (Model.IslemDurum == "D")
                 {
                     <dt></dt>
                     <dd>

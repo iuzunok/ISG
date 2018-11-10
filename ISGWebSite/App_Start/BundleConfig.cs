@@ -25,11 +25,24 @@ namespace ISGWebSite
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/font-awesome.css",
                       "~/Content/site.css"));
+
+
+
 
             bundles.Add(new ScriptBundle("~/bundles/Genel").Include(
                       "~/Scripts/Genel.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-datepicker").Include(
+                     "~/Scripts/bootstrap-datepicker*",
+                     "~/Scripts/locales/bootstrap-datepicker.tr.min.js",
+                     "~/Scripts/jquery.globalize/cultures/ globalize.culture.tr*"
+                     ));
+
+            bundles.Add(new StyleBundle("~/Contents/css").Include(
+                      "~/Contents/bootstrap-datepicker*"
+                      ));
         }
     }
 }

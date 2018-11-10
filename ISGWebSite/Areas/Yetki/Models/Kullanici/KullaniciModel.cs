@@ -13,12 +13,15 @@ namespace ISGWebSite.Models.Yetki.Kullanici
 
         public int KullaniciKey { get; set; }
 
+        [Required]
         [Display(Name = "Ad")]
         public string Ad { get; set; }
 
+        [Required]
         [Display(Name = "Soyad")]
         public string Soyad { get; set; }
 
+        [Required]
         [Display(Name = "Kullanıcı Adı")]
         public string KullaniciAd { get; set; }
 
@@ -26,7 +29,9 @@ namespace ISGWebSite.Models.Yetki.Kullanici
 
         [Display(Name = "Kullanıcı Tipi")]
         public string  KullaniciTipNoUzunAd { get; set; }
+
         public int UKullaniciKey { get; set; }
+
         public DateTime UTar { get; set; }
     }
          

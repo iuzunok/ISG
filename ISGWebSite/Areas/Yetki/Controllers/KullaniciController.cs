@@ -7,9 +7,7 @@ using System.Web.Mvc;
 using VeriTabani;
 
 namespace ISGWebSite.Areas.Yetki.Controllers
-{
-    [Authorize]
-
+{    
     public class KullaniciController : BaseController
     {
         // GET: Yetki/Kullanici
@@ -18,21 +16,85 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             return View();
         }
 
+        [HttpGet]
+        [OutputCache(Duration = 0)]
+        public ActionResult KullaniciKayit(string Durum, string Key)
+        {
+            KullaniciModel oKullaniciModel = new KullaniciModel()
+            {
+                IslemDurum = "H"
+            };
+
+            if (string.IsNullOrEmpty(Durum) && string.IsNullOrEmpty(Key))
+            {
+                return PartialView(oKullaniciModel);
+            }
+            else if (Durum == "I")
+            {
+                oKullaniciModel = new KullaniciModel()
+                {
+                    IslemDurum = "I",
+                    KullaniciKey = 0,
+                    KullaniciAd = "",
+                    Ad = "",
+                    Soyad = "",
+                    KullaniciTipNo = 0,
+                    KullaniciTipNoUzunAd = ""
+                    // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
+                    // UTar = Convert.ToDateTime(dr["UTar"])
+                };
+                return PartialView("KullaniciKayit", oKullaniciModel);
+            }
+            else if (string.IsNullOrEmpty(Key))
+            {
+            }
+            else
+            {
+                string sSQL = "SELECT * FROM public.\"KULLANICI\"";
+                sSQL += " where \"KullaniciKey\" = " + Key;
+                DataSet ds = DBUtil.VeriGetirDS(sSQL);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataRow dr = ds.Tables[0].Rows[0];
+                    int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
+                    oKullaniciModel = new KullaniciModel()
+                    {
+                        IslemDurum = "U",
+                        KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
+                        KullaniciAd = dr["KullaniciAd"].ToString(),
+                        Ad = dr["Ad"].ToString(),
+                        Soyad = dr["Soyad"].ToString(),
+                        KullaniciTipNo = KullaniciTipNo,
+                        KullaniciTipNoUzunAd = UzunAdBul(KullaniciTipNo)
+                        // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
+                        // UTar = Convert.ToDateTime(dr["UTar"])
+                    };
+                    return PartialView("KullaniciKayit", oKullaniciModel);
+                }
+            }
+
+            return PartialView(oKullaniciModel);
+        }
+
         public ActionResult KullaniciKayit(FormCollection formCollection)
         {
             if (ModelState.IsValid)
             {
-                List<KullaniciModel> aryKullaniciModel = new List<KullaniciModel>();
-                return View(aryKullaniciModel);
+                KullaniciModel oKullaniciModel = new KullaniciModel();
+
+                string KullaniciAd = formCollection["KullaniciAd"];
+                string Ad = formCollection["Ad"];
+                string Soyad = formCollection["Soyad"];
+                if (string.IsNullOrEmpty(KullaniciAd))
+                {
+                    ModelState.AddModelError("", "Kullanıcı adını giriniz");
+                    return View(oKullaniciModel);
+                }
+
+                return View(oKullaniciModel);
             }
             else
                 return HttpNotFound("1111");
-        }
-
-        public ActionResult KullaniciKayit()
-        {
-            List<KullaniciModel> aryKullaniciModel = new List<KullaniciModel>();
-            return View(aryKullaniciModel);
         }
 
         public ActionResult KullaniciAra(FormCollection formCollection)
@@ -83,15 +145,19 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             }
             return View("sdsdfds");
         }
-
-
+        
 
         [HttpGet]
         public PartialViewResult KullaniciOku(string Durum, string Key)
         {
+            KullaniciModel oKullaniciModel = new KullaniciModel()
+            {
+                IslemDurum = "H"
+            };
+
             if (string.IsNullOrEmpty(Key))
             {
-                return PartialView();
+                return PartialView(oKullaniciModel);
             }
             else
             {
@@ -102,7 +168,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                 {
                     DataRow dr = ds.Tables[0].Rows[0];
                     int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
-                    KullaniciModel oKullaniciModel = new KullaniciModel()
+                    oKullaniciModel = new KullaniciModel()
                     {
                         IslemDurum = Durum,
                         KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
@@ -118,11 +184,9 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                 }
             }
 
-            return PartialView();
+            return PartialView(oKullaniciModel);
         }
-
-
-
+               
 
         private string UzunAdBul(int LookNo)
         {

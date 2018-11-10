@@ -5,13 +5,16 @@
     {
         @Html.AntiForgeryToken()
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="javascript:document.getElementById('logoutForm').submit()">Çıkış</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="/Account/AnaSayfa">
+                    <span class="fa fa-home" style="padding-right:5px"></span>Ana Sayfa
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">
+                    <span class="fa fa-sign-out" style="padding-right:5px"></span>Çıkış
+                </a>
+            </li>
         </ul>
     }
-}
-else
-{
-    <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Giriş", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-    </ul>
 }

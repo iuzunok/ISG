@@ -1,6 +1,6 @@
 ﻿body {
-    padding-top: 50px;
-    padding-bottom: 20px;
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -24,34 +24,83 @@ textarea {
 }
 
 
-img
-{
-    cursor:pointer;
+img {
+    cursor: pointer;
 }
 
-.table-borderless > tbody > tr > td,
+a {
+    color: white;
+    text-decoration: none;
+}
+    a:hover {
+        color: black;
+        text-decoration: none;
+    }
+
+.LinkKirmizi a {
+    color: red;
+    text-decoration: none;
+}
+    .LinkKirmizi a:hover {
+        color: #ac0000;
+        text-decoration: none;
+    }
+
+
+/*.table-borderless > tbody > tr > td,
 .table-borderless > tbody > tr > th,
 .table-borderless > tfoot > tr > td,
 .table-borderless > tfoot > tr > th,
 .table-borderless > thead > tr > td,
 .table-borderless > thead > tr > th {
     border: none;
+}*/
+
+
+
+
+
+.modal-dialog {
+    /*left:50px;*/
+    max-width: 900px;
 }
 
-.modal-dialog
-{
-    width:800px;
-    height:600px;
-    max-height:600px;
+.modal-content {
+    left: 10px;
+    width: 900px;
+    height: 600px;
+    max-height: 600px;
 }
 
-.modal-header
-{
-    background-color:#0480be;
+
+/*.modal-content {
+    max-height: calc(100vh-200px);
+    overflow: auto;
 }
 
-.modal-body
-{
-    max-height:calc(100vh-200px);
-    overflow:auto;
+.modal-header {
+    background-color: #0480be;
+}
+
+
+*/
+
+
+
+.nav > li > a:hover {
+    background-color: #808080;
+}
+
+
+
+.SayfaBaslik {
+    background: #ff6600;
+    background: -moz-linear-gradient(top, #ff6600 0%, #ff6600 100%);
+    background: -webkit-linear-gradient(top, #ff6600 0%,#ff6600 100%);
+    background: linear-gradient(to bottom, #ff6600 0%,#ff6600 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff6600', endColorstr='#ff6600',GradientType=0 );
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }

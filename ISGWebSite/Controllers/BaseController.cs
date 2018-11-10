@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace ISGWebSite.Controllers
 {
+    [AttributeRolKontrol(Roles = "LoginOlan")]
     [HandleError()]
     public class BaseController : Controller
     {
@@ -19,6 +20,15 @@ namespace ISGWebSite.Controllers
             //filterContext.ExceptionHandled = true;
         }
 
-       
+        protected override void OnResultExecuting(ResultExecutingContext filterContext)
+        {
+
+        }
+
+        protected override void OnResultExecuted(ResultExecutedContext filterContext)
+        {
+
+        }
+
     }
 }
