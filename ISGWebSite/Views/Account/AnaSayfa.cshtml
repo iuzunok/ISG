@@ -3,9 +3,9 @@
 }
 
 @{
-    if (User != null && User.Identity.IsAuthenticated)
+    if (Session["OpKullaniciAd"] != null && Session["OpKullaniciSoyad"] != null)
     {
-        <h4>Sayın @User.Identity.Name hoşgeldiniz...</h4>
+        <h4>Sayın @Session["OpKullaniciAd"].ToString() @Session["OpKullaniciSoyad"].ToString() hoşgeldiniz...</h4>
     }
     else
     {

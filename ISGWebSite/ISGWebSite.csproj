@@ -201,18 +201,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_GlobalResources\Messages.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Messages.resx</DependentUpon>
+    </Compile>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\DBUtil.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Areas\Personel\PersonelAreaRegistration.cs" />
     <Compile Include="Areas\Yetki\Controllers\KullaniciController.cs" />
-    <Compile Include="Areas\Yetki\CustomAuthentication\CustomAuthorizeAttribute.cs" />
-    <Compile Include="Areas\Yetki\CustomAuthentication\CustomMembership.cs" />
-    <Compile Include="Areas\Yetki\CustomAuthentication\CustomMembershipUser.cs" />
-    <Compile Include="Areas\Yetki\CustomAuthentication\CustomPrincipal.cs" />
-    <Compile Include="Areas\Yetki\CustomAuthentication\CustomRole.cs" />
     <Compile Include="Areas\Yetki\Models\Kullanici\KullaniciModel.cs" />
     <Compile Include="Areas\Yetki\YetkiAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -224,6 +223,11 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Personel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -775,9 +779,10 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Shared\_Bos.cshtml" />
+    <Content Include="Views\Shared\_LayoutPopUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Code\" />
+    <Folder Include="AppCode\" />
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Personel\Controllers\" />
     <Folder Include="Areas\Personel\Models\" />
@@ -792,6 +797,18 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\Messages.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>Messages.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

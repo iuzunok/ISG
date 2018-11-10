@@ -1,7 +1,11 @@
 ﻿@model ISGWebSite.Models.Yetki.Kullanici.KullaniciModel
 
 @{
-    if (Model != null && Model.IslemDurum!="H")
+    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
+}
+
+@{
+    if (Model != null && Model.IslemDurum != "H")
     {
         <div>
             <dl class="dl-horizontal">
@@ -40,6 +44,7 @@
                         <button class="btn btn-danger">
                             @Html.ActionLink("Sil", "KullaniciSil", "Kullanici", new { area = "Yetki" }, new { @class = "text-white" })
                         </button>
+                        @Html.ActionLink("Sil", "KullaniciSil", "Kullanici", new { area = "Yetki" }, new { @class = "text-white" })
                     </dd>
                 }
 

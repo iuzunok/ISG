@@ -37,7 +37,7 @@ namespace ISGWebSite
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-datepicker").Include(
                      "~/Scripts/bootstrap-datepicker*",
                      "~/Scripts/locales/bootstrap-datepicker.tr.min.js",
-                     "~/Scripts/jquery.globalize/cultures/ globalize.culture.tr*"
+                     "~/Scripts/jquery.globalize/cultures/globalize.culture.tr*"
                      ));
 
             bundles.Add(new StyleBundle("~/Contents/css").Include(

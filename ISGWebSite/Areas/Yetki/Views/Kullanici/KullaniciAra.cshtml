@@ -83,9 +83,9 @@
                         <td>@Html.DisplayFor(modelItem => item.Soyad)</td>
                         <td>@Html.DisplayFor(modelItem => item.KullaniciTipNoUzunAd)</td>
                         <td>
-                            <img src="~/Resim/Ortak/Guncelle.png" class="anchorGuncelle" data-durum="U" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Güncelle"/>
-                            <img src="~/Resim/Ortak/Detay.png" class="anchorOku" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Oku"/>
-                            <img src="~/Resim/Ortak/Sil.png" class="anchorOku" data-durum="D" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Sil"/>
+                            <img src="~/Resim/Ortak/Guncelle.png" class="anchorGuncelle" data-durum="U" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Güncelle" />
+                            <img src="~/Resim/Ortak/Detay.png" class="anchorOku" data-durum="O" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Oku" />
+                            <img src="~/Resim/Ortak/Sil.png" class="anchorOku" data-durum="D" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Sil" />
                         </td>
                     </tr>
                     i++;
@@ -114,7 +114,6 @@
         </li>
     </ul>
 </nav>
-
 
 @section scripts
 {

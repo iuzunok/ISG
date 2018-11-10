@@ -72,5 +72,34 @@ namespace VeriTabani
         }
 
 
+        public static string VeriKaydet(string sSQL)
+        {
+            try
+            {
+                NpgsqlConnection conn = new NpgsqlConnection(connstrYetki);
+                conn.Open();
+
+                NpgsqlCommand query = new NpgsqlCommand(sSQL, conn);
+                // query.Parameters.Add(new NpgsqlParameter("nombre", NpgsqlDbType.Varchar));
+                // query.Parameters.Add(new NpgsqlParameter("capital", NpgsqlDbType.Varchar));
+                query.Prepare();
+                // query.Parameters[0].Value = this.textBox1.Text;
+                // query.Parameters[1].Value = this.textBox2.Text;
+                Object res = query.ExecuteScalar();
+                conn.Close();
+
+                if (res != null)
+                    return res.ToString();
+                else
+                    return "0";
+            }
+            catch (Exception msg)
+            {
+                // something went wrong, and you wanna know why                
+                throw new Exception(msg.ToString());
+            }
+        }
+
+
     }
 }

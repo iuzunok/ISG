@@ -7,14 +7,14 @@ using System.Web.Mvc;
 using VeriTabani;
 
 namespace ISGWebSite.Areas.Yetki.Controllers
-{    
+{
     public class KullaniciController : BaseController
     {
-        // GET: Yetki/Kullanici
-        public ActionResult Index()
-        {
-            return View();
-        }
+        //// GET: Yetki/Kullanici
+        //public ActionResult Index()
+        //{
+        //    return View();
+        //}
 
         [HttpGet]
         [OutputCache(Duration = 0)]
@@ -50,8 +50,8 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             }
             else
             {
-                string sSQL = "SELECT * FROM public.\"KULLANICI\"";
-                sSQL += " where \"KullaniciKey\" = " + Key;
+                string sSQL = "SELECT * FROM public.\"KULLANICI\" ";
+                sSQL += "where \"KullaniciKey\" = " + Key;
                 DataSet ds = DBUtil.VeriGetirDS(sSQL);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
@@ -82,16 +82,62 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             {
                 KullaniciModel oKullaniciModel = new KullaniciModel();
 
+                string KullaniciKey = formCollection["KullaniciKey"];
                 string KullaniciAd = formCollection["KullaniciAd"];
                 string Ad = formCollection["Ad"];
                 string Soyad = formCollection["Soyad"];
-                if (string.IsNullOrEmpty(KullaniciAd))
+
+                if (string.IsNullOrEmpty(KullaniciKey))
+                {
+                    ModelState.AddModelError("", "Kullanıcı bilgisine ukaşılamadı");
+                    return PartialView("KullaniciKayit", oKullaniciModel);
+                }
+                else if (string.IsNullOrEmpty(KullaniciAd))
                 {
                     ModelState.AddModelError("", "Kullanıcı adını giriniz");
-                    return View(oKullaniciModel);
+                    return PartialView("KullaniciKayit", oKullaniciModel);
+                }
+                else if (string.IsNullOrEmpty(Ad))
+                {
+                    ModelState.AddModelError("", "Adı giriniz");
+                    return PartialView("KullaniciKayit", oKullaniciModel);
+                }
+                else if (string.IsNullOrEmpty(Soyad))
+                {
+                    ModelState.AddModelError("", "Soyadı giriniz");
+                    return PartialView("KullaniciKayit", oKullaniciModel);
                 }
 
-                return View(oKullaniciModel);
+                if (KullaniciKey == "0")
+                {
+                    string sSQL =
+                        "insert into public.\"KULLANICI\" " +
+                        "       (\"KullaniciAd\", \"Ad\", \"Soyad\", \"KullaniciTipNo\", \"AktifPasifTipNo\", \"Sifre\", \"UKullaniciKey\", \"UTar\") " +
+                        "values ('" + KullaniciAd + "','" + Ad + "','" + Soyad + "', 1, 1, '123', 1, CURRENT_DATE) " +
+                        "returning \"KullaniciKey\" ";
+                    KullaniciKey = DBUtil.VeriKaydet(sSQL);
+                    if (KullaniciKey != "0")
+                    {
+                        return RedirectToAction("KullaniciOku", "Kullanici", new { area = "Yetki", Durum = "O", Key = KullaniciKey });
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "Veri kaydedilemedi");
+                        return PartialView("KullaniciKayit", oKullaniciModel);
+                    }
+                }
+                else
+                {
+                    string sSQL =
+                        "update public.\"KULLANICI\" " +
+                        "set    \"KullaniciAd\" = '" + KullaniciAd + "', " +
+                        "       \"Ad\" = '" + Ad + "', " +
+                        "       \"Soyad\"='" + Soyad + "' ";
+                    sSQL += " where \"KullaniciKey\" = " + KullaniciKey;
+                    DBUtil.VeriKaydet(sSQL);
+
+                    return RedirectToAction("KullaniciOku", "Kullanici", new { area = "Yetki", Durum = "O", Key = KullaniciKey });
+                }
             }
             else
                 return HttpNotFound("1111");
@@ -145,7 +191,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             }
             return View("sdsdfds");
         }
-        
+
 
         [HttpGet]
         public PartialViewResult KullaniciOku(string Durum, string Key)
@@ -186,7 +232,48 @@ namespace ISGWebSite.Areas.Yetki.Controllers
 
             return PartialView(oKullaniciModel);
         }
-               
+
+
+        [HttpGet]
+        public PartialViewResult KullaniciSil(string Durum, string Key)
+        {
+            KullaniciModel oKullaniciModel = new KullaniciModel()
+            {
+                IslemDurum = "H"
+            };
+
+            if (string.IsNullOrEmpty(Key))
+            {
+                return PartialView(oKullaniciModel);
+            }
+            else
+            {
+                string sSQL = "SELECT * FROM public.\"KULLANICI\"";
+                sSQL += " where \"KullaniciKey\" = " + Key;
+                DataSet ds = DBUtil.VeriGetirDS(sSQL);
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    DataRow dr = ds.Tables[0].Rows[0];
+                    int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
+                    oKullaniciModel = new KullaniciModel()
+                    {
+                        IslemDurum = Durum,
+                        KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
+                        KullaniciAd = dr["KullaniciAd"].ToString(),
+                        Ad = dr["Ad"].ToString(),
+                        Soyad = dr["Soyad"].ToString(),
+                        KullaniciTipNo = KullaniciTipNo,
+                        KullaniciTipNoUzunAd = UzunAdBul(KullaniciTipNo)
+                        // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
+                        // UTar = Convert.ToDateTime(dr["UTar"])
+                    };
+                    return PartialView("KullaniciOku", oKullaniciModel);
+                }
+            }
+
+            return PartialView(oKullaniciModel);
+        }
+        
 
         private string UzunAdBul(int LookNo)
         {

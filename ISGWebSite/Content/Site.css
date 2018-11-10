@@ -47,29 +47,16 @@ a {
     }
 
 
-/*.table-borderless > tbody > tr > td,
-.table-borderless > tbody > tr > th,
-.table-borderless > tfoot > tr > td,
-.table-borderless > tfoot > tr > th,
-.table-borderless > thead > tr > td,
-.table-borderless > thead > tr > th {
-    border: none;
-}*/
-
-
-
-
 
 .modal-dialog {
-    /*left:50px;*/
     max-width: 900px;
 }
 
 .modal-content {
     left: 10px;
     width: 900px;
-    height: 600px;
-    max-height: 600px;
+    height: 500px;
+    max-height: 500px;
 }
 
 
