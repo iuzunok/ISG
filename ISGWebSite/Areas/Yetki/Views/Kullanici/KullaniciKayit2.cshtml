@@ -1,0 +1,82 @@
+﻿@*
+    @model ISGWebSite.Models.Yetki.Kullanici.KullaniciModelKayit
+    @{
+        if (Model == null || Model.IslemDurum == "H")
+        {
+            <div ng-show="HataVar" class="alert alert-danger">
+                @Html.DisplayFor(model => model.IslemAciklama)
+            </div>
+        }
+        else
+        {*@
+<form name="Login" ng-submit="KullaniciKaydet()" novalidate role="form">
+    <table class="table table-borderless table-sm">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="KullaniciAd">Kullanıcı Adı :</label>
+                        <input type="text" name="KullaniciAd" value="@Model.KullaniciAd" ng-model="KullaniciModelKayit.KullaniciAd"
+                               class="form-control" required autofocus />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="KullaniciAd">Adı :</label>
+                        <input type="text" name="Ad" value="@Model.Ad" ng-model="KullaniciModelKayit.Ad"
+                               class="form-control" required />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="KullaniciAd">Soyad :</label>
+                        <input type="text" name="Soyad" value="@Model.Soyad" ng-model="KullaniciModelKayit.Soyad"
+                               class="form-control" required />
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label for="ddlKullaniciTipNo">Tipi :</label>
+                        <select name="ddlKullaniciTipNo" ng-model="KullaniciModelKayit.KullaniciTipNo" class="form-control">
+                            @*{
+                                    foreach (var oLookModelDetay in Model.KullaniciTipNolar)
+                                    {
+                                        string Selected = "";
+                                        if (oLookModelDetay.LookNo == Model.KullaniciTipNo)
+                                        {
+                                            Selected = " selected=\"selected\"";
+                                        }
+                                        <option value="@oLookModelDetay.LookNo" @Selected>@oLookModelDetay.UzunAd</option>
+                                    }
+                                }*@
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label for="ddlAktifPasifTipNo">Durumu :</label>
+                        <select name="ddlAktifPasifTipNo" ng-model="KullaniciModelKayit.AktifPasifTipNo" class="form-control">
+                            @*{
+                                    foreach (var oLookModelDetay in Model.AktifPasifTipNolar)
+                                    {
+                                        string Selected = "";
+                                        if (oLookModelDetay.LookNo == Model.AktifPasifTipNo)
+                                        {
+                                            Selected = " selected=\"selected\"";
+                                        }
+                                        <option value="@oLookModelDetay.LookNo" @Selected>@oLookModelDetay.UzunAd</option>
+                                    }
+                                }*@
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+@*}
+    }*@

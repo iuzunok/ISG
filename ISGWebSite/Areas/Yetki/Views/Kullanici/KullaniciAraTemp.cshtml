@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.2.4.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body ng-app="app" ng-controller="ctrl" class="container">
+    @{
+        ViewBag.Title = "KullaniciAraTemp";
+    }
+
+    <h1>$uibModal example</h1>
+    <button class="btn btn-primary" type="button" ng-click="OpenModalPopUp('1', 'Ali')">Open modal</button>
+
+    <div>Selection from a modal: {{selected}}</div>
+
+    <script>
+
+        angular.module('app', ['ui.bootstrap'])
+            .controller('ctrl', function ($scope, $uibModal)
+            {
+                'use strict';
+                $scope.OpenModalPopUp = function (id, name)
+                {
+                    var uibModalInstance = $uibModal.open({
+                        templateUrl: '/Yetki/Kullanici/KullaniciAraTempTemp',
+                        size: 'sm',
+                        controller: PopUpController,
+                        resolve: {
+                            name: function () { return name; },
+                            id: function () { return id; }
+                        }
+                    });
+
+                    uibModalInstance.result.then(function (data)
+                    {
+                        // debugger;
+                        console.log('user clicked ok', data);
+                        if (data.doDelete)
+                            alert('Sil');
+                        else
+                            alert('Silme');
+                    }, function ()
+                        {
+                            console.log('Modal dismissed at: ' + new Date());
+                        });
+                };
+            });
+
+        var PopUpController = function ($scope, $uibModalInstance, name, id)
+        {
+            $scope.name = name;
+            $scope.id = id;
+            $scope.PopUpOkButonu = function ()
+            {
+                // debugger;
+                // this is the function called when the user clicks the "Yes Delete File" button
+                $uibModalInstance.close({ doDelete: true, id: id }); //this gets passed back to
+                // the code that created the popup
+            };
+            $scope.PopUpOkCancel = function ()
+            {
+                // debugger;
+                $uibModalInstance.close({ doDelete: false, id: id });
+            };
+            $scope.PopUpOkCancel1 = function ()
+            {
+                // debugger;
+                $uibModalInstance.dismiss('cancel1');
+            };
+        };
+
+    </script>
+
+</body>
+</html>

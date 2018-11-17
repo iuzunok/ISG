@@ -1,16 +1,10 @@
 ﻿using ISGWebSite.Controllers;
 using ISGWebSite.Models;
-using ISGWebSite.Models.Yetki.Kullanici;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using VeriTabani;
 
 namespace ISGWebSite.Areas.Yetki.Controllers
@@ -24,33 +18,23 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             return View();
         }
 
-        ////
-        //// GET: /Account/Login
-        //[AllowAnonymous]
-        //public ActionResult Login(string returnUrl)
-        //{
-        //    ViewBag.ReturnUrl = returnUrl;
-        //    return View();
-        //}
-
         [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
         }
 
-
+     
         //
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        // public async Task<ActionResult> Login(LoginViewModel loginView, string returnUrl)
-        public ActionResult Login(LoginViewModel oLoginViewModel, string returnUrl)
+        public ActionResult LoginXX(LoginViewModel oLoginViewModel, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                if (string.IsNullOrEmpty(oLoginViewModel.KullaniciAd) || string.IsNullOrEmpty(oLoginViewModel.Sifre))
+                if (string.IsNullOrEmpty(oLoginViewModel.KullaniciAd) || string.IsNullOrEmpty(oLoginViewModel.Parola))
                 {
                     ModelState.AddModelError("", "Kullanıcı adı ve/veya şifre boş");
                     return View(oLoginViewModel);
@@ -61,13 +45,13 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                         "select * " +
                         "from   public.\"KULLANICI\" " +
                         "where  \"KullaniciAd\" = '" + oLoginViewModel.KullaniciAd + "' " +
-                        "       and \"Sifre\" = '" + oLoginViewModel.Sifre + "'";
+                        "       and \"Parola\" = '" + oLoginViewModel.Parola + "'";
                     DataTable dt = DBUtil.VeriGetirDT(sSQL);
                     if (dt != null)
                     {
                         if (dt.Rows.Count > 0)
                         {
-                            if (dt.Rows[0]["AktifPasifTipNo"].ToString() == "1")
+                            if (dt.Rows[0]["AktifPasifTipNo"].ToString() == "100")
                             {
                                 Session["OpKullaniciKey"] = dt.Rows[0]["KullaniciKey"].ToString();
                                 Session["OpKullaniciAd"] = dt.Rows[0]["Ad"].ToString();
@@ -96,7 +80,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                         return View(oLoginViewModel);
                     }
                 }
-                                             
+
                 //// CustomMembership oCustomMembership = new CustomMembership();
                 //DataTable dt = oCustomMembership.ValidateUser(loginView.KullaniciAd, loginView.Sifre, out Sonuc);
                 //if (dt != null)
@@ -316,7 +300,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             }
             return View();
         }
-        
+
         public ActionResult HataKontrol()
         {
             return View();

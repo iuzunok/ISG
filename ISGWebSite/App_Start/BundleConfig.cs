@@ -14,6 +14,12 @@ namespace ISGWebSite
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*"));
 
+            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
+                      "~/Scripts/angular.js"/*,
+                      // "~/Scripts/angular-bootstrap.js",
+                      "~/Scripts/angular-ui/ui-bootstrap-tpls.js"*/
+                      ));
+
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at http://modernizr.com to pick only the tests you need.
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
@@ -33,6 +39,14 @@ namespace ISGWebSite
 
             bundles.Add(new ScriptBundle("~/bundles/Genel").Include(
                       "~/Scripts/Genel.js"));
+
+            bundles.Add(new ScriptBundle("~/ClientSide/AngularVeriGetir").Include(
+                "~/ClientSide/AngularVeriGetir.js"));
+
+            bundles.Add(new ScriptBundle("~/ClientSide/AngularLogin").Include(
+                "~/ClientSide/AngularLogin.js"));
+
+
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-datepicker").Include(
                      "~/Scripts/bootstrap-datepicker*",

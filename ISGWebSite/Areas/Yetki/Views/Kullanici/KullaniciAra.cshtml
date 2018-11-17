@@ -1,5 +1,4 @@
-﻿@model List<ISGWebSite.Models.Yetki.Kullanici.KullaniciModel>
-@{
+﻿@{
     ViewBag.Title = "Kullanıcı İşlemleri";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -13,86 +12,87 @@
     </div>
 </div>
 
-@using (Html.BeginForm("KullaniciAra", "Kullanici", FormMethod.Post))
-{
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+@Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="border">
-
+<div class="border">
+    <form id="kullaniciAra" name="kullaniciAra" ng-submit="KullaniciAra()">
         <table class="table table-borderless table-sm">
             <tbody>
                 <tr>
                     <td>
                         <div class="form-group">
                             <label for="txtKullaniciAd">Kullanıcı Adı :</label>
-                            <input type="text" class="form-control" name="txtKullaniciAd" />
+                            <input type="text" name="txtKullaniciAd" ng-model="KullaniciModelAra.KullaniciAd" class="form-control" />
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
-                            <label for="txtAd">Ad :</label>
-                            <input type="text" class="form-control" name="txtAd" />
+                            <label for="txtAd">Adı :</label>
+                            <input type="text" name="txtAd" ng-model="KullaniciModelAra.Ad" class="form-control" />
                         </div>
                     </td>
                     <td>
                         <div class="form-group">
-                            <label for="txtSoyad">Soyad :</label>
-                            <input type="text" class="form-control" name="txtSoyad" />
+                            <label for="txtSoyad">Soyadı :</label>
+                            <input type="text" name="txtSoyad" ng-model="KullaniciModelAra.Soyad" class="form-control" />
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <div class="form-group">
-                            <label for="ddlKullaniciTipNo">Kullanıcı Tipi :</label>
-                            <select name="ddlKullaniciTipNo" class="form-control"></select>
+                            <label for="ddlKullaniciTipNo">Tipi :</label>
+                            <select name="ddlKullaniciTipNo" ng-model="KullaniciModelAra.KullaniciTipNo"
+                                    ng-options="T.LookNo as T.UzunAd for T in KullaniciModelAra.KullaniciTipNolar" class="form-control"></select>
                         </div>
                     </td>
-                    <td></td>
                     <td>
-                        <input type="submit" name="Ara" value="Ara" class="btn btn-primary" />
+                        <div class="form-group">
+                            <label for="ddlAktifPasifTipNo">Durumu :</label>
+                            <select name="ddlKullaniciTipNo" ng-model="KullaniciModelAra.AktifPasifTipNo"
+                                    ng-options="T.LookNo as T.UzunAd for T in KullaniciModelAra.AktifPasifTipNoNolar" class="form-control"></select>
+                        </div>
+                    </td>
+                    <td style="vertical-align:middle">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search" style="padding-right:15px"></span>Ara
+                        </button>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>
-}
+    </form>
+</div>
 
 <table class="table table-bordered table-sm">
-    <thead>
-        <tr>
-            <th>S.No</th>
-            <th>Kullanici Ad</th>
-            <th>Ad</th>
-            <th>Soyad</th>
-            <th>Kullanıcı Tipi</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            int i = 1;
-            if (Model != null)
-            {
-                foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@i</td>
-                        <td>@Html.DisplayFor(modelItem => item.KullaniciAd)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Ad)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Soyad)</td>
-                        <td>@Html.DisplayFor(modelItem => item.KullaniciTipNoUzunAd)</td>
-                        <td>
-                            <img src="~/Resim/Ortak/Guncelle.png" class="anchorGuncelle" data-durum="U" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Güncelle" />
-                            <img src="~/Resim/Ortak/Detay.png" class="anchorOku" data-durum="O" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Oku" />
-                            <img src="~/Resim/Ortak/Sil.png" class="anchorOku" data-durum="D" data-id="@item.KullaniciKey" data-sayfaad="Kullanıcı Sil" />
-                        </td>
-                    </tr>
-                    i++;
-                }
-            }
-        }
-    </tbody>
+    <tr>
+        <th style="width:50px">S.No</th>
+        <th>Kullanıcı Adı</th>
+        <th>Adı</th>
+        <th>Soyadı</th>
+        <th>Tipi</th>
+        <th>Durumu</th>
+        <th style="width:25px"></th>
+        <th style="width:25px"></th>
+        <th style="width:25px"></th>
+    </tr>
+    <tr ng-show="KullaniciModelAraSonuc.length" ng-repeat="KM in KullaniciModelAraSonuc" ng-class-even="'even'" ng-class-odd="'odd'">
+        <td>{{$index+1}}</td>
+        <td>{{KM.KullaniciAd}}</td>
+        <td>{{KM.Ad}}</td>
+        <td>{{KM.Soyad}}</td>
+        <td>{{KM.KullaniciTipNoUzunAd}}</td>
+        <td>{{KM.AktifPasifTipNoUzunAd}}</td>
+        <td>
+            <img src="~/Resim/Ortak/Guncelle.png" ng-click="RCGu(KM.KullaniciKey)" />
+        </td>
+        <td>
+            <img src="~/Resim/Ortak/Detay.png" ng-click="RCOk(KM.KullaniciKey)" />
+        </td>
+        <td>
+            <img src="~/Resim/Ortak/Sil.png" ng-click="RCSi(KM.KullaniciKey)" />
+        </td>
+    </tr>
 </table>
 
 <nav aria-label="Page navigation example">
@@ -100,7 +100,7 @@
         <li class="page-item">
             <a class="page-link" href="#" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
+                <span class="sr-only">Önceki</span>
             </a>
         </li>
         <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -109,16 +109,17 @@
         <li class="page-item">
             <a class="page-link" href="#" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
+                <span class="sr-only">Sonraki</span>
             </a>
         </li>
     </ul>
 </nav>
 
 @section scripts
-{
+        {
     <script>
         var URLOku = '/Yetki/Kullanici/KullaniciOku';
         var URLGuncelle = '/Yetki/Kullanici/KullaniciKayit';
     </script>
 }
+

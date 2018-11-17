@@ -1,7 +1,4 @@
-﻿@using ISGWebSite.Models
-@model LoginViewModel
-
-@{
+﻿@{
     ViewBag.Title = "Giriş";
     ViewContext.ClientValidationEnabled = true;
     Layout = "~/Views/Shared/_Login.cshtml";
@@ -12,50 +9,42 @@
         <ul class="list-group">
             <li class="list-group-item active">Sisteme Giriş</li>
             <li class="list-group-item">
-                <section id="loginForm">
-                    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        <hr />
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+                <section id="loginForm" ng-app="AngLoginApp" ng-controller="AngLoginController">
+                    <form name="Login" ng-submit="SistemeGirisYap()" novalidate role="form">
+                        <div ng-show="HataVar" class="alert alert-danger">
+                            {{HataAciklama}}
+                        </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.KullaniciAd, new { @class = "col-md-3 control-label" })
+                            <label for="KullaniciAd">Kullanıcı Adı :</label>
                             <div class="col-md-9">
-                                @Html.TextBoxFor(m => m.KullaniciAd, new { @Value = "iuzunok@argemyazilim.com", @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.KullaniciAd, "", new { @class = "text-danger" })
+                                <input type="text" name="KullaniciAd" ng-model="LoginViewModel.KullaniciAd"
+                                       class="form-control" required autofocus />
                             </div>
                         </div>
                         <div class="form-group">
-                            @Html.LabelFor(m => m.Sifre, new { @class = "col-md-3 control-label" })
+                            <label for="Parola">Parola :</label>
                             <div class="col-md-9">
-                                @Html.PasswordFor(m => m.Sifre, new { @Value = "123", @class = "form-control" })
-                                @Html.ValidationMessageFor(m => m.Sifre, "", new { @class = "text-danger" })
+                                <input type="password" name="Parola" ng-model="LoginViewModel.Parola" class="form-control"
+                                       required autofocus />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-9">
+                                <input type="checkbox" id="cbxKullaniciAdimiHatirla" ng-model="LoginViewModel.KullaniciAdimiHatirla">
+                                <label for="cbxKullaniciAdimiHatirla">Kullanıcı adımı hatırla</label>
                             </div>
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-3 col-md-9">
-                                <div class="checkbox">
-                                    @Html.CheckBoxFor(m => m.KullaniciAdimiHatirla)
-                                    @Html.LabelFor(m => m.KullaniciAdimiHatirla)
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-3 col-md-9">
-                                <button type="submit" class="btn btn-lg btn-primary">
+                                <button class="btn btn-lg btn-primary" ng-disabled="GirisButonKapat">
                                     <span class="fa fa-sign-in" style="padding-right:15px"></span>Giriş
+                                </button>
+                                <button ng-click="SifremiUnuttum()" class="btn btn-lg btn-light">
+                                    <span class="fa fa-question-circle" style="padding-right:15px"></span>Şifremi Unuttum
                                 </button>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-3 col-md-9">
-                                <span class="LinkKirmizi">
-                                    @Html.ActionLink("Şifremi unuttum", "SifremiUnuttum")
-                                </span>
-                            </div>
-                        </div>
-                    }
+                    </form>
                 </section>
             </li>
         </ul>
@@ -76,31 +65,8 @@
     </div>
 </div>
 
-<!--
-<div class="tarih-kontrol">
-    <div class="input-group date">
-        <input type="text" class="form-control">
-        <span class="input-group-addon">
-            <i class="glyphicon glyphicon-th"></i>
-        </span>
-    </div>
-</div>
-    -->
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @*@Scripts.Render("~/bundles/bootstrap-datepicker")
-        @Styles.Render("~/Contents/css")
-    *@
-    <!--
-    < s c r i p t charset="utf-8">
-        // alert(1);
-        // alert($('.tarih-kontrol .input-group.date').length);
-        $('.tarih-kontrol .input-group.date').datepicker({
-            language: "tr",
-            todayHighlight: true,
-            autoclose: true
-        });
-    </script>
-        -->
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/ClientSide/AngularLogin")
 }

@@ -12,12 +12,12 @@ namespace ISGWebSite.Controllers
     {
         protected override void OnException(ExceptionContext filterContext)
         {
-            base.OnException(filterContext);
+            // base.OnException(filterContext);
 
-            //ViewResult view = new ViewResult();
-            //view.ViewName = "Error";
-            //filterContext.Result = view;
-            //filterContext.ExceptionHandled = true;
+            ViewResult view = new ViewResult();
+            view.ViewName = "/Account/HataKontrol";
+            filterContext.Result = view;
+            filterContext.ExceptionHandled = true;
         }
 
         protected override void OnResultExecuting(ResultExecutingContext filterContext)

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
+using static ISGWebSite.Areas.Yetki.Models.Kullanici.LookModel;
 
 namespace ISGWebSite.Models.Yetki.Kullanici
 {
-    public class KullaniciModel
+    public class KullaniciModelKayit
     {
         public string IslemDurum { get; set; }
+        public string IslemAciklama { get; set; }
 
         public int KullaniciKey { get; set; }
 
@@ -25,28 +24,52 @@ namespace ISGWebSite.Models.Yetki.Kullanici
         [Display(Name = "Kullanıcı Adı")]
         public string KullaniciAd { get; set; }
 
+
         public int KullaniciTipNo { get; set; }
 
         [Display(Name = "Kullanıcı Tipi")]
-        public string  KullaniciTipNoUzunAd { get; set; }
+        public string KullaniciTipNoUzunAd { get; set; }
+
+        public List<LookModelDetay> KullaniciTipNolar { get; set; }
+
+
+        public int AktifPasifTipNo { get; set; }
+
+        [Display(Name = "Aktif/Pasif")]
+        public string AktifPasifTipNoUzunAd { get; set; }
+
+        public List<LookModelDetay> AktifPasifTipNolar { get; set; }
+
 
         public int UKullaniciKey { get; set; }
 
         public DateTime UTar { get; set; }
     }
-         
-    public class CustomSerializeModel
+
+    public class KullaniciModelAra
     {
-        public int UserId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public List<string> RoleName { get; set; }
+        // public string IslemDurum { get; set; }
+
+        public int KullaniciKey { get; set; }
+
+        [Display(Name = "Ad")]
+        public string Ad { get; set; }
+
+        [Display(Name = "Soyad")]
+        public string Soyad { get; set; }
+
+        [Display(Name = "Kullanıcı Adı")]
+        public string KullaniciAd { get; set; }
+
+        [Display(Name = "Kullanıcı Tipi")]
+        public int KullaniciTipNo { get; set; }
+
+        public string KullaniciTipNoUzunAd { get; set; }
+
+        [Display(Name = "Aktif/Pasif")]
+        public int AktifPasifTipNo { get; set; }
+
+        public string AktifPasifTipNoUzunAd { get; set; }
     }
-
-
-
-
-
-
 
 }

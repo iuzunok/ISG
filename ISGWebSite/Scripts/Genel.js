@@ -1,4 +1,9 @@
-﻿$(function ()
+﻿window.ModalPopUpKapat = function ()
+{
+    $('#argemModalPopUp').modal('hide');
+};
+
+$(function ()
 {
     $(".anchorOku").click(function ()
     {
@@ -14,8 +19,8 @@
         var $ifmp = $('._armp_Iframe');
         $ifmp.attr('src', URLOku + '?Durum=' + Durum + '&Key=' + id);
 
-        $('#argemModal').modal(options);
-        $('#argemModal').modal('show');
+        $('#argemModalPopUp').modal(options);
+        $('#argemModalPopUp').modal('show');
 
 
         /*// debugger;
@@ -37,8 +42,8 @@
                 // debugger;
                 $('#argemModalContent').html(data);
                 // alert($('#myModalContent').html());
-                $('#argemModal').modal(options);
-                $('#argemModal').modal('show');
+                $('#argemModalPopUp').modal(options);
+                $('#argemModalPopUp').modal('show');
 
             },
             error: function (request, status, error)
@@ -50,6 +55,7 @@
 
     $(".anchorGuncelle").click(function ()
     {
+        alert(1);
         // debugger;
         var $buttonClicked = $(this);
         var SayfaAd = $buttonClicked.attr('data-sayfaad');
@@ -62,8 +68,8 @@
         var $ifmp = $('._armp_Iframe');
         $ifmp.attr('src', URLGuncelle + '?Durum=' + Durum + '&Key=' + id);
 
-        $('#argemModal').modal(options);
-        $('#argemModal').modal('show');
+        $('#argemModalPopUp').modal(options);
+        $('#argemModalPopUp').modal('show');
 
         /*// debugger;
         var $buttonClicked = $(this);
@@ -83,8 +89,8 @@
                 // debugger;
                 $('#argemModalContent').html(data);
                 // alert($('#myModalContent').html());
-                $('#argemModal').modal(options);
-                $('#argemModal').modal('show');
+                $('#argemModalPopUp').modal(options);
+                $('#argemModalPopUp').modal('show');
 
             },
             error: function (request, status, error)
@@ -108,8 +114,8 @@
         var $ifmp = $('._armp_Iframe');
         $ifmp.attr('src', URLGuncelle + '?Durum=' + Durum + '&Key=' + id);
 
-        $('#argemModal').modal(options);
-        $('#argemModal').modal('show');
+        $('#argemModalPopUp').modal(options);
+        $('#argemModalPopUp').modal('show');
 
         // return;
         /*$.ajax({
@@ -122,8 +128,8 @@
             {
                 // debugger;
                 // $('#argemModalContent').html(data);
-                $('#argemModal').modal(options);
-                $('#argemModal').modal('show');
+                $('#argemModalPopUp').modal(options);
+                $('#argemModalPopUp').modal('show');
 
             },
             error: function (request, status, error)
@@ -145,7 +151,7 @@ function fnIframeBoyutAyarla()
     var cssMpIF = '_armp_Iframe';
     // var cssMp = '_armp_Iframe';
 
-    var $mp = $('#argemModal');
+    var $mp = $('#argemModalPopUp');
     var $ifmp = $('.' + cssMpIF);
 
     // var $ifmp = $mp.find('.' + cssIframe);

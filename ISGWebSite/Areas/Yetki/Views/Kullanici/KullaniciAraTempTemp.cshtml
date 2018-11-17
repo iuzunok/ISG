@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "KullaniciAraTempTemp";
+}
+
+
+
+    <div ng-show="HataVar" class="alert alert-danger">
+        {{HataAciklama}}
+    </div>
+
+    <table class="table table-bordered table-sm">
+        <tr>
+            <td style="width:150px">
+                <b>Kullanıcı Adı :</b>
+            </td>
+            <td>
+                {{KullaniciModel.KullaniciAd}}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Adı :</b>
+            </td>
+            <td>{{KullaniciModel.Ad}}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Soyad :</b>
+            </td>
+            <td>{{KullaniciModel.Soyad}}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Tipi :</b>
+            </td>
+            <td>{{KullaniciModel.KullaniciTipNoUzunAd}}</td>
+        </tr>
+        <tr>
+            <td>
+                <b>Durumu :</b>
+            </td>
+            <td>{{KullaniciModel.AktifPasifTipNoUzunAd}}</td>
+        </tr>
+    </table>
+    <table class="table table-bordered table-sm">
+        <tr>
+            <td>
+                <div ng-show="SilmeGoster">
+                    <div class="pull-right">
+                        <button class="btn btn-danger" ng-click="KullaniciSil(KullaniciModel.KullaniciKey)" data-silinenkey="22">
+                            <span class="fa fa-minus-square-o" style="padding-right:15px"></span>Sil
+                        </button>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="PopUpOkButonu()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="PopUpOkCancel()">Cancel</button>
+    <button class="btn btn-warning" type="button" ng-click="PopUpOkCancel1()">Cancel1</button>
+</div>
+
+
+
+

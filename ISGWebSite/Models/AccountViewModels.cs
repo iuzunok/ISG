@@ -50,13 +50,12 @@ namespace ISGWebSite.Models
     {
         [Required]
         [Display(Name = "Kullanıcı Adı")]
-        [EmailAddress]
         public string KullaniciAd { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Şifre")]
-        public string Sifre { get; set; }
+        [Display(Name = "Parola")]
+        public string Parola { get; set; }
 
         [Display(Name = "Kullanıcı adımı hatırla")]
         public bool KullaniciAdimiHatirla { get; set; }
