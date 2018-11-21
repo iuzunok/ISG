@@ -1,47 +1,76 @@
-﻿<form name="Login" ng-submit="KullaniciKaydet()" novalidate role="form">
-    <table class="table table-borderless table-sm">
-        <tbody>
+﻿@{
+    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
+}
+
+<div ng-controller="ngConKullaniciKayit">
+
+    <form name="frmKullaniciKayit" ng-submit="KullaniciKaydet(frmKullaniciKayit.$valid)" novalidate role="form">
+        <input type="hidden" ng-model="KullaniciModelKayit.KullaniciKey" value="{{Key}}" />
+
+        <table style="width:100%; background-color:#2e3b46">
             <tr>
-                <td>
-                    <div class="form-group">
-                        <label for="KullaniciAd">Kullanıcı Adı :</label>
-                        <input type="text" name="KullaniciAd" ng-model="KullaniciModelKayit.KullaniciAd"
-                               class="form-control" required autofocus />
-                    </div>
+                <td style="padding-left: 5px; color:white">Kullanıcı Güncelle</td>
+                <td style="text-align:right;padding-right: 5px">
+                    <button type="submit" class="btn btn-success btnAltKoseYok" aria-label="Kaydet">
+                        <span class="fa fa-save" aria-hidden="true" style="padding-right:15px"></span>Kaydet
+                    </button>
+                    <button type="button" class="btn btn-info btnAltKoseYok" onclick="parent.ModalPopUpKapat();" aria-label="Kapat">
+                        <span class="fa fa-close" aria-hidden="true" style="padding-right:15px"></span>Kapat
+                    </button>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <label for="KullaniciAd">Adı :</label>
-                        <input type="text" name="Ad" ng-model="KullaniciModelKayit.Ad"
-                               class="form-control" required />
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <label for="KullaniciAd">Soyad :</label>
-                        <input type="text" name="Soyad" ng-model="KullaniciModelKayit.Soyad"
-                               class="form-control" required />
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="form-group">
-                        <label for="ddlKullaniciTipNo">Tipi :</label>
-                        <select name="ddlKullaniciTipNo" ng-model="KullaniciModelKayit.KullaniciTipNo"
-                                ng-options="T.LookNo as T.UzunAd for T in KullaniciModelKayit.KullaniciTipNolar" class="form-control"></select>
-                    </div>
-                </td>
-                <td>
-                    <div class="form-group">
-                        <label for="ddlAktifPasifTipNo">Durumu :</label>
-                        <select name="ddlKullaniciTipNo" ng-model="KullaniciModelKayit.AktifPasifTipNo"
-                                ng-options="T.LookNo as T.UzunAd for T in KullaniciModelKayit.KullaniciTipNolar" class="form-control"></select>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+        </table>
+
+        <div ng-show="HataVar" class="alert alert-danger ng-hide">
+            {{HataAciklama}}
+        </div>
+
+        <table class="table table-borderless table-sm">
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="KullaniciAd">Kullanıcı Adı :</label>
+                            <input type="text" name="KullaniciAd" ng-model="KullaniciModelKayit.KullaniciAd"
+                                   class="form-control" required autofocus />
+                        </div>
+                        <span ng-show="frmKullaniciKayit.KullaniciAd.$touched && myForm.myName.$invalid">Zorunlu alan.</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="KullaniciAd">Adı :</label>
+                            <input type="text" name="Ad" ng-model="KullaniciModelKayit.Ad"
+                                   class="form-control" required />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="KullaniciAd">Soyad :</label>
+                            <input type="text" name="Soyad" ng-model="KullaniciModelKayit.Soyad"
+                                   class="form-control" required />
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="form-group">
+                            <label for="ddlKullaniciTipNo">Tipi :</label>
+                            <select name="ddlKullaniciTipNo" ng-model="KullaniciModelKayit.KullaniciTipNo"
+                                    ng-options="T.LookNo as T.UzunAd for T in KullaniciModelKayit.KullaniciTipNolar" class="form-control" required></select>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                            <label for="ddlAktifPasifTipNo">Durumu :</label>
+                            <select name="ddlKullaniciTipNo" ng-model="KullaniciModelKayit.AktifPasifTipNo"
+                                    ng-options="T.LookNo as T.UzunAd for T in KullaniciModelKayit.AktifPasifTipNoNolar" class="form-control" required></select>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </form>
+</div>
+

@@ -9,18 +9,31 @@
             KullaniciAdimiHatirla: 1
         };
 
-        $scope.SistemeGirisYap = function ()
+        $scope.SistemeGirisYap = function (FormValid)
         {
+            if (!FormValid)
+            {
+                $scope.HataVar = true;
+                $scope.HataAciklama = 'Zorunlu alanları giriniz';
+                return;
+            }
+            $scope.HataVar = false;
+            $scope.HataAciklama = '';
+
+            // console.log('login giden form data:');
+            // console.log($scope.LoginViewModel);
             $scope.GirisButonKapat = true;
+
             $http({
                 method: 'Post',
                 url: '/Yetki/Kullanici/SistemeGirisYap',
+                // contentType: 'application/x-www-form-urlencoded; charset-UTF-8',
                 data: $scope.LoginViewModel
             })
                 .then(function (response)
                 {
                     // debugger;
-                    console.log('kullanıcı girişi sonucu success...');
+                    // console.log('kullanıcı girişi sonucu success...');
                     if (response.data == 'OK')
                         window.location.href = '/Account/AnaSayfa';
                     else
@@ -41,8 +54,4 @@
                     $scope.HataAciklama = response.data;
                 });
         };
-
-        // $scope.KullaniciAd = "iuzunok@argemyazilim.com";
-        // $scope.LoginViewModel.Parola = "123";
-        // $scope.ArkaPlanKapat = false;
     });

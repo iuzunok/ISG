@@ -1,12 +1,16 @@
 ﻿body {
     padding-top: 0px;
     padding-bottom: 0px;
+    min-height: 100vh;
+    position: relative;
+    margin: 0;
+    background-color: #f7f7f7;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -22,6 +26,14 @@ select,
 textarea {
     max-width: 280px;
 }
+
+    input.ng-invalid, select.ng-invalid {
+        background-color: red;
+    }
+
+    input.ng-valid, select.ng-valid {
+        background-color: white;
+    }
 
 
 .ArkaPlanGizleGoster {
@@ -52,12 +64,12 @@ img {
     cursor: pointer;
 }
 
-a {
+.MenuBar a {
     color: white;
     text-decoration: none;
 }
 
-    a:hover {
+    .MenuBar a:hover {
         color: black;
         text-decoration: none;
     }
@@ -72,9 +84,55 @@ a {
         text-decoration: none;
     }
 
+.ArkaBeyaz {
+    background-color: #FFFFFF;
+}
+
+.SayfaBaslikAd {
+    background-color: #808080;
+    padding: 3px;
+    color: white;
+}
+
+.SayfaBaslik {
+    background-color: #686868;
+    /*background: -moz-linear-gradient(top, #ff6600 0%, #ff6600 100%);
+    background: -webkit-linear-gradient(top, #ff6600 0%,#ff6600 100%);
+    background: linear-gradient(to bottom, #ff6600 0%,#ff6600 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff6600', endColorstr='#ff6600',GradientType=0 );
+    */ padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
 
 
-.modal-dialog {
+.btnAltKoseYok {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-top: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.nav > li > a:hover {
+    background-color: #808080;
+}
+
+
+
+
+
+/*.modal-dialog {
     max-width: 900px;
 }
 
@@ -85,35 +143,63 @@ a {
     max-height: 500px;
 }
 
-
-/*.modal-content {
-    max-height: calc(100vh-200px);
-    overflow: auto;
-}
-
 .modal-header {
-    background-color: #0480be;
+    padding: 0.5rem !important;
 }
 
 
-*/
+.modal-body {
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+.modal-content {
+    background-color: #428bca;
+    width: 800px;
+}*/
 
 
+.modal-content {
+    background-color: #1a2732;
+}
 
-.nav > li > a:hover {
-    background-color: #808080;
+.modal-body {
+    height: 500px;
+    padding: 0.5rem;
+}
+
+
+footer {
+    /*   position: absolute;
+    bottom: 0;
+     width: 100%;
+ */
+    background-color: #cecece;
 }
 
 
 
-.SayfaBaslik {
-    background: #ff6600;
-    background: -moz-linear-gradient(top, #ff6600 0%, #ff6600 100%);
-    background: -webkit-linear-gradient(top, #ff6600 0%,#ff6600 100%);
-    background: linear-gradient(to bottom, #ff6600 0%,#ff6600 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff6600', endColorstr='#ff6600',GradientType=0 );
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+/*//Copy this css*/
+.navbar {
+}
+
+.navbar-light .navbar-nav .nav-link {
+    color: rgb(64, 64, 64);
+}
+
+.btco-menu li > a {
+    padding: 10px 15px;
+    color: #000;
+}
+
+.btco-menu .active a:focus,
+.btco-menu li a:focus,
+.navbar > .show > a:focus {
+    background: transparent;
+    outline: 0;
+}
+
+
+.dropdown-menu .show > .dropdown-toggle::after {
+    transform: rotate(-90deg);
 }

@@ -1,57 +1,83 @@
 ﻿@model ISGWebSite.Models.Yetki.Kullanici.KullaniciModelKayit
 @{
-    if (Model == null || Model.IslemDurum == "H")
-    {
-        <div ng-show="HataVar" class="alert alert-danger">
-            @Html.DisplayFor(model => model.IslemAciklama)
-        </div>
-    }
-    else
-    {
-        <table class="table table-bordered table-sm">
-            <tr>
-                <td style="width:150px">
-                    <b>Kullanıcı Adı :</b>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.KullaniciAd)
-                </td>
-                <td rowspan="5" style="width:110px">
-                    <img src="/Yetki/Kullanici/KullaniciResimGetir" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Adı :</b>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Ad)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Soyad :</b>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.Soyad)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Tipi :</b>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.KullaniciTipNoUzunAd)
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <b>Durumu :</b>
-                </td>
-                <td>
-                    @Html.DisplayFor(model => model.AktifPasifTipNoUzunAd)
-                </td>
-            </tr>
-        </table>
-    }
+    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
 }
+
+<div ng-controller="ngConOkuma">
+    @{
+        if (Model == null || Model.IslemDurum == "H")
+        {
+            <div ng-show="HataVar" class="alert alert-danger">
+                @Html.DisplayFor(model => model.IslemAciklama)
+            </div>
+        }
+        else
+        {
+            <table style="width:100%; background-color:#2e3b46;">
+                <tr>
+                    <td style="padding-left: 5px; color:white">Kullanıcı Oku</td>
+                    <td style="text-align:right;padding-right: 5px">
+                        @{
+                            if (Model.IslemDurum == "D")
+                            {
+                                <button type="button" class="btn btn-danger btnAltKoseYok" ng-click="RCSil('@Model.KullaniciKey');" aria-label="Sil">
+                                    <span class="fa fa-trash" aria-hidden="true" style="padding-right:15px"></span>Sil
+                                </button>
+                            }
+                            <button type="button" class="btn btn-info btnAltKoseYok" onclick="parent.ModalPopUpKapat();" aria-label="Kapat">
+                                <span class="fa fa-close" aria-hidden="true" style="padding-right:15px"></span>Kapat
+                            </button>
+                        }
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table table-bordered table-sm">
+                <tr>
+                    <td style="width:150px">
+                        <b>Kullanıcı Adı :</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.KullaniciAd)
+                    </td>
+                    <td rowspan="5" style="width:110px">
+                        <img src="/Yetki/Kullanici/KullaniciResimGetir" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Adı :</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Ad)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Soyad :</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.Soyad)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Tipi :</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.KullaniciTipNoUzunAd)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>Durumu :</b>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => model.AktifPasifTipNoUzunAd)
+                    </td>
+                </tr>
+            </table>
+        }
+    }
+
+</div>

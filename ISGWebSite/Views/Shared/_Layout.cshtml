@@ -9,80 +9,94 @@
 </head>
 <body>
     <div ng-app="AngGenelApp" ng-controller="AngGenelController">
+
         <div class="ArkaPlanGizleGoster" ng-show="ArkaPlaniAcikMi">
             <div class="progress ArkaPlanProgress" style="width:400px; height:50px">
                 <div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" style="width: 100%;">
                     <span style="font-size:20px">
-                        Yükleniyor...
+                        İşlem sürüyor...
                     </span>
                 </div>
             </div>
         </div>
 
-        <div class="container">
+        <div class="container body-content">
 
-            <div class="navbar navbar-expand-sm navbar-dark bg-dark" role="navigation">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Standard
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#">Yetkilerim</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Şifre Değiştir</a>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Kullanıcı İşlemleri
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown2">
-                                @Html.ActionLink("Kullanıcı İşlemleri", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Şifre Değiştir</a>
-                            </div>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li>
+                                    @Html.ActionLink("Kullanıcı İşlemleri", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
+                                </li>
+                                <li><a class="dropdown-item" href="#">Rol İşlemleri</a></li>
+                                <li>
+                                    <a class="dropdown-item dropdown-toggle" href="#">Yetki İşlemleri</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Yetki Grup İşlemleri</a></li>
+                                        <li><a class="dropdown-item" href="#">Menu İşlemleri</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Standart
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li>
+                                    <a class="dropdown-item" href="#">Yetkilerim</a>
+                                </li>
+                                <li>
+                                    <div class="dropdown-divider"></div>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">Şifre Değiştir</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item dropdown-toggle" href="#">Sertifikalarım</a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">E-İmza Sertifikalarım</a></li>
+                                        <li><a class="dropdown-item" href="#">Alt Sertifika</a></li>
+                                        <li>
+                                            <a class="dropdown-item dropdown-toggle" href="#">Alt Alt Sertifika</a>
+                                            <ul class="dropdown-menu">
+                                                <li><a class="dropdown-item" href="#">Alt alt sertifika detay1</a></li>
+                                                <li><a class="dropdown-item" href="#">Alt alt sertifika detay2</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                     @Html.Partial("_LoginPartial")
                 </div>
-            </div>
+            </nav>
 
         </div>
 
         <div class="container body-content">
             @RenderBody()
-
-            <hr />
             <footer>
-                <p>&copy; @DateTime.Now.Year - Argem Yazılım ve Danışmanlık Ticaret Ltd.Şti</p>
+                <div style="padding-left:20px; padding-right:20px">
+                    <p>&copy; @DateTime.Now.Year - Argem Yazılım ve Danışmanlık Ticaret Ltd.Şti</p>
+                </div>
             </footer>
         </div>
 
-        <!-- Modal -->
-        <div id="argemModalPopUp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="argemModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+        <div id="argemModalPopUp" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
-                    <div class="modal-header alert-info">
-                        <h5 class="modal-title" id="argemModalLabel"></h5>
-                        <span>
-                            <button type="button" class="btn btn-success tempArgemModalKaydet" style="display:none" aria-label="Kaydet">
-                                <span class="fa fa-save" aria-hidden="true" style="padding-right:15px"></span>Kaydet
-                            </button>
-                            <button type="button" class="btn btn-danger tempArgemModalSil" style="display:none" aria-label="Sil">
-                                <span class="fa fa-trash" aria-hidden="true" style="padding-right:15px"></span>Sil
-                            </button>
-                            <button type="button" class="btn btn-info tempArgemModalKapat" data-dismiss="modal" aria-label="Kapat">
-                                <span class="fa fa-close" aria-hidden="true" style="padding-right:15px"></span>Kapat
-                            </button>
-                        </span>
-                    </div>
                     <div id="argemModalContent" class="modal-body">
+                        <iframe id="arifPopUp" src="" style="width:100%; height:100%" frameborder="0" scrolling="no"></iframe>
                     </div>
                 </div>
             </div>
@@ -95,10 +109,9 @@
     @Scripts.Render("~/bundles/angular")
 
     @Scripts.Render("~/ClientSide/AngularVeriGetir")
-    @Scripts.Render("~/bundles/Genel")
+    @Scripts.Render("~/bundles/JS/Genel")
 
     @RenderSection("scripts", required: false)
-
 
 </body>
 </html>

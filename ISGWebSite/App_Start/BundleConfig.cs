@@ -37,11 +37,14 @@ namespace ISGWebSite
 
 
 
-            bundles.Add(new ScriptBundle("~/bundles/Genel").Include(
-                      "~/Scripts/Genel.js"));
+            bundles.Add(new ScriptBundle("~/bundles/JS/Genel").Include(
+                      "~/JS/Genel/Genel.js"));
 
             bundles.Add(new ScriptBundle("~/ClientSide/AngularVeriGetir").Include(
-                "~/ClientSide/AngularVeriGetir.js"));
+                // "~/ClientSide/AngularVeriGetir.js",
+                "~/ClientSide/AngularVeriGetirIFrmApp.js",
+                "~/ClientSide/AngularVeriGetirIFrm.js"
+                ));
 
             bundles.Add(new ScriptBundle("~/ClientSide/AngularLogin").Include(
                 "~/ClientSide/AngularLogin.js"));

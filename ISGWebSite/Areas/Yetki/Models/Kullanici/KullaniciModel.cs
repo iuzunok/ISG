@@ -5,11 +5,8 @@ using static ISGWebSite.Areas.Yetki.Models.Kullanici.LookModel;
 
 namespace ISGWebSite.Models.Yetki.Kullanici
 {
-    public class KullaniciModelKayit
+    public class KullaniciModelKayit : BaseModel
     {
-        public string IslemDurum { get; set; }
-        public string IslemAciklama { get; set; }
-
         public int KullaniciKey { get; set; }
 
         [Required]
@@ -48,8 +45,6 @@ namespace ISGWebSite.Models.Yetki.Kullanici
 
     public class KullaniciModelAra
     {
-        // public string IslemDurum { get; set; }
-
         public int KullaniciKey { get; set; }
 
         [Display(Name = "Ad")]

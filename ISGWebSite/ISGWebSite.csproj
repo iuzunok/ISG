@@ -224,6 +224,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BaseModel.cs" />
     <Compile Include="Models\Personel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -236,6 +237,9 @@
   <ItemGroup>
     <Content Include="ClientSide\AngularLogin.js" />
     <Content Include="ClientSide\AngularVeriGetir.js" />
+    <Content Include="ClientSide\AngularVeriGetirIFrm.js" />
+    <Content Include="ClientSide\AngularVeriGetirIFrmApp.js" />
+    <Content Include="ClientSide\DirPagination.js" />
     <Content Include="Contents\bootstrap-datepicker.css" />
     <Content Include="Contents\bootstrap-datepicker.min.css" />
     <Content Include="Contents\bootstrap-datepicker.standalone.css" />
@@ -261,6 +265,7 @@
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="JS\Genel\Genel.js" />
     <Content Include="Resim\Ortak\Detay.png" />
     <Content Include="Resim\Ortak\Guncelle.png" />
     <Content Include="Resim\Ortak\PersonelResim.png" />
@@ -336,7 +341,6 @@
     <Content Include="Areas\Yetki\Views\Kullanici\KullaniciKayit.cshtml" />
     <Content Include="Areas\Yetki\Views\Kullanici\KullaniciKayit2.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
-    <Content Include="Scripts\Genel.js" />
     <None Include="Scripts\jquery-3.0.0-vsdoc.js" />
     <Content Include="Scripts\i18n\angular-locale_am-et.js" />
     <Content Include="Scripts\i18n\angular-locale_am.js" />

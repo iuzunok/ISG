@@ -1,19 +1,15 @@
 ﻿@if (Session["OpKullaniciKey"] != null)
 {
-    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
-    {
-        @Html.AntiForgeryToken()
-        <ul class="nav navbar-nav navbar-right">
-            <li class="nav-item">
-                <a class="nav-link" href="/Account/AnaSayfa">
-                    <span class="fa fa-home" style="padding-right:5px"></span>Ana Sayfa
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">
-                    <span class="fa fa-sign-out" style="padding-right:5px"></span>Çıkış
-                </a>
-            </li>
-        </ul>
-    }
+    <ul class="nav navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="/Account/AnaSayfa">
+                <span class="fa fa-home" style="padding-right:5px"></span>Ana Sayfa
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/Account/LogOff">
+                <span class="fa fa-sign-out" style="padding-right:5px"></span>Çıkış
+            </a>
+        </li>
+    </ul>
 }

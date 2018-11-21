@@ -1,7 +1,6 @@
 ﻿@{
     ViewBag.Title = "Ana Sayfa";
 }
-
 @{
     if (Session["OpKullaniciAd"] != null && Session["OpKullaniciSoyad"] != null)
     {
@@ -12,25 +11,25 @@
         <h4>User yok</h4>
     }
 }
+<div ng-controllerXX="ngConAnaSayfa">
+    <div class="row">
+        <div class="col-sm-6">
+            <ul class="list-group ">
+                <li class="list-group-item list active py-1"><h3>Favoriler</h3></li>
+                <li class="list-group-item py-1">
+                    @Html.ActionLink("Kullanıcı İşlemleri angular", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
+                </li>
+                <li class="list-group-item py-1">
+                    @Html.ActionLink("Kullanıcı İşlemleri Mvc", "KullaniciAraMVC", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
+                </li>
 
-
-<div class="row">
-    <div class="col-sm-6">
-        <ul class="list-group ">
-            <li class="list-group-item list active py-1"><h3>Favoriler</h3></li>
-            <li class="list-group-item py-1">
-                @Html.ActionLink("Kullanıcı İşlemleri angular", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
-            </li>
-            <li class="list-group-item py-1">
-                @Html.ActionLink("Kullanıcı İşlemleri Mvc", "KullaniciAraMVC", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
-            </li>
-
-            <li class="list-group-item py-1">
-                @Html.ActionLink("Kullanıcı İşlemleri Temp", "KullaniciAraTemp", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
-            </li>
-        </ul>
-    </div>
-    <div class="col-sm-6">
-        Boş
+                <li class="list-group-item py-1">
+                    @Html.ActionLink("Kullanıcı İşlemleri Temp", "KullaniciAraTemp", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            Boş
+        </div>
     </div>
 </div>

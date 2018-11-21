@@ -6,27 +6,24 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using VeriTabani;
 
 namespace ISGWebSite.Areas.Yetki.Controllers
 {
+    // https://www.youtube.com/watch?v=_r6laMn70FA paging
     public class KullaniciController : BaseController
     {
-        [OutputCache(Duration = 0)]
         public ActionResult KullaniciAra()
         {
             return View();
         }
 
-        [OutputCache(Duration = 0)]
         public ActionResult KullaniciAraTemp()
         {
             return View();
         }
 
-        [OutputCache(Duration = 0)]
         public ActionResult KullaniciAraTempTemp()
         {
             return View();
@@ -83,10 +80,9 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             return View("sdsdfds");
         }
 
-        [OutputCache(Duration = 0)]
         public JsonResult KullaniciAraSonuc(KullaniciModelAra oKullaniciModelAra)
         {
-            System.Threading.Thread.Sleep(100);
+            // System.Threading.Thread.Sleep(2000);
             List<KullaniciModelAra> aryKullaniciModelAra = new List<KullaniciModelAra>();
             if (ModelState.IsValid)
             {
@@ -126,7 +122,9 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                 if (Where != "")
                     sSQL += "where " + Where;
 
-                DataSet ds = DBUtil.VeriGetirDS(sSQL);
+                sSQL += "order by \"Ad\", \"Soyad\" ";
+
+               DataSet ds = DBUtil.VeriGetirDS(sSQL);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
                     int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
@@ -156,7 +154,6 @@ namespace ISGWebSite.Areas.Yetki.Controllers
         }
 
         [HttpGet]
-        [OutputCache(Duration = 0)]
         public ActionResult KullaniciKayit(string Durum, string Key)
         {
             KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit()
@@ -231,7 +228,58 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             return PartialView(oKullaniciModelKayit);
         }
 
-        public ActionResult KullaniciKayit(FormCollection formCollection)
+        [HttpPost]
+        public JsonResult KullaniciKayit(KullaniciModelKayit oKullaniciModelKayit)
+        {
+            int KullaniciKey = oKullaniciModelKayit.KullaniciKey;
+            string KullaniciAd = oKullaniciModelKayit.KullaniciAd;
+            string Ad = oKullaniciModelKayit.Ad;
+            string Soyad = oKullaniciModelKayit.Soyad;
+            int KullaniciTipNo = oKullaniciModelKayit.KullaniciTipNo;
+            int AktifPasifTipNo = oKullaniciModelKayit.AktifPasifTipNo;
+
+            oKullaniciModelKayit.IslemDurum = "H";
+            if (string.IsNullOrEmpty(KullaniciAd))
+                oKullaniciModelKayit.IslemAciklama = "Kullanıcı adı boş olamaz";
+            else if (string.IsNullOrEmpty(Ad))
+                oKullaniciModelKayit.IslemAciklama = "Ad boş olamaz";
+            else if (string.IsNullOrEmpty(Soyad))
+                oKullaniciModelKayit.IslemAciklama = "Soyad boş olamaz";
+            else
+            {
+                if (KullaniciKey == 0)
+                {
+                    string sSQL =
+                        "insert into public.\"KULLANICI\" " +
+                        "       (\"KullaniciAd\", \"Ad\", \"Soyad\", \"KullaniciTipNo\", \"AktifPasifTipNo\", \"Parola\", \"UKullaniciKey\", \"UTar\") " +
+                        "values ('" + KullaniciAd + "','" + Ad + "','" + Soyad + "', " + KullaniciTipNo + ", " + AktifPasifTipNo + ", '123', 1, CURRENT_DATE) " +
+                        "returning \"KullaniciKey\" ";
+                    string SonucKullaniciKey = DBUtil.SorguCalistir(sSQL);
+                    if (SonucKullaniciKey != "0")
+                        oKullaniciModelKayit.IslemDurum = "OK";
+                    else
+                        oKullaniciModelKayit.IslemAciklama = "Veri kaydedilemedi";
+                }
+                else
+                {
+                    string sSQL =
+                        "update public.\"KULLANICI\" " +
+                        "set    \"KullaniciAd\" = '" + KullaniciAd + "', " +
+                        "       \"Ad\" = '" + Ad + "', " +
+                        "       \"Soyad\"='" + Soyad + "', " +
+                        "       \"KullaniciTipNo\"=" + KullaniciTipNo + ", " +
+                        "       \"AktifPasifTipNo\"=" + AktifPasifTipNo + " ";
+                    sSQL += " where \"KullaniciKey\" = " + KullaniciKey;
+                    DBUtil.SorguCalistir(sSQL);
+
+                    oKullaniciModelKayit.IslemDurum = "OK";
+                }
+            }
+
+            return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult KullaniciKayitMVC(FormCollection formCollection)
         {
             if (ModelState.IsValid)
             {
@@ -298,7 +346,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                 return HttpNotFound("1111");
         }
 
-        [OutputCache(Duration = 0)]
+
         public PartialViewResult KullaniciOkuXXX()
         {
             return PartialView();
@@ -351,7 +399,6 @@ namespace ISGWebSite.Areas.Yetki.Controllers
         }
 
         [HttpGet]
-        [OutputCache(Duration = 0)]
         public PartialViewResult KullaniciOku(string Durum, string Key)
         {
             KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit()
@@ -374,6 +421,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                 {
                     DataRow dr = ds.Tables[0].Rows[0];
                     int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
+                    int AktifPasifTipNo = Convert.ToInt32(dr["AktifPasifTipNo"]);
                     oKullaniciModelKayit = new KullaniciModelKayit()
                     {
                         IslemDurum = Durum,
@@ -381,8 +429,13 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                         KullaniciAd = dr["KullaniciAd"].ToString(),
                         Ad = dr["Ad"].ToString(),
                         Soyad = dr["Soyad"].ToString(),
+
                         KullaniciTipNo = KullaniciTipNo,
-                        KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo)
+                        KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo),
+
+                        AktifPasifTipNo = AktifPasifTipNo,
+                        AktifPasifTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, AktifPasifTipNo)
+
                         // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
                         // UTar = Convert.ToDateTime(dr["UTar"])
                     };
@@ -406,7 +459,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             };
 
             // deneme amaçlı
-            System.Threading.Thread.Sleep(2000);
+            // System.Threading.Thread.Sleep(2000);
             oKullaniciModelKayit.IslemDurum = "OK";
             return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
 
