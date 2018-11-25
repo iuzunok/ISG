@@ -255,7 +255,6 @@
 
     function dirPaginationControlsDirective(paginationService, paginationTemplate)
     {
-
         var numberRegex = /^\d+$/;
 
         var DDO = {
@@ -430,7 +429,8 @@
                     if (scope.pagination.last < scope.pagination.current)
                     {
                         scope.setCurrent(scope.pagination.last);
-                    } else
+                    }
+                    else
                     {
                         updateRangeValues();
                     }
@@ -713,7 +713,6 @@
      */
     function paginationTemplateProvider()
     {
-
         var templatePath = 'angularUtils.directives.dirPagination.template';
         var templateString;
 

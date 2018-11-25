@@ -1,14 +1,14 @@
 ﻿appGenel
-    .controller('AngGenelController', function ($scope, $http, KullaniciAramaService)
+    .controller('AngGenelController', function ()
     {
         // $scope.ArkaPlaniAcikMi = true;
-        /*$scope.$watch("ArkaPlaniAcikMi", function (newValue, oldValue, scope)
-        {
-            console.log("Eski Değer: " + oldValue + " Yeni Değer: " + newValue);
-        }, true);*/
+        //$scope.$watch("ArkaPlaniAcikMi", function (newValue, oldValue, scope)
+        //{
+        //    console.log("Eski Değer: " + oldValue + " Yeni Değer: " + newValue);
+        //}, true);
     })
 
-    .controller('ngConKullaniciAra', function ($scope, $http, KullaniciAramaService)
+    .controller('ngConKullaniciAra', function ($scope, KullaniciAramaService)
     {
         $scope.ArkaPlaniAcikMi = true;
         $scope.KullaniciModelAra = {
@@ -16,31 +16,101 @@
             // KullaniciAd: 'i'
         };
         $scope.KullaniciModelAraSonuc = {};
+        $scope.KullaniciModelAraSonucPage = [];
         $scope.KullaniciModelKayit = {};
+
+        // sıralama
+        $scope.Sirala = function (SiraAlan)
+        {
+            // debugger;
+            $scope.SiralamaAlan = SiraAlan;
+            $scope.TersSira = !$scope.TersSira;
+            // alert($scope.TersSira);
+
+            // var order = !column.orderDesc ? 1 : -1;
+            $scope.KullaniciModelAraSonuc.sort(function (a, b)
+            {
+                if ($scope.TersSira)
+                    return b[SiraAlan].localeCompare(a[SiraAlan]);
+                else
+                    return a[SiraAlan].localeCompare(b[SiraAlan]);
+            });
+
+            Sayfala(true);
+        };
 
         $scope.KullaniciAra = function ()
         {
             $scope.$parent.ArkaPlaniAcikMi = true;
-            KullaniciAramaService.KullaniciAra($scope);
+            KullaniciAramaService.KullaniciAra($scope, function (data)
+            {
+                // debugger;
+                $scope.KullaniciModelAraSonuc = data;
+                if ($scope.KullaniciModelAraSonuc != null)
+                {
+                    // sayfalama
+                    $scope.totalItems = $scope.KullaniciModelAraSonuc.length;
+                    $scope.currentPage = 1;
+                    $scope.itemsPerPage = 4;
+
+                    $scope.$watch('currentPage + itemsPerPage', function ()
+                    {
+                        Sayfala(true);
+                    });
+                }
+                else
+                    $scope.KullaniciModelAraSonucPage = null;
+                $scope.$parent.ArkaPlaniAcikMi = false;
+            });
         };
+
+        Sayfala = function (SayfaYap)
+        {
+            // debugger;
+            if (SayfaYap)
+            {
+                var begin = (($scope.currentPage - 1) * $scope.itemsPerPage);
+                var end = begin + $scope.itemsPerPage;
+                $scope.KullaniciModelAraSonucPage = $scope.KullaniciModelAraSonuc.slice(begin, end);
+            }
+            else
+                $scope.KullaniciModelAraSonucPage = $scope.KullaniciModelAraSonuc;
+        }
 
         $scope.RCInY = function ()
         {
             $scope.ArkaPlaniAcikMi = true;
             var $arifPopUp = $('#arifPopUp');
-            var options = { "backdrop": "static", keyboard: true };
-            $('#argemModalPopUp').modal(options).modal('toggle')
-            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciKayit?Durum=I&Key=0');
+            // var options = { "backdrop": "static", keyboard: true };
+            // $('#argemModalPopUp').css('opacity', '100').show();
+
+            oArgemModal = ArgemModal.open({ width: "816px", height: "516px" });
+            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciKayit?Durum=I&Key=0').width(800).height(500);
+
+            ////removes the "active" class to .popup and .popup-content when the "Close" button is clicked 
+            //$(".close, .popup-overlay").on("click", function ()
+            //{
+            //    $(".popup-overlay, .popup-content").removeClass("active");
+            //    $arifPopUp.attr('src', '');
+            //});
+
+            // .width(600).height(400);
+
+
             $scope.ArkaPlaniAcikMi = false;
         };
 
         $scope.RCGuY = function (Key)
         {
+            // debugger;
             $scope.ArkaPlaniAcikMi = true;
             var $arifPopUp = $('#arifPopUp');
-            var options = { "backdrop": "static", keyboard: true };
+            /*var options = { "backdrop": "static", keyboard: true };
             $('#argemModalPopUp').modal(options).modal('toggle')
-            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciKayit?Durum=U&Key=' + Key);
+            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciKayit?Durum=U&Key=' + Key);*/
+            oArgemModal = ArgemModal.open({ width: "816px", height: "516px" });
+            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciKayit?Durum=U&Key=' + Key).width(800).height(500);
+
             $scope.ArkaPlaniAcikMi = false;
         };
 
@@ -48,9 +118,12 @@
         {
             $scope.ArkaPlaniAcikMi = true;
             var $arifPopUp = $('#arifPopUp');
-            var options = { "backdrop": "static", keyboard: true };
+            /*var options = { "backdrop": "static", keyboard: true };
             $('#argemModalPopUp').modal(options).modal('toggle')
-            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciOku?Durum=O&Key=' + Key);
+            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciOku?Durum=O&Key=' + Key);*/
+            oArgemModal = ArgemModal.open({ width: "816px", height: "516px" });
+            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciOku?Durum=O&Key=' + Key).width(800).height(500);
+
             $scope.ArkaPlaniAcikMi = false;
         };
 
@@ -58,9 +131,11 @@
         {
             $scope.ArkaPlaniAcikMi = true;
             var $arifPopUp = $('#arifPopUp');
-            var options = { "backdrop": "static", keyboard: true };
+            /*var options = { "backdrop": "static", keyboard: true };
             $('#argemModalPopUp').modal(options).modal('toggle')
-            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciOku?Durum=D&Key=' + Key);
+            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciOku?Durum=D&Key=' + Key);*/
+            oArgemModal = ArgemModal.open({ width: "816px", height: "516px" });
+            $arifPopUp.attr('src', '/Yetki/Kullanici/KullaniciOku?Durum=D&Key=' + Key).width(800).height(500);
             $scope.ArkaPlaniAcikMi = false;
         };
 
@@ -99,12 +174,70 @@
             }
         });
 
+        $scope.ExportPDF = function ()
+        {
+            var pdf = new jsPDF('p', 'pt', 'letter');
+            // source can be HTML-formatted string, or a reference
+            // to an actual DOM element from which the text will be scraped.
+            source = $('#tblSonuc')[0];
+
+            // we support special element handlers. Register them with jQuery-style 
+            // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
+            // There is no support for any other type of selectors 
+            // (class, of compound) at this time.
+            specialElementHandlers = {
+                // element with id of "bypass" - jQuery style selector
+                '#bypassme': function (element, renderer)
+                {
+                    // true = "handled elsewhere, bypass text extraction"
+                    return true
+                }
+            };
+            margins = {
+                top: 20,
+                bottom: 20,
+                left: 20,
+                width: 522
+            };
+            // all coords and widths are in jsPDF instance's declared units
+            // 'inches' in this case
+            pdf.fromHTML(
+                source, // HTML string or DOM elem ref.
+                margins.left, // x coord
+                margins.top, { // y coord
+                    'width': margins.width, // max width of content on PDF
+                    'elementHandlers': specialElementHandlers
+                },
+
+                function (dispose)
+                {
+                    // dispose: object with X, Y of the last line add to the PDF 
+                    //          this allow the insertion of new lines after html
+                    pdf.save('Kullanici.pdf');
+                }, margins);
+        }
+        $scope.ExportExcel = function ()
+        {
+            // debugger;
+            Sayfala(false);
+            $scope.$apply();
+            var tblSonuc = document.getElementById('tblSonuc');
+            var wb = XLSX.utils.table_to_book(tblSonuc, { sheet: "Sayfa1" });
+            XLSX.writeFile(wb, 'Sonuc.xlsx');
+            Sayfala(true);
+
+            // direk $scope çalışıyor fakat kolon adları düzgün gelmiyor ve sıralama da yok
+            var ws = XLSX.utils.json_to_sheet($scope.KullaniciModelAraSonuc);
+            var wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Kullanıcı");
+            XLSX.writeFile(wb, 'Sonuc.xlsx');
+        }
 
         // sayfa ilk açıldığında otomotik yüklensin diye
-        // KullaniciAramaService.KullaniciAra($scope);
+        $scope.KullaniciAra();
     })
 
-    .controller('ngConKullaniciKayit', function ($scope, $http, KullaniciAramaService)
+    .controller('ngConKullaniciKayit', function ($scope, KullaniciAramaService)
     {
         // debugger;
         $scope.$parent.ArkaPlaniAcikMi = true;
@@ -120,7 +253,7 @@
 
         if (Key > 0) // yeni kayıtsa veri çekmeye gerek yok
         {
-            KullaniciAramaService.KullaniciGetir($scope, Key, function (data)
+            KullaniciAramaService.KullaniciGetir(Key, function (data)
             {
                 $scope.$parent.ArkaPlaniAcikMi = true;
                 if (data != null)
@@ -184,7 +317,7 @@
         };
     })
 
-    .controller('ngConOkuma', function ($scope, $http, KullaniciAramaService)
+    .controller('ngConOkuma', function ($scope, KullaniciAramaService)
     {
         $scope.RCSil = function (Key)
         {
@@ -198,10 +331,4 @@
                 $scope.$parent.ArkaPlaniAcikMi = false;
             });
         };
-    });
-
-function KullaniciSil(Key)
-{
-    alert('çöp fonksyon');
-}
-
+    })

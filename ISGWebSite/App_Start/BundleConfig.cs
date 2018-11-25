@@ -15,9 +15,14 @@ namespace ISGWebSite
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-                      "~/Scripts/angular.js"/*,
-                      // "~/Scripts/angular-bootstrap.js",
-                      "~/Scripts/angular-ui/ui-bootstrap-tpls.js"*/
+                      "~/Scripts/angular.js",
+                      "~/Scripts/angular-bootstrap.js",
+                      "~/Scripts/angular-ui/ui-bootstrap-tpls.js"/*,
+
+                      "~/Scripts/angular-touch.js",
+                      "~/Scripts/angular-animate.js",
+                      "~/Scripts/angular-aria.js",
+                      "~/Scripts/ui-grid.js" */                     
                       ));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -32,8 +37,16 @@ namespace ISGWebSite
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/font-awesome.css",
-                      "~/Content/site.css"));
+                      //"~/Content/site.css"
+                      "~/CSS/Main.css"));
 
+
+
+            bundles.Add(new ScriptBundle("~/bundles/JS/Excel").Include(
+              "~/JS/Excel/shim.min.js",
+              "~/JS/Excel/xlsx.full.min.js",
+              "~/JS/PDF/jspdf.min.js"
+              ));
 
 
 
@@ -41,7 +54,7 @@ namespace ISGWebSite
                       "~/JS/Genel/Genel.js"));
 
             bundles.Add(new ScriptBundle("~/ClientSide/AngularVeriGetir").Include(
-                // "~/ClientSide/AngularVeriGetir.js",
+                // "~/ClientSide/DirPagination.js",
                 "~/ClientSide/AngularVeriGetirIFrmApp.js",
                 "~/ClientSide/AngularVeriGetirIFrm.js"
                 ));
@@ -51,7 +64,7 @@ namespace ISGWebSite
 
 
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap-datepicker").Include(
+            /*bundles.Add(new ScriptBundle("~/bundles/bootstrap-datepicker").Include(
                      "~/Scripts/bootstrap-datepicker*",
                      "~/Scripts/locales/bootstrap-datepicker.tr.min.js",
                      "~/Scripts/jquery.globalize/cultures/globalize.culture.tr*"
@@ -59,7 +72,7 @@ namespace ISGWebSite
 
             bundles.Add(new StyleBundle("~/Contents/css").Include(
                       "~/Contents/bootstrap-datepicker*"
-                      ));
+                      ));*/
         }
     }
 }

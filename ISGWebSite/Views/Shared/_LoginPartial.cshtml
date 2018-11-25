@@ -1,15 +1,42 @@
 ﻿@if (Session["OpKullaniciKey"] != null)
 {
     <ul class="nav navbar-nav ml-auto">
+
         <li class="nav-item">
-            <a class="nav-link" href="/Account/AnaSayfa">
-                <span class="fa fa-home" style="padding-right:5px"></span>Ana Sayfa
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/Account/LogOff">
-                <span class="fa fa-sign-out" style="padding-right:5px"></span>Çıkış
-            </a>
+            <div class="row">
+                <div class="col-xs-3">
+                    <a class="nav-link " href="/Account/AnaSayfa">
+                        <span class="fa fa-bell fa-fw" style="padding-right:5px"></span>
+                        <span class="badge badge-danger">5</span>
+                    </a>
+                </div>
+                <div class="col-xs-3">
+                    <a class="nav-link " href="/Account/AnaSayfa">
+                        <span class="fa fa-envelope fa-fw" style="padding-right:5px"></span>
+                        <span class="badge badge-danger">7</span>
+                    </a>
+                </div>
+                <div class="col-xs-3">
+                    <a class="nav-link " href="/Account/AnaSayfa">
+                        <span class="fa fa-home" style="padding-right:5px"></span>
+                    </a>
+                </div>
+                <div class="col-xs-3">
+                    <a class="nav-link " href="/Account/LogOff">
+                        <span class="fa fa-sign-out" style="padding-right:5px"></span>
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <a class="nav-link" href="/Account/LogOff">
+                        @if (Session["OpKullaniciAd"] != null && Session["OpKullaniciSoyad"] != null)
+                        {
+                            <span class="fa fa-user" style="padding-right:10px"></span>@(Session["OpKullaniciAd"].ToString() + " " + Session["OpKullaniciSoyad"].ToString())
+                        }
+                    </a>
+                </div>
+            </div>
         </li>
     </ul>
 }

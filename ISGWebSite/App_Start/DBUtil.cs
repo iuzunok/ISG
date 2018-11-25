@@ -52,7 +52,7 @@ namespace VeriTabani
                 conn.Close();
                 return ds;
             }
-            catch (Exception msg)
+            catch /*(Exception msg)*/
             {
                 // something went wrong, and you wanna know why                
                 // throw new Exception(msg.ToString());

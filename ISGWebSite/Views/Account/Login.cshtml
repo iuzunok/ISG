@@ -5,88 +5,99 @@
 }
 
 <div class="row">
+    <div class="col-md-12">
+        <div style="padding-bottom:40px;text-align:center">
+            <img src="~/Resim/Ortak/KurumLogo.png" />
+        </div>
+    </div>
+</div>
+
+<div class="row" ng-app="AngLoginApp" ng-controller="AngLoginController">
     <div class="col-md-6">
         <ul class="list-group">
-            <li class="list-group-item list-group-item-dark">Sisteme Giriş</li>
-            <li class="list-group-item">
-                <section id="loginForm" ng-app="AngLoginApp" ng-controller="AngLoginController">
-                    <form name="frmLogin" ng-submit="SistemeGirisYap(frmLogin.$valid)" novalidate role="form">
-                        <div ng-show="HataVar" class="alert alert-danger ng-hide">
-                            {{HataAciklama}}
-                        </div>
-                        <div class="form-group">
+            <li class="list-group-item KusakKirmizi">Sisteme Giriş</li>
+            <li class="list-group-item KusakAlt">
+                <form name="frmLogin" ng-submit="SistemeGirisYap(frmLogin.$valid)" novalidate role="form">
+                    <div ng-show="HataVar" class="alert alert-danger ng-hide">
+                        {{HataAciklama}}
+                    </div>
+                    <div class="row RowBosluk">
+                        <div class="col-md-4">
                             <label for="KullaniciAd">Kullanıcı Adı :</label>
-                            <div class="col-md-9">
-                                <input type="text" name="KullaniciAd" ng-model="LoginViewModel.KullaniciAd"
-                                       class="form-control" required autofocus />
-                            </div>
-                            <span ng-show="frmLogin.KullaniciAd.$dirty && frmLogin.KullaniciAd.$touched && frmLogin.KullaniciAd.$invalid">Zorunlu alan.</span>
                         </div>
-                        <div class="form-group">
+                        <div class="col-md-8">
+                            <input type="text" name="KullaniciAd" ng-model="LoginViewModel.KullaniciAd"
+                                   class="form-control" required autofocus />
+                        </div>
+                    </div>
+                    <div class="row RowBosluk">
+                        <div class="col-md-4">
                             <label for="Parola">Parola :</label>
-                            <div class="col-md-9">
-                                <input type="password" name="Parola" ng-model="LoginViewModel.Parola" class="form-control"
-                                       required autofocus />
-                            </div>
                         </div>
-                        <div class="form-group">
-                            <div class="col-md-9">
-                                <input type="checkbox" id="cbxKullaniciAdimiHatirla" ng-model="LoginViewModel.KullaniciAdimiHatirla">
-                                <label for="cbxKullaniciAdimiHatirla">Kullanıcı adımı hatırla</label>
-                            </div>
+                        <div class="col-md-8">
+                            <input type="password" name="Parola" ng-model="LoginViewModel.Parola" class="form-control"
+                                   required autofocus />
                         </div>
-                        <div class="form-group">
-                            <div class="col-md-offset-3 col-md-9">
-                                <button class="btn btn-lg btn-primary" ng-disabled="GirisButonKapat">
-                                    <span class="fa fa-sign-in" style="padding-right:15px"></span>Giriş
-                                </button>
-                                <button ng-click="SifremiUnuttum()" class="btn btn-lg btn-light">
-                                    <span class="fa fa-question-circle" style="padding-right:15px"></span>Şifremi Unuttum
-                                </button>
-                            </div>
+                    </div>
+                    <div class="row RowBosluk">
+                        <div class="col-md-4">
                         </div>
-                    </form>
-                </section>
+                        <div class="col-md-8">
+                            <input type="checkbox" id="cbxKullaniciAdimiHatirla" ng-model="LoginViewModel.KullaniciAdimiHatirla">
+                            <label for="cbxKullaniciAdimiHatirla">Kullanıcı adımı hatırla</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-8">
+                            <button class="btn btn-primary" ng-disabled="GirisButonKapat">
+                                <span class="fa fa-sign-in" style="padding-right:15px"></span>Giriş
+                            </button>
+                            <button ng-click="SifremiUnuttum()" class="btn btn-light">
+                                <span class="fa fa-question-circle" style="padding-right:15px"></span>Şifremi Unuttum
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </li>
         </ul>
     </div>
     <div class="col-md-6">
-        <section>
-            <ul class="list-group">
-                <li class="list-group-item list-group-item-info">Uyarılar</li>
-                <li class="list-group-item">
-                    <p>
-                        <a data-toggle="collapse" href="#LMA1" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <span class="fa fa-bell" style="padding-right:5px"></span>
-                            Argem İSG modülü 01.01.2019 tarihi ile kullanıma açıldı
-                        </a>
-                    </p>
-                    <div class="collapse" id="LMA1" style="padding-left:20px">
+        <ul class="list-group">
+            <li class="list-group-item KusakTeal">Uyarılar</li>
+            <li class="list-group-item KusakSagSol">
+                <p>
+                    <a data-toggle="collapse" href="#LMA1" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <span class="fa fa-bell" style="padding-right:5px"></span>
                         Argem İSG modülü 01.01.2019 tarihi ile kullanıma açıldı
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <p>
-                        <a data-toggle="collapse" href="#LMA2" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <span class="fa fa-bell-o" style="padding-right:5px"></span>Teknik denetçi raporu için tıklayınız
-                        </a>
-                    </p>
-                    <div class="collapse" id="LMA2" style="padding-left:20px">
-                        Teknik denetçi raporu için tıklayınız
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <p>
-                        <a data-toggle="collapse" href="#LMA3" role="button" aria-expanded="false" aria-controls="collapseExample">
-                            <span class="fa fa-bell" style="padding-right:5px"></span>Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
-                        </a>
-                    </p>
-                    <div class="collapse" id="LMA3" style="padding-left:20px">
-                        Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
-                    </div>
-                </li>
-            </ul>
-        </section>
+                    </a>
+                </p>
+                <div class="collapse" id="LMA1" style="padding-left:20px">
+                    Argem İSG modülü 01.01.2019 tarihi ile kullanıma açıldı
+                </div>
+            </li>
+            <li class="list-group-item KusakSagSol">
+                <p>
+                    <a data-toggle="collapse" href="#LMA2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <span class="fa fa-bell-o" style="padding-right:5px"></span>Teknik denetçi raporu için tıklayınız
+                    </a>
+                </p>
+                <div class="collapse" id="LMA2" style="padding-left:20px">
+                    Teknik denetçi raporu için tıklayınız
+                </div>
+            </li>
+            <li class="list-group-item KusakAlt">
+                <p>
+                    <a data-toggle="collapse" href="#LMA3" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <span class="fa fa-bell" style="padding-right:5px"></span>Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
+                    </a>
+                </p>
+                <div class="collapse" id="LMA3" style="padding-left:20px">
+                    Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
+                </div>
+            </li>
+        </ul>
     </div>
 </div>
 

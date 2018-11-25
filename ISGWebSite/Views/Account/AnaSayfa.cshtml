@@ -1,35 +1,61 @@
 ﻿@{
     ViewBag.Title = "Ana Sayfa";
 }
-@{
-    if (Session["OpKullaniciAd"] != null && Session["OpKullaniciSoyad"] != null)
-    {
-        <h4>Sayın @Session["OpKullaniciAd"].ToString() @Session["OpKullaniciSoyad"].ToString() hoşgeldiniz...</h4>
-    }
-    else
-    {
-        <h4>User yok</h4>
-    }
-}
+
 <div ng-controllerXX="ngConAnaSayfa">
     <div class="row">
         <div class="col-sm-6">
-            <ul class="list-group ">
-                <li class="list-group-item list active py-1"><h3>Favoriler</h3></li>
-                <li class="list-group-item py-1">
-                    @Html.ActionLink("Kullanıcı İşlemleri angular", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
+            <ul class="list-group">
+                <li class="list-group-item list py-2 KusakKirmizi">Favori İşlemler</li>
+                <li class="list-group-item py-2 KusakSagSol">
+                    <span class="fa fa-star" style="padding-right:10px"></span>@Html.ActionLink("Kullanıcı İşlemleri angular", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { })
                 </li>
-                <li class="list-group-item py-1">
-                    @Html.ActionLink("Kullanıcı İşlemleri Mvc", "KullaniciAraMVC", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
+                <li class="list-group-item py-2 KusakSagSol">
+                    <span class="fa fa-star" style="padding-right:10px"></span>@Html.ActionLink("Kullanıcı İşlemleri Mvc", "KullaniciAraMVC", "Kullanici", new { area = "Yetki" }, new { })
                 </li>
-
-                <li class="list-group-item py-1">
-                    @Html.ActionLink("Kullanıcı İşlemleri Temp", "KullaniciAraTemp", "Kullanici", new { area = "Yetki" }, new { @class = "dropdown-item" })
+                <li class="list-group-item py-2 KusakSagSol">
+                    <span class="fa fa-star" style="padding-right:10px"></span>@Html.ActionLink("Kullanıcı İşlemleri Temp", "KullaniciAraTemp", "Kullanici", new { area = "Yetki" }, new { })
+                </li>
+                <li class="list-group-item py-2 KusakAlt">
+                    <span class="fa fa-star" style="padding-right:10px"></span>@Html.ActionLink("Deneme", "Deneme", "Kullanici", new { area = "Yetki" }, new { })
                 </li>
             </ul>
         </div>
         <div class="col-sm-6">
-            Boş
+            <ul class="list-group">
+                <li class="list-group-item py-2 KusakKirmizi">Uyarılar</li>
+                <li class="list-group-item KusakSagSol">
+                    <p>
+                        <a data-toggle="collapse" href="#LMA1" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <span class="fa fa-bell" style="padding-right:5px"></span>
+                            Argem İSG modülü 01.01.2019 tarihi ile kullanıma açıldı
+                        </a>
+                    </p>
+                    <div class="collapse" id="LMA1" style="padding-left:20px">
+                        Argem İSG modülü 01.01.2019 tarihi ile kullanıma açıldı
+                    </div>
+                </li>
+                <li class="list-group-item KusakSagSol">
+                    <p>
+                        <a data-toggle="collapse" href="#LMA2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <span class="fa fa-bell-o" style="padding-right:5px"></span>Teknik denetçi raporu için tıklayınız
+                        </a>
+                    </p>
+                    <div class="collapse" id="LMA2" style="padding-left:20px">
+                        Teknik denetçi raporu için tıklayınız
+                    </div>
+                </li>
+                <li class="list-group-item KusakAlt">
+                    <p>
+                        <a data-toggle="collapse" href="#LMA3" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <span class="fa fa-bell" style="padding-right:5px"></span>Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
+                        </a>
+                    </p>
+                    <div class="collapse" id="LMA3" style="padding-left:20px">
+                        Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

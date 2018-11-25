@@ -1,53 +1,48 @@
 ﻿'use strict';
-var appGenel = angular.module('AngGenelApp', [])
+var appGenel = angular.module('AngGenelApp', ['ui.bootstrap'])
 
     .factory("KullaniciAramaService", ['$http', function ($http)
     {
-        // debugger;
         var fac = {};
 
-        fac.KullaniciGetir = function ($scope, Key, CallBack)
+        fac.KullaniciGetir = function (Key, CallBack)
         {
-            // debugger;
-            //$scope.ArkaPlaniAcikMi = true;
-            // alert(Key);
             $http.post("/Yetki/Kullanici/KullaniciAraSonuc", { KullaniciKey: Key })
                 .then(function (response)
                 {
-                    // debugger;
-                    // $scope.ArkaPlaniAcikMi = false;
                     console.log('kullanıcı getir success...');
-                    // $scope.KullaniciModelKayit = response.data;
                     CallBack(response.data[0]);
                 })
                 .catch(function (response)
                 {
                     debugger;
-                    // $scope.ArkaPlaniAcikMi = false;
                     console.log('kullanıcı getir error...' + response.data);
                     alert("Hata : " + response.data);
                     CallBack(null);
                 });
         };
 
-        fac.KullaniciAra = function ($scope)
+        fac.KullaniciAra = function ($scope, CallBack)
         {
             // debugger;
-            $scope.$parent.ArkaPlaniAcikMi = true;
+            // $scope.$parent.ArkaPlaniAcikMi = true;
             $http.post("/Yetki/Kullanici/KullaniciAraSonuc", $scope.KullaniciModelAra)
                 .then(function (response)
                 {
                     // debugger;
-                    $scope.$parent.ArkaPlaniAcikMi = false;
-                    console.log('kullanıcı ara success...');
-                    $scope.KullaniciModelAraSonuc = response.data;
+                    // $scope.$parent.ArkaPlaniAcikMi = false;
+                    console.log('kullanıcı ara ok:');
+                    console.log(response.data);
+                    // $scope.KullaniciModelAraSonuc = response.data;
+                    CallBack(response.data);
                 })
                 .catch(function (response)
                 {
                     // debugger;
-                    $scope.$parent.ArkaPlaniAcikMi = false;
+                    // $scope.$parent.ArkaPlaniAcikMi = false;
                     console.log('kullanıcı ara error...' + response.data);
                     alert("Hata : " + response.data);
+                    CallBack(null);
                 });
         };
 
@@ -96,9 +91,6 @@ var appGenel = angular.module('AngGenelApp', [])
             if (confirm("Kullanıcı kaydını güncellemek istediğinize emin misiniz?"))
             {
                 $scope.ArkaPlaniAcikMi = true;
-                // alert($scope.KullaniciModelKayit.KullaniciKey);
-                // console.log('giden form data:');
-                // console.log($scope.KullaniciModelKayit);
 
                 $http({
                     method: 'Post',
@@ -145,5 +137,6 @@ var appGenel = angular.module('AngGenelApp', [])
                     CallBack(null);
                 });
         }
+
         return fac;
     }]);

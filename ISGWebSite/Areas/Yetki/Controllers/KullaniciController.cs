@@ -460,8 +460,8 @@ namespace ISGWebSite.Areas.Yetki.Controllers
 
             // deneme amaçlı
             // System.Threading.Thread.Sleep(2000);
-            oKullaniciModelKayit.IslemDurum = "OK";
-            return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
+            // oKullaniciModelKayit.IslemDurum = "OK";
+            // return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
 
             if (string.IsNullOrEmpty(Key))
             {
@@ -580,5 +580,10 @@ namespace ISGWebSite.Areas.Yetki.Controllers
 
         #endregion
 
+
+        public ActionResult Deneme()
+        {
+            return View();
+        }
     }
 }

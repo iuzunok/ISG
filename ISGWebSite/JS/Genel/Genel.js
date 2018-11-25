@@ -74,7 +74,7 @@ var KayitSilindi = function (Key)
         $scope.KullaniciModelAraSonuc.splice(ix, 1);
     $scope.$apply();
 
-    ModalPopUpKapat();
+    ArgemModalPopUpKapat();
 };
 
 var KayitGuncellendi = function (Key, Model)
@@ -103,13 +103,14 @@ var KayitGuncellendi = function (Key, Model)
     }
     $scope.$apply();
 
-    ModalPopUpKapat();
+    ArgemModalPopUpKapat();
 };
 
 
-var ModalPopUpKapat = function (data)
+var ArgemModalPopUpKapat = function (data)
 {
-    $('#argemModalPopUp').modal('toggle');
+    oArgemModal.close();
+    // $('#argemModalPopUp').modal('toggle');
 };
 
 var KullaniciGuncelle = function ()
@@ -172,162 +173,93 @@ function getIframeWindow(iframe_object)
 
 
 
-//window.ModalPopUpKapat = function ()
-//{
-//    $('#argemModalPopUp').modal('hide');
-//};
 
-$(function ()
+
+
+var oArgemModal;
+var ArgemModal = (function ()
 {
-    //    $(".anchorOku").click(function ()
-    //    {
-    //        // debugger;
-    //        var $buttonClicked = $(this);
-    //        var SayfaAd = $buttonClicked.attr('data-sayfaad');
-    //        $('#argemModalLabel').html(SayfaAd);
-    //        var id = $buttonClicked.attr('data-id');
-    //        // var id = "0";
-    //        var Durum = $buttonClicked.attr('data-durum');
-    //        var options = { "backdrop": "static", keyboard: true };
+    var method = {},
+        $overlay,
+        $modal,
+        $content;
+    // $close;
 
-    //        var $ifmp = $('._armp_Iframe');
-    //        $ifmp.attr('src', URLOku + '?Durum=' + Durum + '&Key=' + id);
-
-    //        $('#argemModalPopUp').modal(options);
-    //        $('#argemModalPopUp').modal('show');
-
-
-    //        /*// debugger;
-    //        var $buttonClicked = $(this);
-    //        var SayfaAd = $buttonClicked.attr('data-sayfaad');
-    //        $('#argemModalLabel').html(SayfaAd);
-    //        var id = $buttonClicked.attr('data-id');
-    //        var Durum = $buttonClicked.attr('data-durum');
-    //        var options = { "backdrop": "static", keyboard: true };
-    //        $.ajax({
-    //            type: "GET",
-    //            url: URLOku,
-    //            contentType: "application/json; charset=utf-8",
-    //            data: { "Durum": Durum, "Key": id },
-    //            datatype: "json",
-    //            cache: false,
-    //            success: function (data)
-    //            {
-    //                // debugger;
-    //                $('#argemModalContent').html(data);
-    //                // alert($('#myModalContent').html());
-    //                $('#argemModalPopUp').modal(options);
-    //                $('#argemModalPopUp').modal('show');
-
-    //            },
-    //            error: function (request, status, error)
-    //            {
-    //                alert('Sistem Hatası:\n' + request.responseText);
-    //            }
-    //        });*/
-    //    });
-
-    //    $(".anchorGuncelle").click(function ()
-    //    {
-    //        alert(1);
-    //        // debugger;
-    //        var $buttonClicked = $(this);
-    //        var SayfaAd = $buttonClicked.attr('data-sayfaad');
-    //        $('#argemModalLabel').html(SayfaAd);
-    //        var id = $buttonClicked.attr('data-id');
-    //        // var id = "0";
-    //        var Durum = $buttonClicked.attr('data-durum');
-    //        var options = { "backdrop": "static", keyboard: true };
-
-    //        var $ifmp = $('._armp_Iframe');
-    //        $ifmp.attr('src', URLGuncelle + '?Durum=' + Durum + '&Key=' + id);
-
-    //        $('#argemModalPopUp').modal(options);
-    //        $('#argemModalPopUp').modal('show');
-
-    //        /*// debugger;
-    //        var $buttonClicked = $(this);
-    //        var SayfaAd = $buttonClicked.attr('data-sayfaad');
-    //        $('#argemModalLabel').html(SayfaAd);
-    //        var id = $buttonClicked.attr('data-id');
-    //        var Durum = $buttonClicked.attr('data-durum');
-    //        var options = { "backdrop": "static", keyboard: true };
-    //        $.ajax({
-    //            type: "GET",
-    //            url: URLGuncelle,
-    //            contentType: "application/json; charset=utf-8",
-    //            data: { "Durum": Durum, "Key": id },
-    //            datatype: "json",
-    //            success: function (data)
-    //            {
-    //                // debugger;
-    //                $('#argemModalContent').html(data);
-    //                // alert($('#myModalContent').html());
-    //                $('#argemModalPopUp').modal(options);
-    //                $('#argemModalPopUp').modal('show');
-
-    //            },
-    //            error: function (request, status, error)
-    //            {
-    //                alert('Sistem Hatası:\n' + request.responseText);
-    //            }
-    //        });*/
-    //    });
-
-    //$(".anchorYeniKayit").click(function ()
-    //{
-    //    //// debugger;
-    //    var $buttonClicked = $(this);
-    //    //var SayfaAd = $buttonClicked.attr('data-sayfaad');
-    //    //$('#argemModalLabel').html(SayfaAd);
-    //    var id = "0";
-    //    var Durum = $buttonClicked.attr('data-durum');
-        
-    //    //var $ifmp = $('._armp_Iframe');
-    //    // $ifmp.attr('src', URLGuncelle + '?Durum=' + Durum + '&Key=' + id);
-
-    //    var options = { "backdrop": "static", keyboard: true };
-    //    // $('#argemModalPopUp2').modal(options);
-    //    // $('#argemModalPopUp2').modal('show');
-
-    //    // return;
-    //    $.ajax({
-    //        type: "GET",
-    //        url: URLGuncelle,
-    //        contentType: "application/json; charset=utf-8",
-    //        data: { "Durum": Durum, "Key": id },
-    //        datatype: "json",
-    //        success: function (data)
-    //        {
-    //            // debugger;
-    //            $('#argemModalContent2').html(data);
-    //            $('#argemModalPopUp2').modal(options);
-    //            // $('#argemModalPopUp2').modal('show');
-    //        },
-    //        error: function (request, status, error)
-    //        {
-    //            alert('Sistem Hatası:\n' + request.responseText);
-    //        }
-    //    });
-    //});
-
-    /*$("#closbtn").click(function ()
+    // Center the modal in the viewport
+    method.center = function ()
     {
-        $('#myModal').modal('hide');
+        var top, left;
+        top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
+        left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
+        $modal.css({
+            top: top + $(window).scrollTop(),
+            left: left + $(window).scrollLeft()
+        });
+    };
+
+    // Open the modal
+    method.open = function (settings)
+    {
+        // debugger;
+        // $content.empty().append(settings.content);
+        $modal.css({ width: settings.width || 'auto', height: settings.height || 'auto' });
+        method.center();
+        $(window).bind('resize.modal', method.center);
+        $modal.show();
+        $overlay.show();
+        return this;
+    };
+
+    // Close the modal
+    method.close = function ()
+    {
+        // debugger;
+        $modal.hide();
+        $overlay.hide();
+        // $content.empty();
+        $content.find('#arifPopUp').attr('src', '');
+        $(window).unbind('resize.modal');
+    };
+
+    // debugger;
+    // Generate the HTML and add it to the document
+    $overlay = $('<div id="ArgemModalOverlay"></div>');
+    $modal = $('<div id="ArgemModal"></div>');
+    $content = $('<div id="ArgemModalContent"><iframe id="arifPopUp" src="" frameborder="0" scrolling="no"></iframe></div>');
+    // $close = $('<a id="close" href="#">close</a>');
+
+    $modal.hide();
+    $overlay.hide();
+    // $modal.append($content, $close);
+    $modal.append($content);
+
+    $(document).ready(function ()
+    {
+        $('body').append($overlay, $modal);
+    });
+
+    /*$close.click(function (e)
+    {
+        e.preventDefault();
+        method.close();
     });*/
-});
 
+    return method;
+}());
 
-//function fnIframeBoyutAyarla()
-//{
-//    var cssMpIF = '_armp_Iframe';
-//    // var cssMp = '_armp_Iframe';
+/*
+// Wait until the DOM has loaded before querying the document
+$(document).ready(function ()
+{
 
-//    var $mp = $('#argemModalPopUp');
-//    var $ifmp = $('.' + cssMpIF);
+    $.get('ajax.html', function (data)
+    {
+        modal.open({ content: data });
+    });
 
-//    // var $ifmp = $mp.find('.' + cssIframe);
-//    $ifmp
-//        .css({ 'height': ($ifmp.parent().height() - $mp.find('.modal-header').outerHeight()) });
-//}
-
+    $('a#howdy').click(function (e)
+    {
+        modal.open({ content: "Hows it going?" });
+        e.preventDefault();
+    });
+});*/
