@@ -1,85 +1,98 @@
-﻿@model ISGWebSite.Models.Yetki.Kullanici.KullaniciModelKayit
+﻿@model ISGWebSite.Models.SonucModel<ISGWebSite.Models.Yetki.Kullanici.KullaniciAraModel>
 @{
-    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
+    Layout = Request.IsAjaxRequest() ? null : "~/Views/Shared/_LayoutPopUp.cshtml";
 }
 
-<div ng-controller="ngConOkuma">
+<div ng-controller="ngcOkuma">
+
+    <div ng-show="HataVar" class="alert alert-danger ng-hide">
+        {{HataAciklama}}
+    </div>
+
     @{
-        if (Model == null || Model.IslemDurum == "H")
+        if (Model == null || Model.Durum == "H")
         {
-            <div ng-show="HataVar" class="alert alert-danger">
-                @Html.DisplayFor(model => model.IslemAciklama)
+            <div class="alert alert-danger">
+                @Html.DisplayFor(model => model.Aciklama)
             </div>
         }
         else
         {
-            <table style="width:100%; background-color:#2e3b46;">
-                <tr>
-                    <td class="TurkuazKusak" style="padding-left: 5px; color:white">Kullanıcı Oku</td>
-                    <td class="TurkuazKusak" style="text-align:right;padding-right: 5px">
-                        <div class="btn-group" role="group" aria-label="işlem">
-                            @{
-                                if (Model.IslemDurum == "D")
-                                {
-                                    <button type="button" class="btn btn-danger btnAltKoseYok" ng-click="RCSil('@Model.KullaniciKey');" aria-label="Sil">
-                                        <span class="fa fa-trash" aria-hidden="true" style="padding-right:15px"></span>Sil
-                                    </button>
-                                }
-                                <button type="button" class="btn btn-info btnAltKoseYok" onclick="parent.ArgemModalPopUpKapat();" aria-label="Kapat">
-                                    <span class="fa fa-close" aria-hidden="true" style="padding-right:15px"></span>Kapat
-                                </button>
-                            }
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <div class="card cardPopUp">
+                <div class="card-header KusakInce">
+                    <h6 class="float-left">Kullanıcı Bilgileri</h6>
+                </div>
+                <div class="card-body PaddingYok">
 
-            <table class="table table-bordered table-sm">
-                <tr>
-                    <td style="width:150px">
-                        <b>Kullanıcı Adı :</b>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.KullaniciAd)
-                    </td>
-                    <td rowspan="5" style="width:110px">
-                        <img src="/Yetki/Kullanici/KullaniciResimGetir" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Adı :</b>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Ad)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Soyad :</b>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Soyad)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Tipi :</b>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.KullaniciTipNoUzunAd)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>Durumu :</b>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.AktifPasifTipNoUzunAd)
-                    </td>
-                </tr>
-            </table>
+                    <table class="table table-bordered table-sm">
+                        <tr>
+                            <td style="width:150px">
+                                <b>Kullanıcı Adı :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].KullaniciAd)
+                            </td>
+                            <td rowspan="5" style="width:110px">
+                                <img src="/Yetki/Kullanici/KullaniciResimGetir" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Adı :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].Ad)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Soyad :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].Soyad)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Tipi :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].KullaniciTipNoUzunAd)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Durumu :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].AktifPasifTipNoUzunAd)
+                            </td>
+                        </tr>
+                        @{
+                            if (Model != null && Model.Durum == "D")
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" ng-click="RCSil('@Model.Data[0].KullaniciKey');" aria-label="Sil">
+                                            <span class="fa fa-trash" aria-hidden="true" style="padding-right:15px"></span>Sil
+                                        </button>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            }
+                        }
+
+                    </table>
+
+                </div>
+            </div>
         }
     }
 
 </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/JSNG/Yetki/Kullanici")
+}

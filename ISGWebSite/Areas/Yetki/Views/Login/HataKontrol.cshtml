@@ -1,0 +1,58 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "HataKontrol";
+}
+
+<h1 class="text-danger">Sistem Hatası Hata</h1>
+<h2 class="text-danger">Beklenmedik bir sistem hatası oluştu.</h2>
+
+@if (Model != null)
+{
+    <div>
+        <h2>
+            Hata Yeri :
+        </h2>
+        <h3>
+            @Model.ControllerName
+        </h3>
+        <h2>
+            Hata Mesajı :
+        </h2>
+        <h3>
+            @Model.Exception.Message
+        </h3>
+        <h2>Data :</h2>
+        <h3>
+            @Model.Exception.Data
+        </h3>
+        <h2>Inner :</h2>
+        <h3>
+            @if (Model.Exception.InnerException != null)
+            {
+                @Model.Exception.InnerException.ToString()
+            }
+
+            @Model.Exception.InnerException.ToString()
+        </h3>
+        <h2>Source :</h2>
+        <h3>
+            @Model.Exception.Source
+        </h3>
+        <h2>Stack :</h2>
+        <h3>
+            @Model.Exception.StackTrace
+        </h3>
+        <h2>target :</h2>
+        <h3>
+            @Model.Exception.TargetSite
+        </h3>
+        <h2>tostr :</h2>
+        <h3>
+            @Model.Exception.ToString()
+        </h3>
+    </div>
+}
+
+
+

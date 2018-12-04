@@ -9,7 +9,17 @@ namespace ISGWebSite.Controllers
     {
         protected override void OnException(ExceptionContext filterContext)
         {
-            base.OnException(filterContext);
+            // base.OnException(filterContext);
+
+            //if (filterContext.ExceptionHandled)
+            //{
+            //    return;
+            //}
+            //filterContext.Result = new ViewResult
+            //{
+            //    ViewName = "~/Yetki/Login/HataKontrol"
+            //};
+            //filterContext.ExceptionHandled = true;
 
             /*ViewResult view = new ViewResult();
             view.ViewName = "~/Account/HataKontrol";

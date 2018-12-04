@@ -139,6 +139,11 @@
             $scope.ArkaPlaniAcikMi = false;
         };
 
+        $scope.RCSec = function (Key)
+        {
+            window.location.href = '/Yetki/Kullanici/Kullanici?Key=' + Key;
+        };
+
         // var t0 = performance.now();
         var KullaniciTipNoGeldi = false;
         var AktifPasifTipNoGeldi = false;
@@ -176,46 +181,34 @@
 
         $scope.ExportPDF = function ()
         {
-            var pdf = new jsPDF('p', 'pt', 'letter');
-            // source can be HTML-formatted string, or a reference
-            // to an actual DOM element from which the text will be scraped.
-            source = $('#tblSonuc')[0];
-
-            // we support special element handlers. Register them with jQuery-style 
-            // ID selector for either ID or node name. ("#iAmID", "div", "span" etc.)
-            // There is no support for any other type of selectors 
-            // (class, of compound) at this time.
-            specialElementHandlers = {
-                // element with id of "bypass" - jQuery style selector
-                '#bypassme': function (element, renderer)
+            var docDefinition = {
+                header: { text: 'Kullanıcı Listesi', margin: [250, 10, 0, 0] },
+                content: [
+                    {
+                        table: {
+                            headerRows: 1,
+                            widths: [130, 100, 100, 80, 80],
+                            body: [
+                                ['Kullanıcı Adı', 'Adı', 'Soyadı', 'Tipi', 'Durumu'],
+                                // [{ text: 'Bold value', bold: true }, 'Val 2', 'Val 3', 'Val 4']
+                            ]
+                        }
+                    }
+                ],
+                footer: function (currentPage, pageCount)
                 {
-                    // true = "handled elsewhere, bypass text extraction"
-                    return true
+                    return { text: currentPage + '/' + pageCount, alignment: 'right', margin: [0, 0, 50, 0] };
                 }
             };
-            margins = {
-                top: 20,
-                bottom: 20,
-                left: 20,
-                width: 522
-            };
-            // all coords and widths are in jsPDF instance's declared units
-            // 'inches' in this case
-            pdf.fromHTML(
-                source, // HTML string or DOM elem ref.
-                margins.left, // x coord
-                margins.top, { // y coord
-                    'width': margins.width, // max width of content on PDF
-                    'elementHandlers': specialElementHandlers
-                },
 
-                function (dispose)
-                {
-                    // dispose: object with X, Y of the last line add to the PDF 
-                    //          this allow the insertion of new lines after html
-                    pdf.save('Kullanici.pdf');
-                }, margins);
-        }
+            $scope.KullaniciModelAraSonuc.forEach(function (Veri)
+            {
+                docDefinition.content[0].table.body.push([Veri.KullaniciAd, Veri.Ad, Veri.Soyad, Veri.KullaniciTipNoUzunAd, Veri.AktifPasifTipNoUzunAd]);
+            });
+
+            pdfMake.createPdf(docDefinition).download('Kullanici.pdf');
+        };
+
         $scope.ExportExcel = function ()
         {
             // debugger;
@@ -231,7 +224,7 @@
             var wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Kullanıcı");
             XLSX.writeFile(wb, 'Sonuc.xlsx');
-        }
+        };
 
         // sayfa ilk açıldığında otomotik yüklensin diye
         $scope.KullaniciAra();

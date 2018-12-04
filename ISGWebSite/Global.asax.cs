@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Security.Claims;
+using System.Web.Helpers;
+using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
@@ -15,6 +17,9 @@ namespace ISGWebSite
 
             // ClientDataTypeModelValidatorProvider.ResourceClassKey = "Messages";
             // DefaultModelBinder.ResourceClassKey = "Messages";
+
+            //set the antiforgery claim to user id
+            // AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
         }
 
         //protected void Application_Error(object sender, EventArgs e)

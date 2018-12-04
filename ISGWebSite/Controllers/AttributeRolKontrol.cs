@@ -10,22 +10,22 @@ namespace ISGWebSite.Controllers
             //Kullanıcı giriş yapmamışsa login sayfasına at
             if (httpContext.Session == null)
             {
-                httpContext.Response.Redirect("~/Account/Login");
+                httpContext.Response.Redirect("~/Yetki/Login/Login");
                 return false;
             }
             else if (httpContext.Session["OpKullaniciKey"] == null)
             {
-                httpContext.Response.Redirect("~/Account/Login");
+                httpContext.Response.Redirect("~/Yetki/Login/Login");
                 return false;
             }
             else if (httpContext.Session["OpKullaniciKey"].ToString() == "")
             {
-                httpContext.Response.Redirect("~/Account/Login");
+                httpContext.Response.Redirect("~/Yetki/Login/Login");
                 return false;
             }
             else if (httpContext.Session["OpKullaniciKey"].ToString() == "0")
             {
-                httpContext.Response.Redirect("~/Account/Login");
+                httpContext.Response.Redirect("~/Yetki/Login/Login");
                 return false;
             }
             else

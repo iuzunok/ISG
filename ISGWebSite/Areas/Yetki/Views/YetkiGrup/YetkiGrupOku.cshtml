@@ -1,0 +1,61 @@
+﻿@model ISGWebSite.Models.SonucModel<ISGWebSite.Areas.Yetki.Models.Kullanici.YetkiGrupModel>
+@{
+    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
+}
+
+<div ng-controller="ngcOkuma">
+
+    <div ng-show="HataVar" class="alert alert-danger ng-hide">
+        {{HataAciklama}}
+    </div>
+
+    @{
+        if (Model == null || Model.Durum == "H")
+        {
+            <div class="alert alert-danger">
+                @Html.DisplayFor(model => model.Aciklama)
+            </div>
+        }
+        else
+        {
+            <div class="card cardPopUp">
+                <div class="card-header KusakInce">
+                    <h6 class="float-left">Yetki Grup Bilgileri</h6>
+                </div>
+                <div class="card-body PaddingYok">
+
+                    <table class="table table-bordered table-sm">
+                        <tr>
+                            <td style="width:150px">
+                                <b>Yetki Grup Adı :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].YetkiGrupAd)
+                            </td>
+                        </tr>
+                        @{
+                            if (Model != null && Model.Durum == "D")
+                            {
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btnAltKoseYok" ng-click="RCSil('@Model.Data[0].YetkiGrupKey');" aria-label="Sil">
+                                            <span class="fa fa-trash" aria-hidden="true" style="padding-right:15px"></span>Sil
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </table>
+
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/JSNG/Yetki/YetkiGrup")
+}

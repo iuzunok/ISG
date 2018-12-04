@@ -23,7 +23,7 @@ namespace ISGWebSite.AppCode
             if (HttpRuntime.Cache["ARGEM_YETKI"] == null)
             {
                 string sSQL = "SELECT \"LookNo\", \"AlanAd\", \"UzunAd\" FROM public.\"YETKI_LOOK\"";
-                ds = DBUtil.VeriGetirDS(sSQL);
+                ds = DBUtilPostger.VeriGetirDS(sSQL);
                 HttpRuntime.Cache["ARGEM_YETKI"] = ds;
             }
             return (DataSet)HttpRuntime.Cache["ARGEM_YETKI"];

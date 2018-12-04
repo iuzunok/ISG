@@ -2,8 +2,9 @@
 {
     abstract public class BaseModel
     {
-        public string IslemDurum { get; set; }
-        public string IslemAciklama { get; set; }
+        public string Durum { get; set; }
+        // public string IslemAciklama { get; set; }
+             
 
     }
 

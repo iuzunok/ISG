@@ -1,0 +1,50 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
+}
+
+<div ng-controller="ngcYetkiGrupKayit">
+
+    <div ng-show="HataVar" class="alert alert-danger ng-hide">
+        {{HataAciklama}}
+    </div>
+
+    <form name="frmYetkiGrupKayit" ng-submit="YetkiGrupKaydet(frmYetkiGrupKayit.$valid)" novalidate role="form">
+        <input type="hidden" ng-model="YetkiGrupModelKayit.YetkiGrupKey" value="{{Key}}" />
+
+        <div class="card cardPopUp">
+            <div class="card-header KusakInce">
+                <h6 class="float-left">Kullanıcı Bilgileri</h6>
+            </div>
+            <div class="card-body PaddingAz">
+
+                <table class="table table-borderless table-sm">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="form-group">
+                                    <label for="YetkiGrupAd">Yetki Grup Adı :</label>
+                                    <input type="text" name="YetkiGrupAd" ng-model="YetkiGrupModel.YetkiGrupAd" class="form-control" required autofocus />
+                                </div>
+                                <span ng-show="frmYetkiGrupKayit.YetkiGrupAd.$touched && frmYetkiGrupKayit.YetkiGrupAd.$invalid">Zorunlu alan</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-success" aria-label="Kaydet">
+                                    <span class="fa fa-save" aria-hidden="true" style="padding-right:15px"></span>Kaydet
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/JSNG/Yetki/YetkiGrup")
+}

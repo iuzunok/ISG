@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - İSG</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="container body-content" style="padding-top:100px">
+
+        @{
+            ViewBag.Title = "Giriş";
+            ViewContext.ClientValidationEnabled = true;
+        }
+
+        <div class="row">
+            <div class="col-md-12">
+                <div style="padding-bottom:40px;text-align:center">
+                    <img src="~/Resim/Ortak/KurumLogo.png" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-app="ngaLogin" ng-controller="ngcLogin">
+            <div class="col-md-6">
+
+                <div class="card">
+                    <h5 class="card-header Kusak">Sisteme Giriş</h5>
+                    <div class="card-body">
+                        <form name="frmLogin" ng-submit="SistemeGirisYap(frmLogin.$valid)" novalidate role="form">
+                            <div class="row RowBosluk">
+                                <div ng-show="HataVar" class="col-md-12 alert alert-danger ng-hide">
+                                    {{HataAciklama}}
+                                </div>
+                            </div>
+                            <div class="row RowBosluk">
+                                <div class="col-md-4">
+                                    <label for="KullaniciAd">Kullanıcı Adı :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="text" name="KullaniciAd" ng-model="KullaniciLoginModel.KullaniciAd"
+                                           class="form-control" required autofocus />
+                                </div>
+                            </div>
+                            <div class="row RowBosluk">
+                                <div class="col-md-4">
+                                    <label for="Parola">Parola :</label>
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="password" name="Parola" ng-model="KullaniciLoginModel.Parola" class="form-control"
+                                           required autofocus />
+                                </div>
+                            </div>
+                            <div class="row RowBosluk">
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-8">
+                                    <input type="checkbox" id="cbxKullaniciAdimiHatirla" ng-model="KullaniciLoginModel.KullaniciAdimiHatirla">
+                                    <label for="cbxKullaniciAdimiHatirla">Kullanıcı adımı hatırla</label>
+                                </div>
+                            </div>
+                            <div class="row RowBosluk">
+                                <div class="col-md-4">
+                                </div>
+                                <div class="col-md-8">
+                                    <button class="btn btn-primary" ng-disabled="GirisButonKapat">
+                                        <span class="fa fa-sign-in" style="padding-right:15px"></span>Giriş
+                                    </button>
+                                    <button ng-click="SifremiUnuttum()" class="btn btn-light">
+                                        <span class="fa fa-question-circle" style="padding-right:15px"></span>Şifremi Unuttum
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <div class="card">
+                    <h5 class="card-header Kusak">Duyurular</h5>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <p>
+                                    <a data-toggle="collapse" href="#LMA1" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <span class="fa fa-bell" style="padding-right:5px"></span>
+                                        Argem İSG modülü 01.01.2019 tarihi ile kullanıma açıldı
+                                    </a>
+                                </p>
+                                <div class="collapse" id="LMA1" style="padding-left:20px">
+                                    Argem İSG modülü 01.01.2019 tarihi ile kullanıma açıldı
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <a data-toggle="collapse" href="#LMA2" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <span class="fa fa-bell-o" style="padding-right:5px"></span>Teknik denetçi raporu için tıklayınız
+                                    </a>
+                                </p>
+                                <div class="collapse" id="LMA2" style="padding-left:20px">
+                                    Teknik denetçi raporu için tıklayınız
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <p>
+                                    <a data-toggle="collapse" href="#LMA3" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <span class="fa fa-bell" style="padding-right:5px"></span>Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
+                                    </a>
+                                </p>
+                                <div class="collapse" id="LMA3" style="padding-left:20px">
+                                    Eğitime başvuruları başladı. Sistem giriş yapıp eğitim başvurusunu onaylayınız.
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
+    @Scripts.Render("~/JSNG/Yetki/Login")
+
+</body>
+</html>
+

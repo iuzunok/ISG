@@ -1,0 +1,123 @@
+﻿@using ISGWebSite.UserControl;
+@{
+    ViewBag.Title = "YetkiVer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="ngcYetkiVer">
+
+    <div ng-show="HataVar" class="alert alert-info ng-hide">
+        {{HataAciklama}}
+    </div>
+
+    <div class="card">
+        <div class="card-header KusakInce">
+            <h6 class="float-left">Yetki Verilecek Kullanıcı</h6>
+        </div>
+        <div class="card-body PaddingYok">
+            <table class="table table-borderless table-sm MarginBottomYok">
+                <tbody>
+                    <tr>
+                        <td style="width:110px; vertical-align:middle"><b>Kullanıcı :</b></td>
+                        <td>
+                            @Html.ArgemDDLText("txtKullaniciAd", "Key", "Ad/Soyad giriniz")
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-primary" ng-click="KullaniciYetkiGetir()">
+                                <span class="fa fa-search" style="padding-right:15px"></span>Ara
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="divKullaniciDetay"></div>
+
+    <div class="card">
+        <div class="card-header KusakInce">
+            <h6 class="float-left">Kullanıcı Yetkileri</h6>
+        </div>
+        <div class="card-body PaddingYok" ng-show="oKullaniciYetkiGrupModelPage.length">
+            <div class="row">
+                <div class="col-12">
+
+                    <table id="tblSonuc" ng-cloak class="table table-bordered table-sm AramaSonuc">
+                        <tr>
+                            <th style="width:50px">S.No</th>
+                            <th ng-click="Sirala('YetkiGrupAd')" style="cursor: pointer;">
+                                Yetki Grup Adı
+                                <span class="fa" ng-show="SiralamaAlan=='YetkiGrupAd'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                            </th>
+                            <th style="width:120px"></th>
+                        </tr>
+                        <tr ng-repeat="KM in oKullaniciYetkiGrupModelPage|orderBy:SiralamaAlan:TersSira" class="AramaSonucAlternate"
+                            ng-class="$index % 2 == 0 ? 'AramaSonucTek' : 'AramaSonucCift'">
+                            <td>{{$index+1}}</td>
+                            <td>{{KM.YetkiGrupAd}}</td>
+                            <td>
+                                <img src="~/Resim/Ortak/Guncelle.png" ng-click="RCGu(KM.YetkiGrupKey)" />
+                                <img src="~/Resim/Ortak/Detay.png" ng-click="RCOk(KM.YetkiGrupKey)" />
+                                <img src="~/Resim/Ortak/Sil.png" ng-click="RCSi(KM.YetkiGrupKey)" />
+                                <img src="~/Resim/Ortak/Sec.png" ng-click="RCSec(KM.YetkiGrupKey)" />
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="row" ng-show="oKullaniciYetkiGrupModelPage.length">
+
+                <div class="col-4">
+                    <div style="padding-left:5px">
+                        {{oKullaniciYetkiGrupModelPage.length}} / {{ToplamKayitAdet}}
+                    </div>
+                </div>
+                <div class="col-4">
+                    <ul uib-pagination
+                        ng-model="AktifSayfaNo"
+                        ng-change="SayfaDegisti()"
+                        total-items="ToplamKayitAdet"
+                        items-per-page="SayfaKayitAdet"
+                        max-size="10"
+                        class="pagination"
+                        boundary-links="true"
+                        previous-text="&lsaquo;"
+                        next-text="&rsaquo;"
+                        first-text="&laquo;"
+                        last-text="&raquo;"></ul>
+                </div>
+                <div class="col-4">
+                    <div class="float-right" style="padding-right:5px">
+                        <div>
+                            <div class="btn-group" role="group" aria-label="yazdır">
+                                <button type="button" class="btn btn-light" ng-click="ExportPDF()" aria-label="Pdf" title="PDF">
+                                    <span class="fa fa-file-pdf-o" style="color:#a90329" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" class="btn btn-light" ng-click="ExportExcel()" aria-label="Excel" title="Excel">
+                                    <span class="fa fa-file-excel-o" style="color:#a90329" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header KusakInce">
+            <h6 class="float-left">Kullanıcı Rolleri</h6>
+        </div>
+        <div id="divRol" class="card-body PaddingYok">
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/JSNG/Yetki/YetkiVer")
+}

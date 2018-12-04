@@ -1,8 +1,9 @@
 ﻿@{
     ViewBag.Title = "Ana Sayfa";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div ng-controllerXX="ngConAnaSayfa">
+<div>
     <div class="row">
         <div class="col-sm-6">
             <ul class="list-group">
@@ -10,6 +11,10 @@
                 <li class="list-group-item py-2 KusakSagSol">
                     <span class="fa fa-star" style="padding-right:10px"></span>@Html.ActionLink("Kullanıcı İşlemleri angular", "KullaniciAra", "Kullanici", new { area = "Yetki" }, new { })
                 </li>
+                <li class="list-group-item py-2 KusakSagSol">
+                    <span class="fa fa-star" style="padding-right:10px"></span>@Html.ActionLink("Yetki Grup İşlemleri", "YetkiGrupAra", "YetkiGrup", new { area = "Yetki" }, new { })
+                </li>
+                <li></li>
                 <li class="list-group-item py-2 KusakSagSol">
                     <span class="fa fa-star" style="padding-right:10px"></span>@Html.ActionLink("Kullanıcı İşlemleri Mvc", "KullaniciAraMVC", "Kullanici", new { area = "Yetki" }, new { })
                 </li>
@@ -59,3 +64,9 @@
         </div>
     </div>
 </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/JSNG/Yetki/Login")
+}
+

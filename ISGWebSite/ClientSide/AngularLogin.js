@@ -20,8 +20,6 @@
             $scope.HataVar = false;
             $scope.HataAciklama = '';
 
-            // console.log('login giden form data:');
-            // console.log($scope.LoginViewModel);
             $scope.GirisButonKapat = true;
 
             $http({

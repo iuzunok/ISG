@@ -1,0 +1,110 @@
+﻿@model ISGWebSite.Models.SonucModel<ISGWebSite.Models.Yetki.Kullanici.KullaniciAraModel>
+
+@{
+    ViewBag.Title = "Kullanici";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div ng-controller="ngcOkuma">
+
+    <div ng-show="HataVar" class="alert alert-danger ng-hide">
+        {{HataAciklama}}
+    </div>
+
+    @{
+        if (Model == null || Model.Durum == "H")
+        {
+            <div class="alert alert-danger">
+                @Html.DisplayFor(model => model.Aciklama)
+            </div>
+        }
+        else
+        {
+            <div class="card">
+                <div class="card-header KusakInce">
+                    <h6 class="float-left">Kullanıcı Bilgileri</h6>
+                </div>
+                <div class="card-body">
+
+                    <table class="table table-bordered table-sm">
+                        <tr>
+                            <td style="width:150px">
+                                <b>Kullanıcı Adı :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].KullaniciAd)
+                            </td>
+                            <td rowspan="5" style="width:110px">
+                                <img src="/Yetki/Kullanici/KullaniciResimGetir" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Adı :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].Ad)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Soyad :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].Soyad)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Tipi :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].KullaniciTipNoUzunAd)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Durumu :</b>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => model.Data[0].AktifPasifTipNoUzunAd)
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header KusakInce">
+                    <h6 class="float-left">Kullanıcı Yetkileri</h6>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-sm btn-dark" ng-click="RCIn()" aria-label="Yeni Kullanıcı Kayıt">
+                            <span class="fa fa-save" aria-hidden="true" style="padding-right:15px"></span>Yeni Kayıt
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header KusakInce">
+                    <h6 class="float-left">Kullanıcı Rolleri</h6>
+                    <div class="float-right">
+                        <button type="button" class="btn btn-sm btn-dark" ng-click="RCIn()" aria-label="Yeni Kullanıcı Kayıt">
+                            <span class="fa fa-save" aria-hidden="true" style="padding-right:15px"></span>Yeni Kayıt
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                </div>
+            </div>
+        }
+    }
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/JSNG/Yetki/Kullanici")
+}

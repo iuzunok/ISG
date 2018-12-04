@@ -1,0 +1,114 @@
+﻿.card {
+    border: 1px solid #c8ced3 !important;
+    margin-bottom: 6px !important;
+}
+
+.cardPopUp {
+    /*border: 1px solid #c8ced3 !important;*/
+    margin:6px !important;
+}
+
+.PaddingYok {
+    padding: 0 !important;
+}
+
+.PaddingAz {
+    padding: 0.75rem !important;
+}
+
+
+.MarginBottomYok {
+    margin-bottom: 0 !important;
+}
+
+.Menu {
+    background-color: white;
+    border-left: 1px solid #B8B8B8;
+    border-right: 1px solid #B8B8B8;
+    border-bottom: 1px solid #B8B8B8;
+    margin-bottom: 10px;
+    padding-top: 0;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
+    padding-bottom: 0;
+}
+
+.nav-link {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    text-align: center;
+}
+
+.AramaSonuc {
+    margin-bottom: 5px !important;
+}
+
+    .AramaSonuc th {
+        /*background-color: #eee;
+        border: 1px solid #ddd;
+        border-bottom: 2px solid #ddd;
+        */
+        background-color: #f0f3f5 !important;
+        border-bottom: 1px solid #c8ced3 !important;
+    }
+
+    .AramaSonuc td {
+        border: 1px solid #ddd
+    }
+
+.AramaSonucTek td {
+    background-color: #eeeeee;
+}
+
+.AramaSonucCift td {
+    background-color: #ffffff;
+}
+
+.btn-gri {
+    background-color: #c8ced3;
+}
+
+/*
+        
+.TabloAltBoslukYok {
+    margin-bottom: 0px !important;
+}
+
+
+.btnAltKoseYok {
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    margin-top: 5px;
+}
+
+.KusakKirmizi > .row {
+    padding: 0px !important;
+}
+
+
+
+  */
+.fa-fs22 {
+    font-size: 22px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+
+/*turuncu*/
+.fa-fcTu {
+    color: orangered;
+    cursor: pointer;
+}
+
+/*gri*/
+.fa-fcGr {
+    color: gray;
+    cursor: pointer;
+}
+
+/*beyaz*/
+.fa-fcBey {
+    color: white;
+    cursor: pointer;
+}

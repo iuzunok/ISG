@@ -7,6 +7,8 @@
 
 $(document).ready(function ()
 {
+    ArgemDDLTextUtil.Init();
+
     $('.dropdown-menu a.dropdown-toggle').on('click', function (e)
     {
         var $el = $(this);
@@ -29,18 +31,9 @@ $(document).ready(function ()
         {
             $el.next().css({ "top": $el[0].offsetTop, "left": $parent.outerWidth() - 4 });
         }
-
         return false;
     });
 });
-
-
-
-
-
-
-
-
 
 
 function GetScope(ctrlName)
@@ -53,64 +46,63 @@ function GetScope(ctrlName)
 
 // modal işlemleri
 
-var KayitSilindi = function (Key)
-{
-    // debugger;
-    // alert('Kullanıcı silindi Key:' + Key);
-    var $scope = GetScope('ngConKullaniciAra');
-    // $scope.KullaniciModelAraSonuc
+//var KayitSilindi = function (Key)
+//{
+//    // debugger;
+//    // alert('Kullanıcı silindi Key:' + Key);
+//    var $scope = GetScope('ngConKullaniciAra');
+//    // $scope.KullaniciModelAraSonuc
 
-    // arama sonucu listesinden de sil
-    var ix = -1;
-    for (var i = 0; i < $scope.KullaniciModelAraSonuc.length; i++)
-    {
-        if ($scope.KullaniciModelAraSonuc[i].KullaniciKey == Key)
-        {
-            ix = i;
-            break;
-        }
-    }
-    if (ix > -1)
-        $scope.KullaniciModelAraSonuc.splice(ix, 1);
-    $scope.$apply();
+//    // arama sonucu listesinden de sil
+//    var ix = -1;
+//    for (var i = 0; i < $scope.KullaniciModelAraSonuc.length; i++)
+//    {
+//        if ($scope.KullaniciModelAraSonuc[i].KullaniciKey == Key)
+//        {
+//            ix = i;
+//            break;
+//        }
+//    }
+//    if (ix > -1)
+//        $scope.KullaniciModelAraSonuc.splice(ix, 1);
+//    $scope.$apply();
 
-    ArgemModalPopUpKapat();
-};
+//    ArgemModalPopUpKapat();
+//};
 
-var KayitGuncellendi = function (Key, Model)
-{
-    // debugger;
-    var $scope = GetScope('ngConKullaniciAra');
+//var KayitGuncellendi = function (Key, Model)
+//{
+//    // debugger;
+//    var $scope = GetScope('ngConKullaniciAra');
 
-    // arama listesinide güncelle
-    var ix = -1;
-    for (var i = 0; i < $scope.KullaniciModelAraSonuc.length; i++)
-    {
-        if ($scope.KullaniciModelAraSonuc[i].KullaniciKey == Key)
-        {
-            ix = i;
-            break;
-        }
-    }
-    if (ix > -1)
-    {
-        // debugger;
-        $scope.KullaniciModelAraSonuc[ix].KullaniciAd = Model.KullaniciAd;
-        $scope.KullaniciModelAraSonuc[ix].Ad = Model.Ad;
-        $scope.KullaniciModelAraSonuc[ix].Soyad = Model.Soyad;
-        $scope.KullaniciModelAraSonuc[ix].KullaniciTipNo = Model.KullaniciTipNo;
-        $scope.KullaniciModelAraSonuc[ix].AktifPasifTipNo = Model.AktifPasifTipNo;
-    }
-    $scope.$apply();
+//    // arama listesinide güncelle
+//    var ix = -1;
+//    for (var i = 0; i < $scope.KullaniciModelAraSonuc.length; i++)
+//    {
+//        if ($scope.KullaniciModelAraSonuc[i].KullaniciKey == Key)
+//        {
+//            ix = i;
+//            break;
+//        }
+//    }
+//    if (ix > -1)
+//    {
+//        // debugger;
+//        $scope.KullaniciModelAraSonuc[ix].KullaniciAd = Model.KullaniciAd;
+//        $scope.KullaniciModelAraSonuc[ix].Ad = Model.Ad;
+//        $scope.KullaniciModelAraSonuc[ix].Soyad = Model.Soyad;
+//        $scope.KullaniciModelAraSonuc[ix].KullaniciTipNo = Model.KullaniciTipNo;
+//        $scope.KullaniciModelAraSonuc[ix].AktifPasifTipNo = Model.AktifPasifTipNo;
+//    }
+//    $scope.$apply();
 
-    ArgemModalPopUpKapat();
-};
+//    ArgemModalPopUpKapat();
+//};
 
 
 var ArgemModalPopUpKapat = function (data)
 {
-    oArgemModal.close();
-    // $('#argemModalPopUp').modal('toggle');
+    oArgemModal.Close();
 };
 
 var KullaniciGuncelle = function ()
@@ -118,7 +110,6 @@ var KullaniciGuncelle = function ()
     if (confirm('değişiklikler kaydedilsin mi'))
     {
         $scope = angular.element(document.getElementById('divKullaniciKayit')).scope();
-        // alert($scope);
         alert(angular);
         angular.KullaniciAramaService.KullaniciKaydet($scope, 0, function (data)
         {
@@ -262,4 +253,5 @@ $(document).ready(function ()
         modal.open({ content: "Hows it going?" });
         e.preventDefault();
     });
-});*/
+});
+*/

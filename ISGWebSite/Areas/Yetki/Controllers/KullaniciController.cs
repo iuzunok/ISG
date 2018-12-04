@@ -1,4 +1,6 @@
-﻿using ISGWebSite.AppCode;
+﻿using Argem.DataServices;
+using ArgemUtil;
+using ISGWebSite.AppCode;
 using ISGWebSite.Controllers;
 using ISGWebSite.Models;
 using ISGWebSite.Models.Yetki.Kullanici;
@@ -8,523 +10,285 @@ using System.Data;
 using System.Linq;
 using System.Web.Mvc;
 using VeriTabani;
+using static ISGWebSite.Areas.Yetki.Models.GenelModel;
 
 namespace ISGWebSite.Areas.Yetki.Controllers
 {
     // https://www.youtube.com/watch?v=_r6laMn70FA paging
     public class KullaniciController : BaseController
     {
+        public ActionResult YetkiVer()
+        {
+            return View();
+        }
+
+
         public ActionResult KullaniciAra()
         {
             return View();
         }
 
-        public ActionResult KullaniciAraTemp()
-        {
-            return View();
-        }
 
-        public ActionResult KullaniciAraTempTemp()
+        public JsonResult KullaniciAraSonuc(KullaniciModel oKullaniciModel)
         {
-            return View();
-        }
+            // System.Threading.Thread.Sleep(2000);
+            SonucModel<KullaniciAraModel> oSonucModel = new SonucModel<KullaniciAraModel>() { Durum = "H", Aciklama = "" };
 
-        public ActionResult KullaniciAraMVC(FormCollection formCollection)
-        {
-            if (ModelState.IsValid)
+            ArgemSQL oSQL = new ArgemSQL();
+            oSQL.CommandText =
+                "SELECT * FROM public.\"KULLANICI\"";
+
+            if (!string.IsNullOrEmpty(oKullaniciModel.KullaniciAd))
+                oSQL.Gecen("KullaniciAd", oKullaniciModel.KullaniciAd);
+            else if (!string.IsNullOrEmpty(oKullaniciModel.Ad))
+                oSQL.Gecen("Ad", oKullaniciModel.Ad);
+            else if (!string.IsNullOrEmpty(oKullaniciModel.Soyad))
+                oSQL.Gecen("Soyad", oKullaniciModel.Soyad);
+
+            oSQL.Esit("KullaniciTipNo", oKullaniciModel.KullaniciTipNo, KolonTipi.Int, false);
+            oSQL.Esit("AktifPasifTipNo", oKullaniciModel.AktifPasifTipNo, KolonTipi.Int, false);
+            oSQL.OrderByAsc("Ad,Soyad");
+
+            using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
             {
-                // hata oluşturmak için
-                // string s = "controller seviye hata";
-                // int i = Convert.ToInt16(s);
+                DataTable dt = new DataTable();
+                oData.DataGetir(ref dt, oSQL);
 
-                List<KullaniciModelAra> aryKullaniciModelAra = new List<KullaniciModelAra>();
-
-                if (formCollection.Count > 0)
+                if (dt.Rows.Count > 0)
                 {
-                    string KullaniciAd = formCollection["txtKullaniciAd"];
-                    string Ad = formCollection["txtAd"];
-                    string Soyad = formCollection["txtSoyad"];
-
-                    string sSQL = "SELECT * FROM public.\"KULLANICI\"";
-                    if (KullaniciAd.Trim() != "")
-                        sSQL += " where \"KullaniciAd\" like '%" + KullaniciAd.Trim() + "%'";
-                    if (Ad.Trim() != "")
-                        sSQL += " where \"Ad\" like '%" + Ad.Trim() + "%'";
-                    if (Soyad.Trim() != "")
-                        sSQL += " where \"Soyad\" like '%" + Soyad.Trim() + "%'";
-                    DataSet ds = DBUtil.VeriGetirDS(sSQL);
-                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    List<KullaniciAraModel> aryKullaniciAraModel = new List<KullaniciAraModel>();
+                    foreach (DataRow dr in dt.Rows)
                     {
                         int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
                         int AktifPasifTipNo = Convert.ToInt32(dr["AktifPasifTipNo"]);
-                        KullaniciModelAra oKullaniciModelAra = new KullaniciModelAra()
+                        KullaniciAraModel oKullaniciAraModel = new KullaniciAraModel()
                         {
                             KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
                             KullaniciAd = dr["KullaniciAd"].ToString(),
                             Ad = dr["Ad"].ToString(),
                             Soyad = dr["Soyad"].ToString(),
                             KullaniciTipNo = KullaniciTipNo,
-
                             KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo),
                             AktifPasifTipNo = AktifPasifTipNo,
                             AktifPasifTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, AktifPasifTipNo)
                         };
-                        aryKullaniciModelAra.Add(oKullaniciModelAra);
+                        aryKullaniciAraModel.Add(oKullaniciAraModel);
                     }
-                }
-                // else
-                // TempData["Sonuc"] = "Kayıt bulunamadı";
 
-                return View(aryKullaniciModelAra);
+                    oSonucModel.Durum = "";
+                    oSonucModel.Data = aryKullaniciAraModel;
+                }
+                else
+                    oSonucModel.Aciklama = "Aradığınız kritere uygun kullanıcı kaydı bulunamadı";
+
+                return Json(oSonucModel, JsonRequestBehavior.AllowGet);
             }
-            return View("sdsdfds");
         }
 
-        public JsonResult KullaniciAraSonuc(KullaniciModelAra oKullaniciModelAra)
+        public JsonResult KullaniciGetir(string KullaniciKey)
         {
             // System.Threading.Thread.Sleep(2000);
-            List<KullaniciModelAra> aryKullaniciModelAra = new List<KullaniciModelAra>();
-            if (ModelState.IsValid)
+            SonucModel<KullaniciModel> oSonucModel = new SonucModel<KullaniciModel>() { Durum = "H", Aciklama = "" };
+
+            if (KullaniciKey == "" || KullaniciKey == "0")
             {
-                string sSQL = "SELECT * FROM public.\"KULLANICI\"";
-                string Where = "";
-                if (oKullaniciModelAra.KullaniciKey != 0)
-                    Where = " \"KullaniciKey\" = " + oKullaniciModelAra.KullaniciKey;
-                else
+                List<KullaniciModel> aryKullaniciModel = new List<KullaniciModel>();
+                // ilk kayıtta default verilerin dolu gelmesi için 
+                KullaniciModel oKullaniciModel = new KullaniciModel()
                 {
-                    if (!string.IsNullOrEmpty(oKullaniciModelAra.KullaniciAd))
-                        Where = " \"KullaniciAd\" like '%" + oKullaniciModelAra.KullaniciAd.Trim() + "%'";
-                    if (!string.IsNullOrEmpty(oKullaniciModelAra.Ad))
-                    {
-                        if (Where != "")
-                            Where += " and ";
-                        Where += "  \"Ad\" like '%" + oKullaniciModelAra.Ad.Trim() + "%'";
-                    }
-                    if (!string.IsNullOrEmpty(oKullaniciModelAra.Soyad))
-                    {
-                        if (Where != "")
-                            Where += " and ";
-                        Where += " \"Soyad\" like '%" + oKullaniciModelAra.Soyad.Trim() + "%'";
-                    }
-                    if (oKullaniciModelAra.KullaniciTipNo != 0)
-                    {
-                        if (Where != "")
-                            Where += " and ";
-                        Where += " \"KullaniciTipNo\" = " + oKullaniciModelAra.KullaniciTipNo + "";
-                    }
-                    if (oKullaniciModelAra.AktifPasifTipNo != 0)
-                    {
-                        if (Where != "")
-                            Where += " and ";
-                        Where += " \"AktifPasifTipNo\" = " + oKullaniciModelAra.AktifPasifTipNo + "";
-                    }
-                }
-                if (Where != "")
-                    sSQL += "where " + Where;
-
-                sSQL += "order by \"Ad\", \"Soyad\" ";
-
-               DataSet ds = DBUtil.VeriGetirDS(sSQL);
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
-                    int AktifPasifTipNo = Convert.ToInt32(dr["AktifPasifTipNo"]);
-                    oKullaniciModelAra = new KullaniciModelAra()
-                    {
-                        KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
-                        KullaniciAd = dr["KullaniciAd"].ToString(),
-                        Ad = dr["Ad"].ToString(),
-                        Soyad = dr["Soyad"].ToString(),
-                        KullaniciTipNo = KullaniciTipNo,
-                        KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo),
-                        AktifPasifTipNo = AktifPasifTipNo,
-                        AktifPasifTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, AktifPasifTipNo)
-                    };
-                    aryKullaniciModelAra.Add(oKullaniciModelAra);
-                }
+                    KullaniciKey = 0,
+                    KullaniciTipNo = 1,
+                    AktifPasifTipNo = 100
+                };
+                aryKullaniciModel.Add(oKullaniciModel);
+                oSonucModel.Durum = "";
+                oSonucModel.Data = aryKullaniciModel;
+                return Json(oSonucModel, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                var errors = ModelState.Select(x => x.Value.Errors)
-                           .Where(y => y.Count > 0)
-                           .ToList();
-            }
+                ArgemSQL oSQL = new ArgemSQL();
+                oSQL.CommandText =
+                    "SELECT * FROM public.\"KULLANICI\"";
+                oSQL.Esit("KullaniciKey", KullaniciKey, KolonTipi.Int, true);
 
-            return Json(aryKullaniciModelAra, JsonRequestBehavior.AllowGet);
+                using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
+                {
+                    DataTable dt = new DataTable();
+                    oData.DataGetir(ref dt, oSQL);
+
+                    if (dt.Rows.Count > 0)
+                    {
+                        List<KullaniciModel> aryKullaniciModel = new List<KullaniciModel>();
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
+                            int AktifPasifTipNo = Convert.ToInt32(dr["AktifPasifTipNo"]);
+                            KullaniciModel oKullaniciModel = new KullaniciModel()
+                            {
+                                KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
+                                KullaniciAd = dr["KullaniciAd"].ToString(),
+                                Ad = dr["Ad"].ToString(),
+                                Soyad = dr["Soyad"].ToString(),
+                                KullaniciTipNo = KullaniciTipNo,
+                                // KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo),
+                                AktifPasifTipNo = AktifPasifTipNo,
+                                // AktifPasifTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, AktifPasifTipNo)
+                            };
+                            aryKullaniciModel.Add(oKullaniciModel);
+                        }
+
+                        oSonucModel.Durum = "";
+                        oSonucModel.Data = aryKullaniciModel;
+                    }
+
+                    return Json(oSonucModel, JsonRequestBehavior.AllowGet);
+                }
+            }
         }
 
         [HttpGet]
         public ActionResult KullaniciKayit(string Durum, string Key)
         {
-            KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit()
-            {
-                IslemDurum = "H",
-                IslemAciklama = "Tanımsız hata"
-            };
-
-            if (string.IsNullOrEmpty(Durum) && string.IsNullOrEmpty(Key))
-            {
-                oKullaniciModelKayit.IslemAciklama = "Hatalı parametre";
-                return PartialView(oKullaniciModelKayit);
-            }
-            else if (Durum == "I")
-            {
-                oKullaniciModelKayit = new KullaniciModelKayit()
-                {
-                    IslemDurum = "I",
-                    KullaniciKey = 0,
-                    KullaniciAd = "",
-                    Ad = "",
-                    Soyad = "",
-
-                    KullaniciTipNo = 0,
-                    KullaniciTipNoUzunAd = "",
-                    KullaniciTipNolar = CacheHelper.LookGetir(CacheHelper.DatabaseTipNo.Yetki, "KullaniciTipNo"),
-
-                    AktifPasifTipNo = 0,
-                    AktifPasifTipNoUzunAd = "",
-                    AktifPasifTipNolar = CacheHelper.LookGetir(CacheHelper.DatabaseTipNo.Yetki, "AktifPasifTipNo")
-
-                    // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
-                    // UTar = Convert.ToDateTime(dr["UTar"])
-                };
-                return PartialView(oKullaniciModelKayit);
-            }
-            else
-            {
-                string sSQL = "SELECT * FROM public.\"KULLANICI\" ";
-                sSQL += "where \"KullaniciKey\" = " + Key;
-                DataSet ds = DBUtil.VeriGetirDS(sSQL);
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataRow dr = ds.Tables[0].Rows[0];
-                    int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
-                    int AktifPasifTipNo = Convert.ToInt32(dr["AktifPasifTipNo"]);
-                    oKullaniciModelKayit = new KullaniciModelKayit()
-                    {
-                        IslemDurum = "U",
-                        KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
-                        KullaniciAd = dr["KullaniciAd"].ToString(),
-                        Ad = dr["Ad"].ToString(),
-                        Soyad = dr["Soyad"].ToString(),
-
-                        KullaniciTipNo = KullaniciTipNo,
-                        KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo),
-                        KullaniciTipNolar = CacheHelper.LookGetir(CacheHelper.DatabaseTipNo.Yetki, "KullaniciTipNo"),
-
-                        AktifPasifTipNo = AktifPasifTipNo,
-                        AktifPasifTipNoUzunAd = "",
-                        AktifPasifTipNolar = CacheHelper.LookGetir(CacheHelper.DatabaseTipNo.Yetki, "AktifPasifTipNo")
-
-                        // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
-                        // UTar = Convert.ToDateTime(dr["UTar"])
-                    };
-                    return PartialView(oKullaniciModelKayit);
-                }
-                else
-                    oKullaniciModelKayit.IslemAciklama = "Kullanıcı bilgisine ulaşılamadı";
-            }
-
-            return PartialView(oKullaniciModelKayit);
+            return PartialView();
         }
 
         [HttpPost]
-        public JsonResult KullaniciKayit(KullaniciModelKayit oKullaniciModelKayit)
+        public JsonResult KullaniciKayit(KullaniciModel oKullaniciModel)
         {
-            int KullaniciKey = oKullaniciModelKayit.KullaniciKey;
-            string KullaniciAd = oKullaniciModelKayit.KullaniciAd;
-            string Ad = oKullaniciModelKayit.Ad;
-            string Soyad = oKullaniciModelKayit.Soyad;
-            int KullaniciTipNo = oKullaniciModelKayit.KullaniciTipNo;
-            int AktifPasifTipNo = oKullaniciModelKayit.AktifPasifTipNo;
+            SonucModel<KullaniciModel> oSonucModel = new SonucModel<KullaniciModel>() { Durum = "H", Aciklama = "" };
 
-            oKullaniciModelKayit.IslemDurum = "H";
+            int KullaniciKey = oKullaniciModel.KullaniciKey;
+            string KullaniciAd = oKullaniciModel.KullaniciAd;
+            string Ad = oKullaniciModel.Ad;
+            string Soyad = oKullaniciModel.Soyad;
+            int KullaniciTipNo = oKullaniciModel.KullaniciTipNo;
+            int AktifPasifTipNo = oKullaniciModel.AktifPasifTipNo;
+
             if (string.IsNullOrEmpty(KullaniciAd))
-                oKullaniciModelKayit.IslemAciklama = "Kullanıcı adı boş olamaz";
+                oSonucModel.Aciklama = "Kullanıcı adı boş olamaz";
             else if (string.IsNullOrEmpty(Ad))
-                oKullaniciModelKayit.IslemAciklama = "Ad boş olamaz";
+                oSonucModel.Aciklama = "Ad boş olamaz";
             else if (string.IsNullOrEmpty(Soyad))
-                oKullaniciModelKayit.IslemAciklama = "Soyad boş olamaz";
+                oSonucModel.Aciklama = "Soyad boş olamaz";
+            else if (KullaniciTipNo == 0)
+                oSonucModel.Aciklama = "Tip boş olamaz";
+            else if (AktifPasifTipNo == 0)
+                oSonucModel.Aciklama = "Durumu boş olamaz";
             else
             {
                 if (KullaniciKey == 0)
                 {
-                    string sSQL =
+                    ArgemSQL oSQL = new ArgemSQL();
+                    oSQL.CommandText =
                         "insert into public.\"KULLANICI\" " +
                         "       (\"KullaniciAd\", \"Ad\", \"Soyad\", \"KullaniciTipNo\", \"AktifPasifTipNo\", \"Parola\", \"UKullaniciKey\", \"UTar\") " +
                         "values ('" + KullaniciAd + "','" + Ad + "','" + Soyad + "', " + KullaniciTipNo + ", " + AktifPasifTipNo + ", '123', 1, CURRENT_DATE) " +
                         "returning \"KullaniciKey\" ";
-                    string SonucKullaniciKey = DBUtil.SorguCalistir(sSQL);
-                    if (SonucKullaniciKey != "0")
-                        oKullaniciModelKayit.IslemDurum = "OK";
-                    else
-                        oKullaniciModelKayit.IslemAciklama = "Veri kaydedilemedi";
+                    using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
+                    {
+                        string SonucYetkiGrupKey = Convert.ToString(oData.SorguCalistir(oSQL));
+                        if (SonucYetkiGrupKey != "0")
+                            oSonucModel.Durum = "";
+                        else
+                            oSonucModel.Aciklama = "Veri kaydedilemedi";
+                    }
                 }
                 else
                 {
-                    string sSQL =
+                    ArgemSQL oSQL = new ArgemSQL();
+                    oSQL.CommandText =
                         "update public.\"KULLANICI\" " +
                         "set    \"KullaniciAd\" = '" + KullaniciAd + "', " +
                         "       \"Ad\" = '" + Ad + "', " +
                         "       \"Soyad\"='" + Soyad + "', " +
                         "       \"KullaniciTipNo\"=" + KullaniciTipNo + ", " +
-                        "       \"AktifPasifTipNo\"=" + AktifPasifTipNo + " ";
-                    sSQL += " where \"KullaniciKey\" = " + KullaniciKey;
-                    DBUtil.SorguCalistir(sSQL);
-
-                    oKullaniciModelKayit.IslemDurum = "OK";
+                        "       \"AktifPasifTipNo\"=" + AktifPasifTipNo + ", " +
+                        "       \"UKullaniciKey\" = " + Session["OpKullaniciKey"] + ", " +
+                        "       \"UTar\" = current_timestamp ";
+                    oSQL.Esit("KullaniciKey", KullaniciKey, KolonTipi.Int, true);
+                    using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
+                    {
+                        oData.SorguCalistir(oSQL);
+                        oSonucModel.Durum = "";
+                    }
                 }
             }
 
-            return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
-        }
-
-        public ActionResult KullaniciKayitMVC(FormCollection formCollection)
-        {
-            if (ModelState.IsValid)
-            {
-                KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit();
-
-                string KullaniciKey = formCollection["KullaniciKey"];
-                string KullaniciAd = formCollection["KullaniciAd"];
-                string Ad = formCollection["Ad"];
-                string Soyad = formCollection["Soyad"];
-
-                if (string.IsNullOrEmpty(KullaniciKey))
-                {
-                    ModelState.AddModelError("", "Kullanıcı bilgisine ukaşılamadı");
-                    return PartialView("KullaniciKayit", oKullaniciModelKayit);
-                }
-                else if (string.IsNullOrEmpty(KullaniciAd))
-                {
-                    ModelState.AddModelError("", "Kullanıcı adını giriniz");
-                    return PartialView("KullaniciKayit", oKullaniciModelKayit);
-                }
-                else if (string.IsNullOrEmpty(Ad))
-                {
-                    ModelState.AddModelError("", "Adı giriniz");
-                    return PartialView("KullaniciKayit", oKullaniciModelKayit);
-                }
-                else if (string.IsNullOrEmpty(Soyad))
-                {
-                    ModelState.AddModelError("", "Soyadı giriniz");
-                    return PartialView("KullaniciKayit", oKullaniciModelKayit);
-                }
-
-                if (KullaniciKey == "0")
-                {
-                    string sSQL =
-                        "insert into public.\"KULLANICI\" " +
-                        "       (\"KullaniciAd\", \"Ad\", \"Soyad\", \"KullaniciTipNo\", \"AktifPasifTipNo\", \"Parola\", \"UKullaniciKey\", \"UTar\") " +
-                        "values ('" + KullaniciAd + "','" + Ad + "','" + Soyad + "', 1, 1, '123', 1, CURRENT_DATE) " +
-                        "returning \"KullaniciKey\" ";
-                    KullaniciKey = DBUtil.SorguCalistir(sSQL);
-                    if (KullaniciKey != "0")
-                    {
-                        return RedirectToAction("KullaniciOku", "Kullanici", new { area = "Yetki", Durum = "O", Key = KullaniciKey });
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("", "Veri kaydedilemedi");
-                        return PartialView("KullaniciKayit", oKullaniciModelKayit);
-                    }
-                }
-                else
-                {
-                    string sSQL =
-                        "update public.\"KULLANICI\" " +
-                        "set    \"KullaniciAd\" = '" + KullaniciAd + "', " +
-                        "       \"Ad\" = '" + Ad + "', " +
-                        "       \"Soyad\"='" + Soyad + "' ";
-                    sSQL += " where \"KullaniciKey\" = " + KullaniciKey;
-                    DBUtil.SorguCalistir(sSQL);
-
-                    return RedirectToAction("KullaniciOku", "Kullanici", new { area = "Yetki", Durum = "O", Key = KullaniciKey });
-                }
-            }
-            else
-                return HttpNotFound("1111");
-        }
-
-
-        public PartialViewResult KullaniciOkuXXX()
-        {
-            return PartialView();
+            return Json(oSonucModel, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public JsonResult KullaniciOkuAng(string Durum, string Key)
+        public ActionResult KullaniciOku(string Durum, string Key)
         {
-            // System.Threading.Thread.Sleep(100);
-            KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit()
-            {
-                IslemDurum = "H",
-                IslemAciklama = "Tanımsız hata"
-            };
-
-            if (string.IsNullOrEmpty(Key))
-            {
-                oKullaniciModelKayit.IslemAciklama = "Hatalı parametre";
-                return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                string sSQL = "SELECT * FROM public.\"KULLANICI\"";
-                sSQL += " where \"KullaniciKey\" = " + Key;
-                DataSet ds = DBUtil.VeriGetirDS(sSQL);
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataRow dr = ds.Tables[0].Rows[0];
-                    int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
-                    int AktifPasifTipNo = Convert.ToInt32(dr["AktifPasifTipNo"]);
-                    oKullaniciModelKayit = new KullaniciModelKayit()
-                    {
-                        IslemDurum = Durum,
-                        KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
-                        KullaniciAd = dr["KullaniciAd"].ToString(),
-                        Ad = dr["Ad"].ToString(),
-                        Soyad = dr["Soyad"].ToString(),
-                        KullaniciTipNo = KullaniciTipNo,
-                        AktifPasifTipNo = AktifPasifTipNo,
-                        KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo),
-                        AktifPasifTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, AktifPasifTipNo)
-                    };
-                    return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
-                }
-                else
-                    oKullaniciModelKayit.IslemAciklama = "Kullanıcı kaydına ulaşılamadı";
-            }
-
-            return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpGet]
-        public PartialViewResult KullaniciOku(string Durum, string Key)
-        {
-            KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit()
-            {
-                IslemDurum = "H",
-                IslemAciklama = "Tanımsız hata"
-            };
+            SonucModel<KullaniciAraModel> oSonucModel = new SonucModel<KullaniciAraModel>() { Durum = "H", Aciklama = "" };
 
             if (string.IsNullOrEmpty(Durum) && string.IsNullOrEmpty(Key))
             {
-                oKullaniciModelKayit.IslemAciklama = "Hatalı parametre";
-                return PartialView(oKullaniciModelKayit);
+                oSonucModel.Aciklama = "Hatalı parametre";
+                return PartialView(oSonucModel);
             }
             else
             {
                 string sSQL = "SELECT * FROM public.\"KULLANICI\"";
                 sSQL += " where \"KullaniciKey\" = " + Key;
-                DataSet ds = DBUtil.VeriGetirDS(sSQL);
+                DataSet ds = DBUtilPostger.VeriGetirDS(sSQL);
                 if (ds.Tables[0].Rows.Count > 0)
                 {
                     DataRow dr = ds.Tables[0].Rows[0];
                     int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
                     int AktifPasifTipNo = Convert.ToInt32(dr["AktifPasifTipNo"]);
-                    oKullaniciModelKayit = new KullaniciModelKayit()
+                    KullaniciAraModel oKullaniciAraModel = new KullaniciAraModel()
                     {
-                        IslemDurum = Durum,
                         KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
                         KullaniciAd = dr["KullaniciAd"].ToString(),
                         Ad = dr["Ad"].ToString(),
                         Soyad = dr["Soyad"].ToString(),
-
                         KullaniciTipNo = KullaniciTipNo,
                         KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo),
-
                         AktifPasifTipNo = AktifPasifTipNo,
                         AktifPasifTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, AktifPasifTipNo)
-
-                        // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
-                        // UTar = Convert.ToDateTime(dr["UTar"])
                     };
-                    // return PartialView("KullaniciOku", oKullaniciModelKayit);
+
+                    List<KullaniciAraModel> aryKullaniciAraModel = new List<KullaniciAraModel>();
+                    aryKullaniciAraModel.Add(oKullaniciAraModel);
+
+                    oSonucModel.Durum = Durum;
+                    oSonucModel.Data = aryKullaniciAraModel;
                 }
                 else
-                    oKullaniciModelKayit.IslemAciklama = "Kullanıcı kaydına ulaşılamadı";
+                    oSonucModel.Aciklama = "Kayıt bulunamadı";
             }
 
-            return PartialView(oKullaniciModelKayit);
+            return PartialView(oSonucModel);
         }
 
+        [HttpGet]
+        public ActionResult Kullanici(string Key)
+        {
+            return KullaniciOku("O", Key);
+        }
 
         [HttpGet]
         public JsonResult KullaniciSil(string Key)
         {
-            KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit()
-            {
-                IslemDurum = "H",
-                IslemAciklama = "Tanımsız hata"
-            };
-
-            // deneme amaçlı
-            // System.Threading.Thread.Sleep(2000);
-            // oKullaniciModelKayit.IslemDurum = "OK";
-            // return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
+            SonucModel<KullaniciModel> oSonucModel = new SonucModel<KullaniciModel>() { Durum = "H", Aciklama = "" };
 
             if (string.IsNullOrEmpty(Key))
-            {
-                oKullaniciModelKayit.IslemAciklama = "Silinecek kayda ulaşılamadı";
-                return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
-            }
+                oSonucModel.Aciklama = "Silinecek kayda ulaşılamadı";
             else if (Key == "1")
-            {
-                oKullaniciModelKayit.IslemAciklama = "Sistem yöneticisi silinemez";
-                return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
-            }
-            else
+                oSonucModel.Aciklama = "Sistem yöneticisi silinemez";
             {
                 string sSQL = "delete from public.\"KULLANICI\"";
                 sSQL += " where \"KullaniciKey\" = " + Key;
-                string Sonuc = DBUtil.SorguCalistir(sSQL);
+                string Sonuc = DBUtilPostger.SorguCalistir(sSQL);
                 if (Sonuc == "0")
-                    oKullaniciModelKayit.IslemDurum = "OK";
+                    oSonucModel.Durum = "";
                 else
-                    oKullaniciModelKayit.IslemAciklama = Sonuc;
-
-                return Json(oKullaniciModelKayit, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        [HttpGet]
-        public PartialViewResult KullaniciSilMVC(string Durum, string Key)
-        {
-            KullaniciModelKayit oKullaniciModelKayit = new KullaniciModelKayit()
-            {
-                IslemDurum = "H"
-            };
-
-            if (string.IsNullOrEmpty(Key))
-            {
-                return PartialView(oKullaniciModelKayit);
-            }
-            else
-            {
-                string sSQL = "SELECT * FROM public.\"KULLANICI\"";
-                sSQL += " where \"KullaniciKey\" = " + Key;
-                DataSet ds = DBUtil.VeriGetirDS(sSQL);
-                if (ds.Tables[0].Rows.Count > 0)
-                {
-                    DataRow dr = ds.Tables[0].Rows[0];
-                    int KullaniciTipNo = Convert.ToInt32(dr["KullaniciTipNo"]);
-                    oKullaniciModelKayit = new KullaniciModelKayit()
-                    {
-                        IslemDurum = Durum,
-                        KullaniciKey = Convert.ToInt32(dr["KullaniciKey"]),
-                        KullaniciAd = dr["KullaniciAd"].ToString(),
-                        Ad = dr["Ad"].ToString(),
-                        Soyad = dr["Soyad"].ToString(),
-                        KullaniciTipNo = KullaniciTipNo,
-                        KullaniciTipNoUzunAd = CacheHelper.LookUzunAdGetir(CacheHelper.DatabaseTipNo.Yetki, KullaniciTipNo)
-                        // UKullaniciKey = Convert.ToInt32(dr["UKullaniciKey"]),
-                        // UTar = Convert.ToDateTime(dr["UTar"])
-                    };
-                    return PartialView("KullaniciOku", oKullaniciModelKayit);
-                }
+                    oSonucModel.Aciklama = Sonuc;
             }
 
-            return PartialView(oKullaniciModelKayit);
+            return Json(oSonucModel, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult KullaniciResimGetir(string Key)
@@ -532,53 +296,52 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             return File(@"C:\ArgemProje\ISG\ISGWebSite\Resim\Ortak\PersonelResim.png", "image/png");
         }
 
-        #region login işlemleri
-
-        [HttpPost]
-        [AllowAnonymous]
-        public JsonResult SistemeGirisYap(LoginViewModel oLoginViewModel)
+        public JsonResult KullaniciGetirDDLText(string AramaKriter)
         {
-            string Sonuc = "";
-            if (ModelState.IsValid)
+            // System.Threading.Thread.Sleep(2000);
+            SonucModel<DDlTextModel> oSonucModel = new SonucModel<DDlTextModel>() { Durum = "H", Aciklama = "" };
+
+            ArgemSQL oSQL = new ArgemSQL();
+            oSQL.CommandText =
+                "SELECT * FROM public.\"KULLANICI\"";
+
+            if (!string.IsNullOrEmpty(AramaKriter))
             {
-                if (string.IsNullOrEmpty(oLoginViewModel.KullaniciAd) || string.IsNullOrEmpty(oLoginViewModel.Parola))
-                    Sonuc = "Kullanıcı adı ve/veya şifre boş";
-                else
+                oSQL.Gecen("Ad", AramaKriter);
+                oSQL.OR();
+                oSQL.Gecen("Soyad", AramaKriter);
+                oSQL.OrderByAsc("Ad,Soyad");
+
+                using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
                 {
-                    string sSQL =
-                        "select * " +
-                        "from   public.\"KULLANICI\" " +
-                        "where  \"KullaniciAd\" = '" + oLoginViewModel.KullaniciAd + "' " +
-                        "       and \"Parola\" = '" + oLoginViewModel.Parola + "'";
-                    DataTable dt = DBUtil.VeriGetirDT(sSQL);
-                    if (dt != null)
+                    DataTable dt = new DataTable();
+                    oData.DataGetir(ref dt, oSQL);
+
+                    if (dt.Rows.Count > 0)
                     {
-                        if (dt.Rows.Count > 0)
+                        List<DDlTextModel> aryDDlTextModel = new List<DDlTextModel>();
+                        foreach (DataRow dr in dt.Rows)
                         {
-                            if (dt.Rows[0]["AktifPasifTipNo"].ToString() == "100")
+                            DDlTextModel oDDlTextModel = new DDlTextModel()
                             {
-                                Session["OpKullaniciKey"] = dt.Rows[0]["KullaniciKey"].ToString();
-                                Session["OpKullaniciAd"] = dt.Rows[0]["Ad"].ToString();
-                                Session["OpKullaniciSoyad"] = dt.Rows[0]["Soyad"].ToString();
-                                Sonuc = "OK";
-                            }
-                            else
-                                Sonuc = "Kullanıcı pasif durumda";
+                                Key = Convert.ToInt32(dr["KullaniciKey"]),
+                                Text = dr["Ad"].ToString() + " " +dr["Soyad"].ToString()
+                            };
+                            aryDDlTextModel.Add(oDDlTextModel);
                         }
-                        else
-                            Sonuc = "Kullanıcı adı ve/veya şifre hatalı";
+
+                        oSonucModel.Durum = "";
+                        oSonucModel.Data = aryDDlTextModel;
                     }
                     else
-                        Sonuc = "Kullanıcı adı ve/veya şifre hatalı.";
+                        oSonucModel.Aciklama = "Aradığınız kritere uygun kullanıcı kaydı bulunamadı";
                 }
             }
             else
-                Sonuc = "Gerekli alanları giriniz";
+                oSonucModel.Aciklama = "Kritere uygun kayıt bulunamadı";
 
-            return Json(Sonuc, JsonRequestBehavior.DenyGet);
+            return Json(oSonucModel, JsonRequestBehavior.AllowGet);
         }
-
-        #endregion
 
 
         public ActionResult Deneme()

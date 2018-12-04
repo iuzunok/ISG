@@ -1,4 +1,5 @@
 ﻿using ISGWebSite.AppCode;
+using ISGWebSite.Controllers;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -6,7 +7,7 @@ using static ISGWebSite.Areas.Yetki.Models.Kullanici.LookModel;
 
 namespace ISGWebSite.Areas.Yetki.Controllers
 {
-    public class LookController : Controller
+    public class LookController : BaseController
     {
         [OutputCache(Duration = 0)]
         public JsonResult LookGetir(string TabloAd, string AlanAd)

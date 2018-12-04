@@ -8,22 +8,19 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div ng-app="AngGenelApp" ng-controller="AngGenelController">
+    <div ng-app="ngaGenel" ng-controller="ngcGenel">
 
-        <div class="ModalPopUp">
-
-            <div class="ArkaPlanGizleGoster" ng-show="ArkaPlaniAcikMi">
-                <div class="progress ArkaPlanProgress" style="width:400px; height:50px">
-                    <div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" style="width: 100%;">
-                        <span style="font-size:20px">
-                            İşlem sürüyor...
-                        </span>
-                    </div>
+        <div class="ArkaPlanGizleGoster" ng-show="ArkaPlaniAcikMi">
+            <div class="progress ArkaPlanProgress" style="width:400px; height:50px">
+                <div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" style="width: 100%;">
+                    <span style="font-size:20px">
+                        İşlem sürüyor...
+                    </span>
                 </div>
             </div>
-
-            @RenderBody()
         </div>
+
+        @RenderBody()
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -31,6 +28,7 @@
     @Scripts.Render("~/bundles/angular")
 
     @Scripts.Render("~/bundles/JS/Excel")
+    @Scripts.Render("~/bundles/Scripts/pdfmake")
 
     @Scripts.Render("~/ClientSide/AngularVeriGetir")
     @Scripts.Render("~/bundles/JS/Genel")
