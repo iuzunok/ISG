@@ -43,6 +43,9 @@ function GetScope(ctrlName)
 }
 
 
+// alert($(document).height() + "," +$(window).height());
+
+
 
 // modal işlemleri
 

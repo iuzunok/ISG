@@ -1,12 +1,22 @@
-﻿.card {
+﻿.LRMarginYok {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.LRPaddingYok {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.card {
     border: 1px solid #c8ced3 !important;
     margin-bottom: 6px !important;
 }
 
-.cardPopUp {
-    /*border: 1px solid #c8ced3 !important;*/
-    margin:6px !important;
-}
+/*.cardPopUp {
+    border: 1px solid #c8ced3 !important;
+    margin: 6px !important;
+}*/
 
 .PaddingYok {
     padding: 0 !important;
@@ -112,3 +122,5 @@
     color: white;
     cursor: pointer;
 }
+
+

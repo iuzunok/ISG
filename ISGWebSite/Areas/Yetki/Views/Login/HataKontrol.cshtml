@@ -2,10 +2,17 @@
 
 @{
     ViewBag.Title = "HataKontrol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="text-danger">Sistem Hatası Hata</h1>
-<h2 class="text-danger">Beklenmedik bir sistem hatası oluştu.</h2>
+<h1 class="text-danger">Sistem Hatası</h1>
+<h2 class="text-danger">Opps!!! Beklenmedik bir sistem hatası oluştu.</h2>
+<h2 class="text-danger">Hata log sistemine kaydedildi. En kısa sürede çözüm üretilecektir.</h2>
+
+@if (TempData["HataKey"] != null)
+{
+    <h2 class="text-danger">Hata kodu :@TempData["HataKey"].ToString()</h2>
+}
 
 @if (Model != null)
 {

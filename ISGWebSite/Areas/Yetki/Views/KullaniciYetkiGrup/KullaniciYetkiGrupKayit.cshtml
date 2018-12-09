@@ -1,0 +1,163 @@
+﻿@{
+    ViewBag.Title = "KullaniciYetkiGrupKayit";
+    Layout = "~/Views/Shared/_LayoutPopUp.cshtml";
+}
+
+<div ng-controller="ngcKullaniciYetkiGrupKayit">
+
+    <div ng-show="HataVar" class="alert alert-danger ng-hide">
+        {{HataAciklama}}
+    </div>
+
+    <form name="frmKullaniciKayit" ng-submit="KullaniciKaydet(frmKullaniciKayit.$valid)" novalidate role="form">
+        <input type="hidden" ng-model="KullaniciModel.KullaniciKey" value="{{Key}}" />
+
+        <div class="card cardPopUp">
+            <div class="card-header KusakInce">
+                <h6 class="float-left">Yetki Verilecek Birim</h6>
+            </div>
+            <div class="card-body PaddingAz">
+
+                <div class="row">
+                    <div class="col-6">
+                        Tüm Birimler :
+                    </div>
+                    <div class="col-6">
+                        <select>
+                            <option value="1">Argem</option>
+                            <option value="2">Argem asdasd</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        Yetkili Birimler :
+                    </div>
+                    <div class="col-6">
+                        <select>
+                            <option value="1">Argem</option>
+                            <option value="2">Argem asdasd</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row LRMarginYok">
+            <div class="col-8 LRPaddingYok">
+                <div class="card cardPopUp">
+                    <div class="card-header KusakInce">
+                        <h6 class="float-left">Tüm Yetkiler</h6>
+                        <div class="float-right">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control" id="txtYetkiGrupAd" ng-change="YetkiGrupFlitrele()" ng-model="YetkiGrupAd" type="text" placeholder="Yetki grup adı">
+                                <div class="input-group-append">
+                                    <button class="btn btn-gri" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body PaddingAz">
+
+                        <div class="card" ng-show="oYetkiGrupModelPage.length">
+
+                            <table id="tblSonuc" ng-cloak class="table table-bordered table-sm AramaSonuc">
+                                <tr>
+                                    <th style="width:50px">S.No</th>
+                                    <th>
+                                        <input type="checkbox" ng-click="YetkiGurupSecBirakTumYetkiGrupTumu($event)" />
+                                    </th>
+                                    <th ng-click="Sirala('YetkiGrupAd')" style="cursor: pointer;">
+                                        Yetki Grup Adı
+                                        <span class="fa" ng-show="SiralamaAlan=='YetkiGrupAd'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="KM in oYetkiGrupModelPage|filter:YetkiGrupAd|orderBy:SiralamaAlan:TersSira" class="AramaSonucAlternate"
+                                    ng-class="$index % 2 == 0 ? 'AramaSonucTek' : 'AramaSonucCift'">
+                                    <td>{{((AktifSayfaNo-1)*SayfaKayitAdet)+$index+1}}</td>
+                                    <td>
+                                        <input type="checkbox" ng-click="YetkiGurupSecBirakTumYetkiGrup($event, KM.YetkiGrupKey)" />
+                                    </td>
+                                    <td>{{KM.YetkiGrupAd}}</td>
+                                </tr>
+                            </table>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <div style="padding-left:5px">
+                                        {{oYetkiGrupModelPage.length}} / {{ToplamKayitAdet}}
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <ul uib-pagination
+                                        ng-model="AktifSayfaNo"
+                                        ng-change="SayfalamaDegisti()"
+                                        total-items="ToplamKayitAdet"
+                                        items-per-page="SayfaKayitAdet"
+                                        max-size="3"
+                                        class="pagination"
+                                        boundary-links="true"
+                                        previous-text="&lsaquo;"
+                                        next-text="&rsaquo;"
+                                        first-text="&laquo;"
+                                        last-text="&raquo;"></ul>
+                                </div>
+                                <div class="col-4">
+                                    <div class="float-right" style="padding-right:5px;margin-top:5px">
+                                        <div>
+                                            <span class="fa fa-file-pdf-o fa-fs22" ng-click="ExportPDF()" style="color:#a90329;" aria-hidden="true"></span>
+                                            <span class="fa fa-file-excel-o fa-fs22" ng-click="ExportExcel()" style="color:#a90329;" aria-hidden="true"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card cardPopUp">
+                    <div class="card-header KusakInce">
+                        <h6 class="float-left">Seçilen Yetkiler</h6>
+                    </div>
+                    <div class="card-body PaddingAz">
+
+                        <div class="card" ng-show="oYetkiGrupModelSec.length">
+                            <table id="tblSonuc" ng-cloak class="table table-bordered table-sm AramaSonuc">
+                                <tr>
+                                    <th colspan="2">
+                                        Yetki Grup Adı
+                                    </th>
+                                </tr>
+                                <tr ng-repeat="KM in oYetkiGrupModelSec" class="AramaSonucAlternate"
+                                    ng-class="$index % 2 == 0 ? 'AramaSonucTek' : 'AramaSonucCift'">
+                                    <td>
+                                        <input type="checkbox" ng-checked="KM.S=='1'" ng-click="YetkiGurupSecBirakSecilenYetkiGrup($event, KM.YetkiGrupKey)" />
+                                    </td>
+                                    <td>{{KM.YetkiGrupAd}}</td>
+                                </tr>
+                            </table>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary" ng-click="KullaniciYetkiKaydet()">
+                                    <span class="fa fa-save" style="padding-right:15px"></span>Kaydet
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/JSNG/Yetki/YetkiVer", "~/JSNG/Yetki/YetkiGrup")
+}
+

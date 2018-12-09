@@ -10,7 +10,7 @@
         cssTitleGradient = 'armp_title_gradient',
         // cssOverlay = 'armp_overlay',
         cssOverlay = 'ArkaPlanGizleGoster',
-        cssClose = 'armp_buton-close',
+        cssClose = 'armp_buton_close',
         cssMax = 'armp_buton_max',
         cssRestore = 'armp_buton_restore',
         cssYenile = 'armp_buton_yenile',
@@ -164,6 +164,10 @@
     {
         var $mp = $('.' + cssMp);
         var $ifmp = $mp.find('.' + cssIframe);
+        var iframe = $ifmp.get(0);
+        var $scope = document.getElementById(iframe.id).contentWindow.angular.element(".ArkaPlanGizleGoster").scope();
+        $scope.ArkaPlaniAcikMi = true;
+        $scope.$apply();
         $ifmp.attr('src', $ifmp.attr('src'));
     };
 
@@ -223,11 +227,19 @@
 
         var $window = $(window);
         // alert($window.width() + ' ' + $window.height() + ' ' + Genislik + ' ' + Yukseklik );
-        if (Genislik > $window.width() - 10)
-            Genislik = $window.width() - 10;
-        if (Yukseklik > $window.height() - 10)
-            Yukseklik = $window.height() - 10;
-        // alert($window.width() + ' ' + $window.height() + ' ' + Genislik + ' ' + Yukseklik);
+
+        if (Genislik.toString().indexOf('%') == -1)
+        {
+            if (Genislik > $window.width() - 10)
+                Genislik = $window.width() - 10;
+            Genislik = Genislik + 'px';
+        }
+        if (Yukseklik.toString().indexOf('%') == -1)
+        {
+            if (Yukseklik > $window.height() - 10)
+                Yukseklik = $window.height() - 10;
+            Yukseklik = Yukseklik + 'px';
+        }
 
         var $iframelayer = $('.' + cssIframeBg),
             // Tema = Util.Theme,
@@ -293,26 +305,26 @@
             // debugger;
             $parentdiv = $(
                 '<div class="' + cssConstraint + ' ArgemModalOverlay" style="z-index:' + (z += 1) + ';position:absolute;left:0;top:0;margin:0px;padding:0px;width:100%;height:100%">' +
-                '   <div class="' + cssMp + ' ' + cssTitleGradient + '" style="width:' + Genislik + 'px; height:' + Yukseklik + 'px; margin:0px; overflow:hidden; display:none;">' +
+                '   <div class="' + cssMp + ' ' + cssTitleGradient + '" style="width:' + Genislik + '; height:' + Yukseklik + '; margin:0px; overflow:hidden; display:none;">' +
                 '       <div style="background-color:#ffffff; width:100%; height:100%; margin:0px; padding:0px; border:none 0px Transparent">' +
                 '           <div class="' + cssTitle + '" style="margin:0px;padding:0px;width:100%">' +
                 '               <table cellpadding="0" cellspacing="0" style="width:100%;padding:0px;border-collapse:collapse;border:none 0px Transparent">' +
                 '                   <tbody>' +
                 '                   <tr>' +
-                '                       <td style="text-align:left">' +
-                '                           <em style="cursor:default;pointer:default;white-space:nowrap">&nbsp;' + Baslik + '</em>' +
+                '                       <td style="cursor:move;text-align:left">' +
+                '                           <em style="white-space:nowrap" title=\"' + SayfaURL + '\">&nbsp;' + Baslik + '</em>' +
                 '                       </td>' +
                 '                       <td style="text-align: right; white-space: nowrap">' +
-                '                           <a class="' + cssYenile + '" title="' + Util.CI.Popup.Yenile + '"><span class="fa fa-refresh"></span></a>' +
-                '                           <a class="' + cssRestore + '" title="' + Util.CI.Popup.Restore + '" style="display:none"><span class="fa fa-window-restore"></span></a>' +
-                '                           <a class="' + cssMax + '" title="' + Util.CI.Popup.EkraniKapla + '" style="display:inline-block"><span class="fa fa-window-maximize"></span></a>' +
-                '                           <a class="' + cssClose + '" title="' + Util.CI.Popup.Kapat + '" style="display:inline-block"><span class="fa fa-window-close"></span></a>' +
+                '                           <a class="armp_buton ' + cssYenile + '" title="' + Util.CI.Popup.Yenile + '"><span class="fa fa-refresh"></span></a>' +
+                '                           <a class="armp_buton ' + cssRestore + '" title="' + Util.CI.Popup.Restore + '" style="display:none"><span class="fa fa-window-restore"></span></a>' +
+                '                           <a class="armp_buton ' + cssMax + '" title="' + Util.CI.Popup.EkraniKapla + '" style="display:inline-block"><span class="fa fa-window-maximize"></span></a>' +
+                '                           <a class="armp_buton ' + cssClose + '" title="' + Util.CI.Popup.Kapat + '" style="display:inline-block"><span class="fa fa-window-close"></span></a>' +
                 '                       </td>' +
                 '                   </tr>' +
                 '                   </tbody>' +
                 '               </table>' +
                 '           </div>' +
-                '           <iframe class="' + cssIframe + '" style="position:relative; display:block; margin: 0px; padding: 0px; border: none 0; width: 100%; top:0px; left:0px" scrolling="0" frameborder="0" marginHeight="0px" marginWidth="0px" src="' + SayfaURL + '"></iframe>' +
+                '           <iframe id=\"ifArgem\" class="' + cssIframe + '" style="position:relative; display:block; margin: 0px; padding: 0px; border: none 0; width: 100%; top:0px; left:0px" scrolling="0" frameborder="0" marginHeight="0px" marginWidth="0px" src="' + SayfaURL + '"></iframe>' +
                 '       </div>' +
                 '   </div>' +
                 '</div>');

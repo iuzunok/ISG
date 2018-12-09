@@ -7,6 +7,7 @@ using ISGWebSite.Models.Yetki.Kullanici;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using VeriTabani;
@@ -15,6 +16,8 @@ using static ISGWebSite.Areas.Yetki.Models.GenelModel;
 namespace ISGWebSite.Areas.Yetki.Controllers
 {
     // https://www.youtube.com/watch?v=_r6laMn70FA paging
+    // https://sroze.github.io/ngInfiniteScroll/demo_async.html
+
     public class KullaniciController : BaseController
     {
         public ActionResult YetkiVer()
@@ -22,21 +25,24 @@ namespace ISGWebSite.Areas.Yetki.Controllers
             return View();
         }
 
-
         public ActionResult KullaniciAra()
         {
             return View();
         }
 
-
-        public JsonResult KullaniciAraSonuc(KullaniciModel oKullaniciModel)
+        public JsonResult KullaniciAraSonuc(int SayfaKayitAdet, int AktifSayfaNo, int SiraTip, string SiraAlan, KullaniciModel oKullaniciModel)
         {
             // System.Threading.Thread.Sleep(2000);
             SonucModel<KullaniciAraModel> oSonucModel = new SonucModel<KullaniciAraModel>() { Durum = "H", Aciklama = "" };
+            int ToplamKayitAdet = 0;
 
             ArgemSQL oSQL = new ArgemSQL();
             oSQL.CommandText =
-                "SELECT * FROM public.\"KULLANICI\"";
+                "select *, count(*) OVER() as \"Adet\" " +
+                "from   public.\"KULLANICI\"";
+
+            // string s = "ddsdf";
+            // int i = Convert.ToInt32(s);
 
             if (!string.IsNullOrEmpty(oKullaniciModel.KullaniciAd))
                 oSQL.Gecen("KullaniciAd", oKullaniciModel.KullaniciAd);
@@ -47,7 +53,16 @@ namespace ISGWebSite.Areas.Yetki.Controllers
 
             oSQL.Esit("KullaniciTipNo", oKullaniciModel.KullaniciTipNo, KolonTipi.Int, false);
             oSQL.Esit("AktifPasifTipNo", oKullaniciModel.AktifPasifTipNo, KolonTipi.Int, false);
-            oSQL.OrderByAsc("Ad,Soyad");
+
+            if (SiraAlan == "")
+                oSQL.OrderByAsc("Ad,Soyad");
+            else if (SiraTip == 1)
+                oSQL.OrderByAsc(SiraAlan);
+            else
+                oSQL.OrderByDesc(SiraAlan);
+
+            if (SayfaKayitAdet != 0 && AktifSayfaNo != 0)
+                oSQL.KayitSayisiLimit(SayfaKayitAdet, AktifSayfaNo);
 
             using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
             {
@@ -56,6 +71,8 @@ namespace ISGWebSite.Areas.Yetki.Controllers
 
                 if (dt.Rows.Count > 0)
                 {
+                    ToplamKayitAdet = Convert.ToInt32(dt.Rows[0]["Adet"].ToString());
+
                     List<KullaniciAraModel> aryKullaniciAraModel = new List<KullaniciAraModel>();
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -80,6 +97,12 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                 }
                 else
                     oSonucModel.Aciklama = "Aradığınız kritere uygun kullanıcı kaydı bulunamadı";
+
+                oSonucModel.ToplamKayitAdet = ToplamKayitAdet;
+
+                Stopwatch _stopwatch = (Stopwatch)TempData["ServerCalismaSure"];
+                _stopwatch.Stop();
+                oSonucModel.SCS = _stopwatch.ElapsedMilliseconds.ToString();
 
                 return Json(oSonucModel, JsonRequestBehavior.AllowGet);
             }
@@ -183,12 +206,12 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                     oSQL.CommandText =
                         "insert into public.\"KULLANICI\" " +
                         "       (\"KullaniciAd\", \"Ad\", \"Soyad\", \"KullaniciTipNo\", \"AktifPasifTipNo\", \"Parola\", \"UKullaniciKey\", \"UTar\") " +
-                        "values ('" + KullaniciAd + "','" + Ad + "','" + Soyad + "', " + KullaniciTipNo + ", " + AktifPasifTipNo + ", '123', 1, CURRENT_DATE) " +
+                        "values ('" + KullaniciAd + "','" + Ad + "','" + Soyad + "', " + KullaniciTipNo + ", " + AktifPasifTipNo + ", '123', 1, current_timestamp) " +
                         "returning \"KullaniciKey\" ";
                     using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
                     {
-                        string SonucYetkiGrupKey = Convert.ToString(oData.SorguCalistir(oSQL));
-                        if (SonucYetkiGrupKey != "0")
+                        string SonucKullaniciKey = Convert.ToString(oData.SorguCalistir(oSQL));
+                        if (SonucKullaniciKey != "0")
                             oSonucModel.Durum = "";
                         else
                             oSonucModel.Aciklama = "Veri kaydedilemedi";
@@ -204,7 +227,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                         "       \"Soyad\"='" + Soyad + "', " +
                         "       \"KullaniciTipNo\"=" + KullaniciTipNo + ", " +
                         "       \"AktifPasifTipNo\"=" + AktifPasifTipNo + ", " +
-                        "       \"UKullaniciKey\" = " + Session["OpKullaniciKey"] + ", " +
+                        "       \"UKullaniciKey\" = " + ArgemSession.OpKullaniciKey + ", " +
                         "       \"UTar\" = current_timestamp ";
                     oSQL.Esit("KullaniciKey", KullaniciKey, KolonTipi.Int, true);
                     using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
@@ -325,7 +348,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                             DDlTextModel oDDlTextModel = new DDlTextModel()
                             {
                                 Key = Convert.ToInt32(dr["KullaniciKey"]),
-                                Text = dr["Ad"].ToString() + " " +dr["Soyad"].ToString()
+                                Text = dr["Ad"].ToString() + " " + dr["Soyad"].ToString()
                             };
                             aryDDlTextModel.Add(oDDlTextModel);
                         }

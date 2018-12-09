@@ -68,6 +68,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -244,7 +247,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppCode\ArgemSession.cs" />
     <Compile Include="AppCode\CacheHelper.cs" />
+    <Compile Include="AppCode\Log4Net.cs" />
+    <Compile Include="AppCode\StopwatchAttribute.cs" />
     <Compile Include="App_GlobalResources\Messages.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -257,6 +263,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Personel\PersonelAreaRegistration.cs" />
     <Compile Include="Areas\Yetki\Controllers\KullaniciController.cs" />
+    <Compile Include="Areas\Yetki\Controllers\KullaniciYetkiGrupController.cs" />
     <Compile Include="Areas\Yetki\Controllers\LoginController.cs" />
     <Compile Include="Areas\Yetki\Controllers\LookController.cs" />
     <Compile Include="Areas\Yetki\Controllers\YetkiGrupController.cs" />
@@ -336,6 +343,7 @@
     <Content Include="CSS\Bootstrap.css" />
     <Content Include="CSS\ArgemToolGenel.css" />
     <Content Include="JSNG\Yetki\AnaSayfa.js" />
+    <Content Include="JSNG\Genel\App.js" />
     <Content Include="JSNG\Yetki\Kullanici.js" />
     <Content Include="JSNG\Yetki\YetkiGrup.js" />
     <Content Include="ClientSide\AngularLogin.js" />
@@ -359,7 +367,6 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="JSNG\Yetki\YetkiVer.js" />
     <Content Include="JS\ArgemTool\ArgemDDLText.js" />
     <Content Include="JS\ArgemTool\ArgemJSUtil.js" />
@@ -462,6 +469,7 @@
     <Content Include="Areas\Yetki\Views\Login\AnaSayfa.cshtml" />
     <Content Include="Areas\Yetki\Views\Kullanici\YetkiVer.cshtml" />
     <Content Include="Areas\Yetki\Views\Login\HataKontrol.cshtml" />
+    <Content Include="Areas\Yetki\Views\KullaniciYetkiGrup\KullaniciYetkiGrupKayit.cshtml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\globalize.js" />
     <Content Include="Scripts\globalize\currency.js" />

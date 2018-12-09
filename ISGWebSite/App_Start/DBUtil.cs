@@ -664,28 +664,49 @@ namespace Argem.DataServices
             VeriKaydetHataYaz(HataTablosuInsertCumlesiOlustur(ex, sSQL));
         }
 
-        public void VeriKaydetHataYaz(string sDataBaseTipi, string sLOG, string sSQL)
+        public int VeriKaydetHataYaz(int KullaniciKey, string Kaynak, string Mesaj, string Form, string QueryString,
+            string HedefSite, string StackTrace, string Referer)
         {
             NpgsqlParameter[] spc = new NpgsqlParameter[8];
-            spc[0] = new NpgsqlParameter(":Kaynak", sDataBaseTipi);
-            spc[1] = new NpgsqlParameter(":Mesaj", sDataBaseTipi);
 
-            if (sSQL.Length < 4000)
-                spc[2] = new NpgsqlParameter(":Form", sSQL);
+            if (Kaynak.Length < 2000)
+                spc[0] = new NpgsqlParameter(":Kaynak", Kaynak);
             else
-                spc[2] = new NpgsqlParameter(":Form", sSQL.Substring(0, 3999));
+                spc[0] = new NpgsqlParameter(":Kaynak", Kaynak.Substring(0, 1999));
 
-            if (sLOG.Length < 2000)
-                spc[3] = new NpgsqlParameter(":QueryString", sLOG);
+            if (Kaynak.Length < 4000)
+                spc[1] = new NpgsqlParameter(":Mesaj", Mesaj);
             else
-                spc[3] = new NpgsqlParameter(":QueryString", sLOG.Substring(0, 1999));
+                spc[1] = new NpgsqlParameter(":Mesaj", Mesaj.Substring(0, 3999));
 
-            spc[4] = new NpgsqlParameter(":HedefSite", sDataBaseTipi);
-            spc[5] = new NpgsqlParameter(":StackTrace", sDataBaseTipi);
-            spc[6] = new NpgsqlParameter(":Referer", string.Empty);
-            spc[7] = new NpgsqlParameter(":UKullaniciKey", "0");
+            if (Form.Length < 4000)
+                spc[2] = new NpgsqlParameter(":Form", Form);
+            else
+                spc[2] = new NpgsqlParameter(":Form", Form.Substring(0, 3999));
 
-            VeriKaydetHataYaz(spc);
+            if (QueryString.Length < 2000)
+                spc[3] = new NpgsqlParameter(":QueryString", QueryString);
+            else
+                spc[3] = new NpgsqlParameter(":QueryString", QueryString.Substring(0, 1999));
+
+            if (HedefSite.Length < 500)
+                spc[4] = new NpgsqlParameter(":HedefSite", HedefSite);
+            else
+                spc[4] = new NpgsqlParameter(":HedefSite", HedefSite.Substring(0, 499));
+
+            if (StackTrace.Length < 4000)
+                spc[5] = new NpgsqlParameter(":StackTrace", StackTrace);
+            else
+                spc[5] = new NpgsqlParameter(":StackTrace", StackTrace.Substring(0, 3999));
+
+            if (Referer.Length < 4000)
+                spc[6] = new NpgsqlParameter(":Referer", Referer);
+            else
+                spc[6] = new NpgsqlParameter(":Referer", Referer.Substring(0, 3999));
+
+            spc[7] = new NpgsqlParameter(":UKullaniciKey", KullaniciKey);
+
+            return VeriKaydetHataYaz(spc);
         }
 
         private void RowUpdating(object sender, NpgsqlRowUpdatingEventArgs e)
@@ -842,7 +863,7 @@ namespace Argem.DataServices
             }
         }
 
-        private void VeriKaydetHataYaz(NpgsqlParameter[] spc)
+        private int VeriKaydetHataYaz(NpgsqlParameter[] spc)
         {
             using (NpgsqlConnection cnnHata = new NpgsqlConnection(saryConnectionString[DataBaseTipi.Yetki]))
             {
@@ -852,11 +873,14 @@ namespace Argem.DataServices
                     cmdHata.CommandText =
                         "insert into public.\"HATA\" " +
                         "       (\"Kaynak\", \"Mesaj\", \"Form\", \"QueryString\", \"HedefSite\", \"StackTrace\", \"Referer\", \"UKullaniciKey\", \"UTar\") " +
-                        "values (:Kaynak, :Mesaj, :Form, :QueryString, :HedefSite, :StackTrace, :Referer, :UKullaniciKey, current_timestamp)";
+                        "values (:Kaynak, :Mesaj, :Form, :QueryString, :HedefSite, :StackTrace, :Referer, :UKullaniciKey, current_timestamp) " +
+                        "returning \"HataKey\" ";
 
                     foreach (NpgsqlParameter op in spc)
                         cmdHata.Parameters.Add(op);
-                    cmdHata.ExecuteNonQuery();
+                    int HataKey = Convert.ToInt32(cmdHata.ExecuteScalar());
+                    cnnHata.Close();
+                    return HataKey;
                 }
             }
         }
@@ -1013,6 +1037,30 @@ namespace Argem.DataServices
             return dtLoglanackTablolar.Select("TabloAd='" + TabloAd + "'").Length > 0;
         }
 
+        public void SayfaZiyaretYaz(int KullaniciKey, string Controller, string Action, long Sure)
+        {
+            using (NpgsqlConnection cnnLog = new NpgsqlConnection(saryConnectionString[DataBaseTipi.Yetki]))
+            {
+                cnnLog.Open();
+                using (NpgsqlCommand cmdLog = cnnLog.CreateCommand())
+                {
+                    cmdLog.CommandText =
+                        "insert into public.\"ZIYARET\" " +
+                        "       (\"KullaniciKey\", \"Controller\", \"Action\", \"Sure\", \"ZiyaretTar\") " +
+                        "values (:KullaniciKey, :Controller, :Action, :Sure, current_timestamp)";
+
+                    cmdLog.Parameters.Add(new NpgsqlParameter(":KullaniciKey", KullaniciKey));
+                    cmdLog.Parameters.Add(new NpgsqlParameter(":Controller", Controller));
+                    cmdLog.Parameters.Add(new NpgsqlParameter(":Action", Action));
+                    cmdLog.Parameters.Add(new NpgsqlParameter(":Sure", Sure));
+
+                    cmdLog.ExecuteNonQuery();
+                }
+                cnnLog.Close();
+            }
+        }
+
+
         #endregion
 
         private static string GetConnectionString(string sDataBaseTipi)
@@ -1064,56 +1112,56 @@ namespace Argem.DataServices
             sDataBaseTipi = null;
         }
 
-        public object SorguCalistirMSSQL(string sSQL, string ConnectionString)
-        {
-            System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection();
+        //public object SorguCalistirMSSQL(string sSQL, string ConnectionString)
+        //{
+        //    System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection();
 
-            try
-            {
-                object sonuc = null;
+        //    try
+        //    {
+        //        object sonuc = null;
 
-                conn = new System.Data.SqlClient.SqlConnection(ConnectionString);
-                conn.Open();
+        //        conn = new System.Data.SqlClient.SqlConnection(ConnectionString);
+        //        conn.Open();
 
-                System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand(sSQL, conn);
-                sonuc = cmd.ExecuteNonQuery();
+        //        System.Data.SqlClient.SqlCommand cmd = new System.Data.SqlClient.SqlCommand(sSQL, conn);
+        //        sonuc = cmd.ExecuteNonQuery();
 
-                return sonuc;
-            }
-            catch (Exception ex)
-            {
-                //Util.EventViewerMesajYaz((string.IsNullOrEmpty(ex.StackTrace) ? "" : ex.StackTrace) + Environment.NewLine + (string.IsNullOrEmpty(ex.Message) ? "" : ex.Message), System.Diagnostics.EventLogEntryType.Error, 0);
-                VeriKaydetHataYaz(ex, sSQL);
-                throw ex;
-            }
-            finally
-            {
-                if (conn != null)
-                    conn.Dispose();
-            }
-        }
+        //        return sonuc;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        //Util.EventViewerMesajYaz((string.IsNullOrEmpty(ex.StackTrace) ? "" : ex.StackTrace) + Environment.NewLine + (string.IsNullOrEmpty(ex.Message) ? "" : ex.Message), System.Diagnostics.EventLogEntryType.Error, 0);
+        //        VeriKaydetHataYaz(ex, sSQL);
+        //        throw ex;
+        //    }
+        //    finally
+        //    {
+        //        if (conn != null)
+        //            conn.Dispose();
+        //    }
+        //}
 
-        public void DataGetirMSSQL(ref DataTable dt, string sSQL, string ConnectionString)
-        {
-            System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection();
-            try
-            {
-                conn = new System.Data.SqlClient.SqlConnection(ConnectionString);
-                conn.Open();
-                System.Data.SqlClient.SqlCommand sqlCommand = new System.Data.SqlClient.SqlCommand(sSQL, conn);
-                sqlCommand.CommandTimeout = 0;
-                using (System.Data.SqlClient.SqlDataAdapter daSQL = new System.Data.SqlClient.SqlDataAdapter(sqlCommand))
-                    daSQL.Fill(dt);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (conn != null)
-                    conn.Dispose();
-            }
-        }
+        //public void DataGetirMSSQL(ref DataTable dt, string sSQL, string ConnectionString)
+        //{
+        //    System.Data.SqlClient.SqlConnection conn = new System.Data.SqlClient.SqlConnection();
+        //    try
+        //    {
+        //        conn = new System.Data.SqlClient.SqlConnection(ConnectionString);
+        //        conn.Open();
+        //        System.Data.SqlClient.SqlCommand sqlCommand = new System.Data.SqlClient.SqlCommand(sSQL, conn);
+        //        sqlCommand.CommandTimeout = 0;
+        //        using (System.Data.SqlClient.SqlDataAdapter daSQL = new System.Data.SqlClient.SqlDataAdapter(sqlCommand))
+        //            daSQL.Fill(dt);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //    finally
+        //    {
+        //        if (conn != null)
+        //            conn.Dispose();
+        //    }
+        //}
     }
 }

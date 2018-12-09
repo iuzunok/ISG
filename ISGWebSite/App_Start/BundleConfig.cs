@@ -60,6 +60,8 @@ namespace ISGWebSite
 
 
 
+            bundles.Add(new ScriptBundle("~/JSNG/Genel/App").Include(
+              "~/JSNG/Genel/App.js"));
 
 
             bundles.Add(new ScriptBundle("~/JSNG/Yetki/Login").Include(

@@ -3,15 +3,16 @@
 }
 
 <div ng-controller="ngcKullaniciKayit">
-
-    <div ng-show="HataVar" class="alert alert-danger ng-hide">
-        {{HataAciklama}}
-    </div>
-
+    
     <form name="frmKullaniciKayit" ng-submit="KullaniciKaydet(frmKullaniciKayit.$valid)" novalidate role="form">
         <input type="hidden" ng-model="KullaniciModel.KullaniciKey" value="{{Key}}" />
 
-        <div class="card cardPopUp">
+        <div class="card">
+            
+            <div ng-show="HataVar" class="alert alert-danger ng-hide">
+                {{HataAciklama}}
+            </div>
+            
             <div class="card-header KusakInce">
                 <h6 class="float-left">Kullanıcı Bilgileri</h6>
             </div>

@@ -20,7 +20,7 @@
                     <tr>
                         <td style="width:110px; vertical-align:middle"><b>Kullanıcı :</b></td>
                         <td>
-                            @Html.ArgemDDLText("txtKullaniciAd", "Key", "Ad/Soyad giriniz")
+                            @Html.ArgemDDLText("txtKullaniciAd", "1", "İsmail Uzunok", "Ad/Soyad giriniz")
                         </td>
                         <td>
                             <button type="submit" class="btn btn-primary" ng-click="KullaniciYetkiGetir()">
@@ -38,8 +38,13 @@
     <div class="card">
         <div class="card-header KusakInce">
             <h6 class="float-left">Kullanıcı Yetkileri</h6>
+            <div class="float-right">
+                <button type="button" class="btn btn-sm btn-primary" ng-click="RCIn()" aria-label="Yeni Yetki Kayıt">
+                    <span class="fa fa-save" aria-hidden="true" style="padding-right:15px"></span>Yeni Yetki Kayıt
+                </button>
+            </div>
         </div>
-        <div class="card-body PaddingYok" ng-show="oKullaniciYetkiGrupModelPage.length">
+        <div class="card-body PaddingYok" ng-show="oKullaniciYetkiGrupAraModelPage.length">
             <div class="row">
                 <div class="col-12">
 
@@ -50,12 +55,17 @@
                                 Yetki Grup Adı
                                 <span class="fa" ng-show="SiralamaAlan=='YetkiGrupAd'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
                             </th>
+                            <th ng-click="Sirala('TeskilatUzunAd')" style="cursor: pointer;">
+                                Birim
+                                <span class="fa" ng-show="SiralamaAlan=='TeskilatUzunAd'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                            </th>
                             <th style="width:120px"></th>
                         </tr>
-                        <tr ng-repeat="KM in oKullaniciYetkiGrupModelPage|orderBy:SiralamaAlan:TersSira" class="AramaSonucAlternate"
+                        <tr ng-repeat="KM in oKullaniciYetkiGrupAraModelPage|orderBy:SiralamaAlan:TersSira" class="AramaSonucAlternate"
                             ng-class="$index % 2 == 0 ? 'AramaSonucTek' : 'AramaSonucCift'">
                             <td>{{$index+1}}</td>
                             <td>{{KM.YetkiGrupAd}}</td>
+                            <td>{{KM.TeskilatUzunAd}}</td>
                             <td>
                                 <img src="~/Resim/Ortak/Guncelle.png" ng-click="RCGu(KM.YetkiGrupKey)" />
                                 <img src="~/Resim/Ortak/Detay.png" ng-click="RCOk(KM.YetkiGrupKey)" />
@@ -68,11 +78,11 @@
                 </div>
             </div>
 
-            <div class="row" ng-show="oKullaniciYetkiGrupModelPage.length">
+            <div class="row" ng-show="oKullaniciYetkiGrupAraModelPage.length">
 
                 <div class="col-4">
                     <div style="padding-left:5px">
-                        {{oKullaniciYetkiGrupModelPage.length}} / {{ToplamKayitAdet}}
+                        {{oKullaniciYetkiGrupAraModelPage.length}} / {{ToplamKayitAdet}}
                     </div>
                 </div>
                 <div class="col-4">
@@ -119,5 +129,5 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/JSNG/Yetki/YetkiVer")
+    @Scripts.Render("~/JSNG/Yetki/YetkiVer");
 }

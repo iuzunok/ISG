@@ -1,8 +1,10 @@
 ﻿using Argem.DataServices;
 using ArgemUtil;
+using ISGWebSite.AppCode;
 using ISGWebSite.Controllers;
 using ISGWebSite.Models;
 using ISGWebSite.Models.Yetki.Kullanici;
+using System;
 using System.Data;
 using System.Web.Mvc;
 using VeriTabani;
@@ -16,6 +18,9 @@ namespace ISGWebSite.Areas.Yetki.Controllers
         {
             return View();
         }
+
+        // CaptchaTextBox için b bak
+        // https://github.com/managedfusion/managedfusion-web/blob/master/src/Web/Mvc/Extensions/HtmlHelper.cs
 
         [HttpPost]
         [AllowAnonymous]
@@ -42,11 +47,13 @@ namespace ISGWebSite.Areas.Yetki.Controllers
 
                         if (dt.Rows.Count > 0)
                         {
+                            // todo log kaydı yap
+
                             if (dt.Rows[0]["AktifPasifTipNo"].ToString() == "100")
                             {
-                                Session["OpKullaniciKey"] = dt.Rows[0]["KullaniciKey"].ToString();
-                                Session["OpKullaniciAd"] = dt.Rows[0]["Ad"].ToString();
-                                Session["OpKullaniciSoyad"] = dt.Rows[0]["Soyad"].ToString();
+                                ArgemSession.OpKullaniciKey = Convert.ToInt32(dt.Rows[0]["KullaniciKey"]);
+                                ArgemSession.OpKullaniciAd = dt.Rows[0]["Ad"].ToString();
+                                ArgemSession.OpKullaniciSoyad = dt.Rows[0]["Soyad"].ToString();
                                 oSonucModel.Durum = "";
                             }
                             else

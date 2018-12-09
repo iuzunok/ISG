@@ -1,10 +1,6 @@
 ﻿'use strict';
-var ngAppLogin = angular.module('ngaGenel', ['ui.bootstrap'])
-    .controller('ngcGenel', function ()
-    {
-    })
-
-    .controller('ngcYetkiGrupAra', function ($scope, YetkiGrupService)
+appGenel
+    .controller('ngcYetkiGrupAra', function ($scope, GenelService, YetkiGrupService)
     {
         $scope.$parent.ArkaPlaniAcikMi = true;
         $scope.oYetkiGrupAraModel = {};
@@ -23,13 +19,13 @@ var ngAppLogin = angular.module('ngaGenel', ['ui.bootstrap'])
                     return a[SiraAlan].localeCompare(b[SiraAlan]);
             });
 
-            Sayfala($scope, true);
+            $scope.oYetkiGrupAraModelPage = GenelService.Sayfala($scope, true, $scope.oYetkiGrupAraModel, $scope.oYetkiGrupAraModelPage);
         };
 
         $scope.SayfalamaDegisti = function ()
         {
             // console.log('sayfa:' + $scope.AktifSayfaNo);
-            Sayfala($scope, true);
+            $scope.oYetkiGrupAraModelPage = GenelService.Sayfala($scope, true, $scope.oYetkiGrupAraModel, $scope.oYetkiGrupAraModelPage);
         };
 
         $scope.YetkiGrupAra = function ()
@@ -45,7 +41,7 @@ var ngAppLogin = angular.module('ngaGenel', ['ui.bootstrap'])
                         $scope.ToplamKayitAdet = $scope.oYetkiGrupAraModel.length;
                         $scope.AktifSayfaNo = 1;
                         $scope.SayfaKayitAdet = 50;
-                        Sayfala($scope, true);
+                        $scope.oYetkiGrupAraModelPage = GenelService.Sayfala($scope, true, $scope.oYetkiGrupAraModel, $scope.oYetkiGrupAraModelPage);
                     }
                     else
                     {
@@ -142,12 +138,13 @@ var ngAppLogin = angular.module('ngaGenel', ['ui.bootstrap'])
 
         $scope.ExportExcel = function ()
         {
-            Sayfala($scope, false);
+            $scope.oYetkiGrupAraModelPage = GenelService.Sayfala($scope, false, $scope.oYetkiGrupAraModel, $scope.oYetkiGrupAraModelPage);
             $scope.$apply();
             var tblSonuc = document.getElementById('tblSonuc');
             var wb = XLSX.utils.table_to_book(tblSonuc, { sheet: "Sayfa1" });
             XLSX.writeFile(wb, 'Sonuc.xlsx');
-            Sayfala($scope, true);
+            // Sayfala($scope, true);
+            $scope.oYetkiGrupAraModelPage = GenelService.Sayfala($scope, true, $scope.oYetkiGrupAraModel, $scope.oYetkiGrupAraModelPage);
 
             // direk $scope çalışıyor fakat kolon adları düzgün gelmiyor ve sıralama da yok
             var ws = XLSX.utils.json_to_sheet($scope.oYetkiGrupAraModel);
@@ -231,7 +228,7 @@ var ngAppLogin = angular.module('ngaGenel', ['ui.bootstrap'])
         };
     })
 
-    .controller('ngcOkuma', function ($scope, YetkiGrupService)
+    .controller('ngcYetkiGrupOku', function ($scope, YetkiGrupService)
     {
         $scope.RCSil = function (Key)
         {
@@ -249,7 +246,6 @@ var ngAppLogin = angular.module('ngaGenel', ['ui.bootstrap'])
             });
         };
     })
-
 
     .factory("YetkiGrupService", ['$http', function ($http)
     {
@@ -354,66 +350,66 @@ var ngAppLogin = angular.module('ngaGenel', ['ui.bootstrap'])
     }]);
 
 
-var Sayfala = function ($scope, SayfaYap)
-{
-    if (SayfaYap)
-    {
-        var begin = (($scope.AktifSayfaNo - 1) * $scope.SayfaKayitAdet);
-        var end = begin + $scope.SayfaKayitAdet;
-        $scope.oYetkiGrupAraModelPage = $scope.oYetkiGrupAraModel.slice(begin, end);
-    }
-    else
-        $scope.oYetkiGrupAraModelPage = $scope.oYetkiGrupAraModel;
-};
+//var Sayfala = function ($scope, SayfaYap)
+//{
+//    if (SayfaYap)
+//    {
+//        var begin = (($scope.AktifSayfaNo - 1) * $scope.SayfaKayitAdet);
+//        var end = begin + $scope.SayfaKayitAdet;
+//        $scope.oYetkiGrupAraModelPage = $scope.oYetkiGrupAraModel.slice(begin, end);
+//    }
+//    else
+//        $scope.oYetkiGrupAraModelPage = $scope.oYetkiGrupAraModel;
+//};
 
-var KayitGuncellendi = function (Key, Model)
-{
-    var $scope = GetScope('ngcYetkiGrupAra');
+//var KayitGuncellendi = function (Key, Model)
+//{
+//    var $scope = GetScope('ngcYetkiGrupAra');
 
-    // arama listesinide güncelle
-    var ix = -1;
-    for (var i = 0; i < $scope.oYetkiGrupAraModel.length; i++)
-    {
-        if ($scope.oYetkiGrupAraModel[i].YetkiGrupKey == Key)
-        {
-            ix = i;
-            break;
-        }
-    }
-    if (ix > -1)
-    {
-        $scope.oYetkiGrupAraModel[ix].YetkiGrupAd = Model.YetkiGrupAd;
-    }
-    $scope.$apply();
+//    // arama listesinide güncelle
+//    var ix = -1;
+//    for (var i = 0; i < $scope.oYetkiGrupAraModel.length; i++)
+//    {
+//        if ($scope.oYetkiGrupAraModel[i].YetkiGrupKey == Key)
+//        {
+//            ix = i;
+//            break;
+//        }
+//    }
+//    if (ix > -1)
+//    {
+//        $scope.oYetkiGrupAraModel[ix].YetkiGrupAd = Model.YetkiGrupAd;
+//    }
+//    $scope.$apply();
 
-    ArgemModalPopUpKapat();
-};
+//    ArgemModalPopUpKapat();
+//};
 
-var KayitSilindi = function (Key)
-{
-    //    debugger;
-    var $scope = GetScope('ngcYetkiGrupAra');
+//var KayitSilindi = function (Key)
+//{
+//    //    debugger;
+//    var $scope = GetScope('ngcYetkiGrupAra');
 
-    // arama sonucu listesinden de sil
-    var ix = -1;
-    for (var i = 0; i < $scope.oYetkiGrupAraModel.length; i++)
-    {
-        if ($scope.oYetkiGrupAraModel[i].YetkiGrupKey == Key)
-        {
-            ix = i;
-            break;
-        }
-    }
-    if (ix > -1)
-    {
-        $scope.oYetkiGrupAraModel.splice(ix, 1);
-        $scope.ToplamKayitAdet--;
+//    // arama sonucu listesinden de sil
+//    var ix = -1;
+//    for (var i = 0; i < $scope.oYetkiGrupAraModel.length; i++)
+//    {
+//        if ($scope.oYetkiGrupAraModel[i].YetkiGrupKey == Key)
+//        {
+//            ix = i;
+//            break;
+//        }
+//    }
+//    if (ix > -1)
+//    {
+//        $scope.oYetkiGrupAraModel.splice(ix, 1);
+//        $scope.ToplamKayitAdet--;
 
-        if ($scope.oYetkiGrupAraModelPage.length == 1 && $scope.AktifSayfaNo > 1) // sayfadaki son kayıt ise önceki sayfa varsa ona git
-            $scope.AktifSayfaNo--;
+//        if ($scope.oYetkiGrupAraModelPage.length == 1 && $scope.AktifSayfaNo > 1) // sayfadaki son kayıt ise önceki sayfa varsa ona git
+//            $scope.AktifSayfaNo--;
 
-        Sayfala($scope, true);
-        $scope.$apply();
-    }
-    ArgemModalPopUpKapat();
-};
+//        Sayfala($scope, true);
+//        $scope.$apply();
+//    }
+//    ArgemModalPopUpKapat();
+//};

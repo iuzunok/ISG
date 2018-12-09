@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using System.Web.Helpers;
+﻿using ISGWebSite.AppCode;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -11,6 +10,9 @@ namespace ISGWebSite
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
+
+            GlobalFilters.Filters.Add(new StopwatchAttribute());
+           
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
@@ -20,6 +22,8 @@ namespace ISGWebSite
 
             //set the antiforgery claim to user id
             // AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+
+            log4net.Config.XmlConfigurator.Configure();
         }
 
         //protected void Application_Error(object sender, EventArgs e)

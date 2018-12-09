@@ -5,13 +5,13 @@ namespace ISGWebSite.UserControl
 {
     public static class ArgemTool
     {
-        public static MvcHtmlString ArgemDDLText(this HtmlHelper oHtmlHelper, string Id,/* string ScopeAd,*/ string NgModel, string PlaceHolder, string Width = "250")
+        public static MvcHtmlString ArgemDDLText(this HtmlHelper oHtmlHelper, string Id, string SeciliKey, string SeciliText, string PlaceHolder, string Width = "250")
         {
             StringBuilder oSB = new StringBuilder();
 
             oSB.AppendLine("<div class=\"input-group ardt_container\">");
-            oSB.AppendLine("<input type=\"text\" id=\"" + Id + "\" class=\"form-control ardt_input\" style=\"width:"+ Width + "px\" placeholder=\"" + PlaceHolder + "\">");
-            oSB.AppendLine("<input type=\"hidden\" id=\"hdn" + Id + "\" ng-model=\"" + NgModel + "\" class=\"ardt_input\">");
+            oSB.AppendLine("<input type=\"text\" id=\"" + Id + "\" class=\"form-control ardt_input\" value=\"" + SeciliText + "\" style=\"width:" + Width + "px\" placeholder=\"" + PlaceHolder + "\">");
+            oSB.AppendLine("<input type=\"hidden\" id=\"hdn" + Id + "\" value=\""+SeciliKey+"\" class=\"ardt_input\">");
             oSB.AppendLine("<div class=\"input-group-append\">");
             oSB.AppendLine("<button id=\"" + Id + "_VeriGetir\" class=\"btn btn-gri\" type=\"button\">");
             oSB.AppendLine("<i class=\"fa fa-search\"></i>");

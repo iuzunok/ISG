@@ -10,7 +10,7 @@
 <body>
     <div ng-app="ngaGenel" ng-controller="ngcGenel">
 
-        <div class="ArkaPlanGizleGoster" ng-show="ArkaPlaniAcikMi">
+        <div class="ArkaPlanGizleGoster modal-backdrop" ng-show="ArkaPlaniAcikMi">
             <div class="progress ArkaPlanProgress" style="width:400px; height:50px">
                 <div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" style="width: 100%;">
                     <span style="font-size:20px">
@@ -20,7 +20,9 @@
             </div>
         </div>
 
-        @RenderBody()
+        <div style="padding-top:5px; padding-left:5px; padding-right:5px;">
+            @RenderBody()
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -30,8 +32,8 @@
     @Scripts.Render("~/bundles/JS/Excel")
     @Scripts.Render("~/bundles/Scripts/pdfmake")
 
-    @Scripts.Render("~/ClientSide/AngularVeriGetir")
     @Scripts.Render("~/bundles/JS/Genel")
+    @Scripts.Render("~/JSNG/Genel/App")
 
     @RenderSection("scripts", required: false)
 

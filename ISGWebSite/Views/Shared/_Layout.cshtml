@@ -10,7 +10,7 @@
 <body>
     <div ng-app="ngaGenel" ng-controller="ngcGenel">
 
-        <div class="ArkaPlanGizleGoster" ng-show="ArkaPlaniAcikMi">
+        <div class="ArkaPlanGizleGoster modal-backdrop" ng-show="ArkaPlaniAcikMi">
             <div class="progress ArkaPlanProgress" style="width:400px; height:50px">
                 <div class="progress-bar progress-bar-striped active progress-bar-animated" role="progressbar" style="width: 100%;">
                     <span style="font-size:20px">
@@ -24,7 +24,7 @@
 
             <nav class="navbar navbar-expand-sm navbar-light bg-light EnUstBaslik">
                 <div>
-                    <span class="fa fa-user" style="padding-right:10px"></span>@(Session["OpKullaniciAd"].ToString() + " " + Session["OpKullaniciSoyad"].ToString())
+                    <span class="fa fa-user" style="padding-right:10px"></span>@(ISGWebSite.AppCode.ArgemSession.OpKullaniciAd + " " + ISGWebSite.AppCode.ArgemSession.OpKullaniciSoyad)
                     (Satınalma Şb Md)
                 </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,12 +139,20 @@
             <br />
             <br />
             <footer>
+                <div class="row">
+                    <div class="col-6">
+                        <p>&copy; @DateTime.Now.Year - Argem Yazılım ve Danışmanlık Ticaret Ltd.Şti</p>
+                    </div>
+                    <div class="col-6 text-right">
+                        <span class="ServerCalismaSure">{{SCS}}</span> |
+                        <span class="ClientCalismaSure">{{CCS}}</span>
+                    </div>
+                </div>
                 <div style="padding-left:20px; padding-right:20px">
-                    <p>&copy; @DateTime.Now.Year - Argem Yazılım ve Danışmanlık Ticaret Ltd.Şti</p>
                 </div>
             </footer>
         </div>
-
+        
     </div>
 
     @Scripts.Render("~/bundles/jquery")
@@ -155,6 +163,8 @@
     @Scripts.Render("~/bundles/Scripts/pdfmake")
 
     @Scripts.Render("~/bundles/JS/Genel")
+
+    @Scripts.Render("~/JSNG/Genel/App")
 
     @RenderSection("scripts", required: false)
 

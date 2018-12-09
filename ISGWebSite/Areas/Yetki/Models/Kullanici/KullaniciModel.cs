@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using static ISGWebSite.Areas.Yetki.Models.Kullanici.LookModel;
 
 namespace ISGWebSite.Models.Yetki.Kullanici
 {
@@ -46,7 +44,6 @@ namespace ISGWebSite.Models.Yetki.Kullanici
         public string AktifPasifTipNoUzunAd { get; set; }
     }
 
-   
     public class KullaniciLoginModel
     {
         [Required]
@@ -62,7 +59,6 @@ namespace ISGWebSite.Models.Yetki.Kullanici
         public bool KullaniciAdimiHatirla { get; set; }
     }
 
-
     public class KullaniciYetkiGrupModel
     {
         public int KullaniciYetkiGrupKey { get; set; }
@@ -73,7 +69,9 @@ namespace ISGWebSite.Models.Yetki.Kullanici
 
     public class KullaniciYetkiGrupAraModel : KullaniciYetkiGrupModel
     {
-        public int TeskilatUzunAd { get; set; }
+        public string YetkiGrupAd { get; set; }
+
+        public string TeskilatUzunAd { get; set; }
     }
 
 }

@@ -1,45 +1,71 @@
 ﻿'use strict';
-var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
+appGenel
     .controller('ngcGenel', function ()
     {
     })
 
-    .controller('ngcKullaniciAra', function ($scope, KullaniciService)
+    .controller('ngcKullaniciAra', function ($scope, $window, GenelService, KullaniciService)
     {
+        $scope.$on('ngRepeatFinished', function (ngRepeatFinishedEvent)
+        {
+            $scope.$parent.$parent.CCS = Math.round(performance.now() - $scope.BasTime);
+            // sayfada başka gridler yoksa bursı olmalı aşağısı olmamalı
+            $scope.$parent.ArkaPlaniAcikMi = false;
+        });
+
         $scope.$parent.ArkaPlaniAcikMi = true;
+        $scope.SayfaKayitAdet = 50;
         $scope.KullaniciModel = {
             // alan dolu gelmesi için
-            // KullaniciAd: 'i'
+            // KullaniciAd: 'i',
+            AktifPasifTipNo: 101,
+
+            ToplamKayitAdet: 0,
+            SayfaKayitAdet: 50,
+            AktifSayfaNo: 1,
+            SiraTip: false,
+            SiraAlan: 'Ad,Soyad'
         };
-        $scope.oKullaniciAraModel = {};
-        $scope.oKullaniciAraModelPage = [];
+        $scope.KullaniciModelSonuc = {};
 
-        $scope.Sirala = function (SiraAlan)
+        $scope.Sirala = function (SiralamaAlan)
         {
-            $scope.SiralamaAlan = SiraAlan;
-            $scope.TersSira = !$scope.TersSira;
+            // debugger;
+            $scope.KullaniciModel.SiraAlan = SiralamaAlan;
+            $scope.KullaniciModel.SiraTip = !$scope.KullaniciModel.SiraTip;
 
-            $scope.oKullaniciAraModel.sort(function (a, b)
+            // birden fazla sayfa var ise vt sıralı çek
+            if ($scope.KullaniciModel.ToplamKayitAdet > $scope.KullaniciModel.SayfaKayitAdet)
+                $scope.KullaniciAramaYap('O', 1); // order
+            else // tek sayfa ise dom da sırala
             {
-                if ($scope.TersSira)
-                    return b[SiraAlan].localeCompare(a[SiraAlan]);
-                else
-                    return a[SiraAlan].localeCompare(b[SiraAlan]);
-            });
-
-            Sayfala($scope, true);
+                $scope.KullaniciModelSonuc.sort(function (a, b)
+                {
+                    if ($scope.KullaniciModel.SiraTip)
+                        return b[SiralamaAlan].localeCompare(a[SiralamaAlan]);
+                    else
+                        return a[SiralamaAlan].localeCompare(b[SiralamaAlan]);
+                });
+            }
         };
 
         $scope.SayfalamaDegisti = function ()
         {
-            // console.log('sayfa:' + $scope.AktifSayfaNo);
-            Sayfala($scope, true);
+            $scope.KullaniciAramaYap('P', $scope.KullaniciModel.AktifSayfaNo); // paging
         };
 
-        $scope.KullaniciAra = function ()
+        $scope.SayfaKayitAdetDegisti = function ()
+        {
+            $scope.KullaniciModel.SayfaKayitAdet = $scope.SayfaKayitAdet;
+            $scope.KullaniciAramaYap('R', 1); // page sayfa kayıt sayısı
+        };
+
+        $scope.KullaniciAramaYap = function (Durum, AktifSayfaNo)
         {
             $scope.$parent.ArkaPlaniAcikMi = true;
-            KullaniciService.KullaniciAra($scope, function (data)
+            $scope.BasTime = performance.now();
+
+            KullaniciService.SrcKullaniciAra($scope, function (data)
             {
                 if (data != null)
                 {
@@ -47,31 +73,42 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                     {
                         $scope.HataVar = false;
                         $scope.HataAciklama = '';
-                        $scope.oKullaniciAraModel = data.Data;
-                        $scope.ToplamKayitAdet = $scope.oKullaniciAraModel.length;
-                        $scope.AktifSayfaNo = 1;
-                        $scope.SayfaKayitAdet = 50;
-                        Sayfala($scope, true);
-                        /*$scope.$watch('AktifSayfaNo + itemsPerPage', function ()
-                        {
-                            Sayfala(true);
-                        });*/
+                        $scope.$parent.SCS = data.SCS;
+
+                        $scope.KullaniciModelSonuc = data.Data;
+                        $scope.KullaniciModel.ToplamKayitAdet = data.ToplamKayitAdet;
+                        $scope.KullaniciModel.AktifSayfaNo = AktifSayfaNo;
+                        if (Durum == 'B' || Durum == 'R')
+                            $scope.KullaniciModel.SiraAlan = '';
+                    }
+                    else if (data.Durum == 'E')
+                    {
+                        $scope.HataVar = true;
+                        $scope.HataAciklama = data.Aciklama;
+                        $('#divSysError').removeClass('alert-info').addClass('alert-danger');
+                        $scope.KullaniciModelSonuc = null;
+                        $scope.$parent.ArkaPlaniAcikMi = false;
                     }
                     else
                     {
                         $scope.HataVar = true;
                         $scope.HataAciklama = data.Aciklama;
-                        $scope.oKullaniciAraModelPage = null;
+                        $scope.KullaniciModelSonuc = null;
+                        $scope.$parent.ArkaPlaniAcikMi = false;
+
+                        $scope.$parent.SCS = data.SCS;
+                        $scope.BitTime = performance.now();
+                        $scope.$parent.CCS = Math.round($scope.BitTime - $scope.BasTime);
                     }
                 }
                 else
                 {
-                    $scope.oKullaniciAraModelPage = null;
                     $scope.HataVar = true;
                     $scope.HataAciklama = 'Sistem hatası. data=null';
                 }
 
-                $scope.$parent.ArkaPlaniAcikMi = false;
+                // sayfada başka gridler olursa bursı olmalı yukarısı olmamalı
+                // $scope.$parent.ArkaPlaniAcikMi = false;
             });
         };
 
@@ -172,6 +209,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
         $scope.ExportPDF = function ()
         {
             // $scope.$parent.ArkaPlaniAcikMi = true;
+            $('.fa-file-pdf-o').addClass('fa-refresh fa-spin').removeClass('fa-file-pdf-o');
 
             var docDefinition = {
                 defaultStyle: { fontSize: 10 },
@@ -193,41 +231,63 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 }
             };
 
-            $scope.oKullaniciAraModel.forEach(function (Veri, index)
+            $scope.KullaniciModelSonuc.forEach(function (Veri, index)
             {
                 docDefinition.content[0].table.body.push([String(index + 1), Veri.KullaniciAd, Veri.Ad, Veri.Soyad, Veri.KullaniciTipNoUzunAd + "", Veri.AktifPasifTipNoUzunAd + ""]);
             });
 
-            // debugger;
-            // pdfMake.createPdf(docDefinition).download('Kullanici.pdf', function () { $scope.$parent.ArkaPlaniAcikMi = false; });
-            pdfMake.createPdf(docDefinition).download('Kullanici.pdf');
+            pdfMake.createPdf(docDefinition).download('Kullanici.pdf', function ()
+            {
+                $('.fa-refresh').addClass('fa-file-pdf-o').removeClass('fa-refresh fa-spin');
+            });
+            // pdfMake.createPdf(docDefinition).download('Kullanici.pdf');
         };
 
         $scope.ExportExcel = function ()
         {
-            Sayfala($scope, false);
-            $scope.$apply();
+            // $scope.KullaniciModelSonuc = GenelService.Sayfala($scope, false, $scope.KullaniciModelSonuc, $scope.KullaniciModelSonucPage);
+            // $scope.$apply();
             var tblSonuc = document.getElementById('tblSonuc');
             var wb = XLSX.utils.table_to_book(tblSonuc, { sheet: "Sayfa1" });
-            XLSX.writeFile(wb, 'Sonuc.xlsx');
-            Sayfala($scope, true);
 
-            // direk $scope çalışıyor fakat kolon adları düzgün gelmiyor ve sıralama da yok
-            var ws = XLSX.utils.json_to_sheet($scope.oKullaniciAraModel);
+            XLSX.writeFile(wb, 'Sonuc.xlsx', function (err)
+            {
+                debugger;
+                if (!err) return alert("Saved to " + filename);
+                alert("Error: " + (err.message || err));
+            });
+
+            /*XLSX.writeFile(wb, 'Sonuc.xlsx',
+
+                function (err)
+                {
+                    debugger;
+                    if (!err)
+                        return alert("Saved to " + filename);
+                    else
+                        alert("Error: " + (err.message || err));
+                }
+            );*/
+            // Sayfala($scope, true);
+            // $scope.KullaniciModelSonuc = GenelService.Sayfala($scope, true, $scope.KullaniciModelSonuc, $scope.KullaniciModelSonuc);
+
+            /*// direk $scope çalışıyor fakat kolon adları düzgün gelmiyor ve sıralama da yok
+            var ws = XLSX.utils.json_to_sheet($scope.KullaniciModelSonuc);
             var wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Kullanıcı");
-            XLSX.writeFile(wb, 'Sonuc.xlsx');
+            XLSX.writeFile(wb, 'Sonuc.xlsx');*/
         };
 
         var KullaniciTipNoGeldi = false;
         var AktifPasifTipNoGeldi = false;
 
-        KullaniciService.KullaniciLookGetir('Yetki', 'AktifPasifTipNo', function (data)
+        KullaniciService.SrcKullaniciLookGetir('Yetki', 'AktifPasifTipNo', function (data)
         {
             data.unshift({ LookNo: 0, UzunAd: 'Seçiniz...' });
             $scope.KullaniciModel.AktifPasifTipNoNolar = data;
-            $scope.KullaniciModel.AktifPasifTipNo = data[0].LookNo; // seçiniz seçili gelsin diye
+            // $scope.KullaniciModel.AktifPasifTipNo = data[0].LookNo; // seçiniz seçili gelsin diye
 
+            console.log('Yetki AktifPasifTipNo geldi');
             AktifPasifTipNoGeldi = true;
             if (KullaniciTipNoGeldi && AktifPasifTipNoGeldi)
             {
@@ -235,12 +295,13 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
             }
         });
 
-        KullaniciService.KullaniciLookGetir('Yetki', 'KullaniciTipNo', function (data)
+        KullaniciService.SrcKullaniciLookGetir('Yetki', 'KullaniciTipNo', function (data)
         {
             data.unshift({ LookNo: 0, UzunAd: 'Seçiniz...' });
             $scope.KullaniciModel.KullaniciTipNolar = data;
             $scope.KullaniciModel.KullaniciTipNo = data[0].LookNo; // seçiniz seçili gelsin diye
 
+            console.log('Yetki KullaniciTipNo geldi');
             KullaniciTipNoGeldi = true;
             if (KullaniciTipNoGeldi && AktifPasifTipNoGeldi)
             {
@@ -249,11 +310,12 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
         });
 
         // sayfa ilk açıldığında otomotik yüklensin diye
-        $scope.KullaniciAra();
+        $scope.KullaniciAramaYap('B', 1);
     })
 
     .controller('ngcKullaniciKayit', function ($scope, KullaniciService)
     {
+        // debugger;
         $scope.$parent.ArkaPlaniAcikMi = true;
         $scope.KullaniciModel = {};
 
@@ -267,9 +329,8 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
 
         // if (Key > 0) // yeni kayıtsa veri çekmeye gerek yok. seçili alanlar yüklü gelsin diye gerek var
         // {
-        KullaniciService.KullaniciGetir(Key, function (data)
+        KullaniciService.SrcKullaniciGetir(Key, function (data)
         {
-            // $scope.$parent.ArkaPlaniAcikMi = false;
             if (data != null)
             {
                 if (data.Durum == '')
@@ -292,15 +353,14 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 // alert('Sistem hatası: data=null');
             }
         });
-        // }
-        //else
-        //   $scope.$parent.ArkaPlaniAcikMi = false;
 
         var KullaniciTipNoGeldi = false;
         var AktifPasifTipNoGeldi = false;
-        KullaniciService.KullaniciLookGetir('Yetki', 'KullaniciTipNo', function (data)
+        KullaniciService.SrcKullaniciLookGetir('Yetki', 'KullaniciTipNo', function (data)
         {
-            console.log('KullaniciLookGetir Yetki KullaniciTipNo sonuç geldi');
+            // debugger;
+            console.log('Yetki KullaniciTipNo:');
+            // console.log(data);
             data.unshift({ LookNo: 0, UzunAd: 'Seçiniz...' });
             $scope.KullaniciModel.KullaniciTipNolar = data;
 
@@ -309,9 +369,11 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 $scope.$parent.ArkaPlaniAcikMi = false;
         });
 
-        KullaniciService.KullaniciLookGetir('Yetki', 'AktifPasifTipNo', function (data)
+        KullaniciService.SrcKullaniciLookGetir('Yetki', 'AktifPasifTipNo', function (data)
         {
-            console.log('KullaniciLookGetir Yetki AktifPasifTipNo sonuç geldi');
+            // debugger;
+            console.log('Yetki AktifPasifTipNo:');
+            // console.log(data);
             data.unshift({ LookNo: 0, UzunAd: 'Seçiniz...' });
             $scope.KullaniciModel.AktifPasifTipNoNolar = data;
 
@@ -332,7 +394,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
             $scope.HataAciklama = '';
 
             $scope.$parent.ArkaPlaniAcikMi = true;
-            KullaniciService.KullaniciKaydet($scope, Key, function (data)
+            KullaniciService.SrcKullaniciKaydet($scope, Key, function (data)
             {
                 if (data.Durum)
                     parent.KayitGuncellendi(Key, data.Model);
@@ -352,7 +414,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
         $scope.RCSil = function (Key)
         {
             $scope.$parent.ArkaPlaniAcikMi = true;
-            KullaniciService.KullaniciSil($scope, Key, function (data)
+            KullaniciService.SrcKullaniciSil($scope, Key, function (data)
             {
                 if (data.Durum)
                     parent.KayitSilindi(Key);
@@ -371,7 +433,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
     {
         var fac = {};
 
-        fac.KullaniciGetir = function (Key, CallBack)
+        fac.SrcKullaniciGetir = function (Key, CallBack)
         {
             $http.post("/Yetki/Kullanici/KullaniciGetir", { KullaniciKey: Key })
                 .then(function (response)
@@ -388,7 +450,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 });
         };
 
-        fac.KullaniciAra = function ($scope, CallBack)
+        fac.SrcKullaniciAra = function ($scope, CallBack)
         {
             $http.post("/Yetki/Kullanici/KullaniciAraSonuc", $scope.KullaniciModel)
                 .then(function (response)
@@ -399,13 +461,13 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 })
                 .catch(function (response)
                 {
-                    console.log('ara hata: ' + response.data);
-                    // alert("Hata : " + response.data);
-                    CallBack(null);
+                    console.log('ara hata: ');
+                    console.log(response.data);
+                    CallBack(response.data);
                 });
         };
 
-        fac.KullaniciSil = function ($scope, Key, CallBack)
+        fac.SrcKullaniciSil = function ($scope, Key, CallBack)
         {
             if (confirm("Kullanıcı kaydını silmek istediğinize emin misiniz?"))
             {
@@ -414,6 +476,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 $http.get("/Yetki/Kullanici/KullaniciSil?Key=" + Key)
                     .then(function (response)
                     {
+                        // debugger;
                         $scope.ArkaPlaniAcikMi = false;
                         console.log('sil sonucu success...');
                         if (response.data.Durum == '')
@@ -428,6 +491,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                     .catch(function (response)
                     {
                         debugger;
+                        // debugger;
                         console.log('sil error...' + response.message);
                         $scope.ArkaPlaniAcikMi = false;
                         CallBack({ Durum: false, Key: Key, Sonuc: response.message });
@@ -437,7 +501,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 CallBack({ Durum: false, Key: Key, Sonuc: 'Iptal' });
         };
 
-        fac.KullaniciKaydet = function ($scope, Key, CallBack)
+        fac.SrcKullaniciKaydet = function ($scope, Key, CallBack)
         {
             if (confirm("Kullanıcı kaydını güncellemek istediğinize emin misiniz?"))
             {
@@ -466,7 +530,7 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
                 CallBack({ Durum: false, Key: Key, Sonuc: 'Iptal', Model: null });
         };
 
-        fac.KullaniciLookGetir = function (TabloAd, AlanAd, CallBack)
+        fac.SrcKullaniciLookGetir = function (TabloAd, AlanAd, CallBack)
         {
             var Parametre = { TabloAd: TabloAd, AlanAd: AlanAd };
             $http.get("/Yetki/Look/LookGetir", { params: Parametre })
@@ -484,17 +548,17 @@ var appGenel = angular.module('ngaGenel', ['ui.bootstrap'])
         return fac;
     }]);
 
-var Sayfala = function ($scope, SayfaYap)
-{
-    if (SayfaYap)
-    {
-        var begin = (($scope.AktifSayfaNo - 1) * $scope.SayfaKayitAdet);
-        var end = begin + $scope.SayfaKayitAdet;
-        $scope.oKullaniciAraModelPage = $scope.oKullaniciAraModel.slice(begin, end);
-    }
-    else
-        $scope.oKullaniciAraModelPage = $scope.oKullaniciAraModel;
-};
+//var Sayfala = function ($scope, SayfaYap)
+//{
+//    if (SayfaYap)
+//    {
+//        var begin = (($scope.AktifSayfaNo - 1) * $scope.SayfaKayitAdet);
+//        var end = begin + $scope.SayfaKayitAdet;
+//        $scope.oKullaniciAraModelPage = $scope.oKullaniciAraModel.slice(begin, end);
+//    }
+//    else
+//        $scope.oKullaniciAraModelPage = $scope.oKullaniciAraModel;
+//};
 
 var KayitGuncellendi = function (Key, Model)
 {
@@ -502,9 +566,9 @@ var KayitGuncellendi = function (Key, Model)
 
     // arama listesinide güncelle
     var ix = -1;
-    for (var i = 0; i < $scope.oKullaniciAraModel.length; i++)
+    for (var i = 0; i < $scope.KullaniciModelSonuc.length; i++)
     {
-        if ($scope.oKullaniciAraModel[i].KullaniciKey == Key)
+        if ($scope.KullaniciModelSonuc[i].KullaniciKey == Key)
         {
             ix = i;
             break;
@@ -512,11 +576,11 @@ var KayitGuncellendi = function (Key, Model)
     }
     if (ix > -1)
     {
-        $scope.oKullaniciAraModel[ix].KullaniciAd = Model.KullaniciAd;
-        $scope.oKullaniciAraModel[ix].Ad = Model.Ad;
-        $scope.oKullaniciAraModel[ix].Soyad = Model.Soyad;
-        $scope.oKullaniciAraModel[ix].KullaniciTipNo = Model.KullaniciTipNo;
-        $scope.oKullaniciAraModel[ix].AktifPasifTipNo = Model.AktifPasifTipNo;
+        $scope.KullaniciModelSonuc[ix].KullaniciAd = Model.KullaniciAd;
+        $scope.KullaniciModelSonuc[ix].Ad = Model.Ad;
+        $scope.KullaniciModelSonuc[ix].Soyad = Model.Soyad;
+        $scope.KullaniciModelSonuc[ix].KullaniciTipNo = Model.KullaniciTipNo;
+        $scope.KullaniciModelSonuc[ix].AktifPasifTipNo = Model.AktifPasifTipNo;
     }
     $scope.$apply();
 
@@ -525,14 +589,14 @@ var KayitGuncellendi = function (Key, Model)
 
 var KayitSilindi = function (Key)
 {
-    //    debugger;
+    debugger;
     var $scope = GetScope('ngcKullaniciAra');
 
     // arama sonucu listesinden de sil
     var ix = -1;
-    for (var i = 0; i < $scope.oKullaniciAraModel.length; i++)
+    for (var i = 0; i < $scope.KullaniciModelSonuc.length; i++)
     {
-        if ($scope.oKullaniciAraModel[i].KullaniciKey == Key)
+        if ($scope.KullaniciModelSonuc[i].KullaniciKey == Key)
         {
             ix = i;
             break;
@@ -540,14 +604,15 @@ var KayitSilindi = function (Key)
     }
     if (ix > -1)
     {
-        $scope.oKullaniciAraModel.splice(ix, 1);
-        $scope.ToplamKayitAdet--;
+        $scope.KullaniciModelSonuc.splice(ix, 1);
+        $scope.KullaniciModel.ToplamKayitAdet--;
 
-        if ($scope.oKullaniciAraModelPage.length == 1 && $scope.AktifSayfaNo > 1) // sayfadaki son kayıt ise önceki sayfa varsa ona git
-            $scope.AktifSayfaNo--;
+        // if ($scope.KullaniciModelSonuc.length == 1 && $scope.AktifSayfaNo > 1) // sayfadaki son kayıt ise önceki sayfa varsa ona git
+        // $scope.AktifSayfaNo--;
 
-        Sayfala($scope, true);
-        $scope.$apply();
+        // Sayfala($scope, true);
+        // $scope.KullaniciModelSonuc = GenelService.Sayfala($scope, true, $scope.KullaniciModelSonuc, $scope.KullaniciModelSonuc);
+        // $scope.$apply();
     }
     ArgemModalPopUpKapat();
 };

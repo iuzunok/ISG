@@ -55,7 +55,7 @@
                     </tr>
                     <tr ng-repeat="KM in oYetkiGrupAraModelPage|orderBy:SiralamaAlan:TersSira" class="AramaSonucAlternate"
                         ng-class="$index % 2 == 0 ? 'AramaSonucTek' : 'AramaSonucCift'">
-                        <td>{{$index+1}}</td>
+                        <td>{{((AktifSayfaNo-1)*SayfaKayitAdet)+$index+1}}</td>
                         <td>{{KM.YetkiGrupAd}}</td>
                         <td>
                             <img src="~/Resim/Ortak/Guncelle.png" ng-click="RCGu(KM.YetkiGrupKey)" />

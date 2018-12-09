@@ -23,7 +23,8 @@ var ngAppLogin = angular.module('ngaLogin', [])
             $scope.HataAciklama = '';
 
             $scope.GirisButonKapat = true;
-
+            $('.fa-sign-in').addClass('fa-refresh fa-spin').removeClass('fa-sign-in');
+            
             $http({
                 method: 'Post',
                 url: '/Yetki/Login/SistemeGirisYap',
@@ -39,6 +40,7 @@ var ngAppLogin = angular.module('ngaLogin', [])
                         $scope.GirisButonKapat = false;
                         $scope.HataVar = true;
                         $scope.HataAciklama = response.data.Aciklama;
+                        $('.fa-refresh').addClass('fa-sign-in').removeClass('fa-refresh fa-spin');
                     }
                 })
                 .catch(function (response)
@@ -48,6 +50,7 @@ var ngAppLogin = angular.module('ngaLogin', [])
                     $scope.GirisButonKapat = false;
                     $scope.HataVar = true;
                     $scope.HataAciklama = response.data;
+                    $('.fa-refresh').addClass('fa-sign-in').removeClass('fa-refresh fa-spin');
                 });
         };
     });

@@ -5,7 +5,8 @@
 
 <div ng-controller="ngcKullaniciAra">
 
-    <div ng-show="HataVar" class="alert alert-info ng-hide">
+    <div ng-show="HataVar" id="divSysError" class="alert alert-info ng-hide alert-dismissable flyover flyover-centered">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
         {{HataAciklama}}
     </div>
 
@@ -19,7 +20,7 @@
             </div>
         </div>
         <div class="card-body PaddingAz">
-            <form id="frmKullaniciAra" name="frmKullaniciAra" ng-submit="KullaniciAra()">
+            <form id="frmKullaniciAra" name="frmKullaniciAra" ng-submit="KullaniciAramaYap('B', 1)">
                 <table class="table table-borderless table-sm MarginBottomYok">
                     <tbody>
                         <tr>
@@ -69,7 +70,7 @@
         </div>
     </div>
 
-    <div class="card" ng-show="oKullaniciAraModelPage.length">
+    <div class="card" ng-show="KullaniciModelSonuc.length">
         <div class="row">
             <div class="col-12">
                 <table id="tblSonuc" ng-cloak class="table table-bordered table-sm AramaSonuc">
@@ -78,32 +79,32 @@
                         <th style="width:50px">S.No</th>
                         <th ng-click="Sirala('KullaniciAd')" style="cursor: pointer;">
                             Kullanıcı Adı
-                            <span class="fa" ng-show="SiralamaAlan=='KullaniciAd'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                            <span class="fa" ng-show="KullaniciModel.SiraAlan=='KullaniciAd'" ng-class="{'fa-chevron-up':KullaniciModel.SiraTip,'fa-chevron-down':!KullaniciModel.SiraTip}"></span>
                         </th>
                         <th ng-click="Sirala('Ad')" style="cursor: pointer;">
                             Adı
-                            <span class="fa" ng-show="SiralamaAlan=='Ad'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                            <span class="fa" ng-show="KullaniciModel.SiraAlan=='Ad'" ng-class="{'fa-chevron-up':KullaniciModel.SiraTip,'fa-chevron-down':!KullaniciModel.SiraTip}"></span>
                         </th>
                         <th ng-click="Sirala('Soyad')" style="cursor: pointer;">
                             Soyadı
-                            <span class="fa" ng-show="SiralamaAlan=='Soyad'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                            <span class="fa" ng-show="KullaniciModel.SiraAlan=='Soyad'" ng-class="{'fa-chevron-up':KullaniciModel.SiraTip,'fa-chevron-down':!KullaniciModel.SiraTip}"></span>
                         </th>
-                        <th ng-click="Sirala('KullaniciTipNoUzunAd')" style="cursor: pointer;">
+                        <th ng-click="Sirala('KullaniciTipNo')" style="cursor: pointer;">
                             Tipi
-                            <span class="fa" ng-show="SiralamaAlan=='KullaniciTipNoUzunAd'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                            <span class="fa" ng-show="KullaniciModel.SiraAlan=='KullaniciTipNo'" ng-class="{'fa-chevron-up':KullaniciModel.SiraTip,'fa-chevron-down':!KullaniciModel.SiraTip}"></span>
                         </th>
-                        <th ng-click="Sirala('AktifPasifTipNoUzunAd')" style="cursor: pointer;">
+                        <th ng-click="Sirala('AktifPasifTipNo')" style="cursor: pointer;">
                             Durumu
-                            <span class="fa" ng-show="SiralamaAlan=='AktifPasifTipNoUzunAd'" ng-class="{'fa-chevron-up':TersSira,'fa-chevron-down':!TersSira}"></span>
+                            <span class="fa" ng-show="KullaniciModel.SiraAlan=='AktifPasifTipNo'" ng-class="{'fa-chevron-up':KullaniciModel.SiraTip,'fa-chevron-down':!KullaniciModel.SiraTip}"></span>
                         </th>
                         <th style="width:120px"></th>
                     </tr>
-                    <tr ng-repeat="KM in oKullaniciAraModelPage|orderBy:SiralamaAlan:TersSira"
-                        ng-class="$index % 2 == 0 ? 'AramaSonucTek' : 'AramaSonucCift'">
+                    <tr ng-repeat="KM in KullaniciModelSonuc|orderBy:SiralamaAlan:TersSira"
+                        ng-class="$index % 2 == 0 ? 'AramaSonucTek' : 'AramaSonucCift'" on-finish-render="ngRepeatFinished">
                         <td>
                             <span class="fa fa-plus-square fa-fs22 fa-fcTu" ng-click="RCDet($event, KM.KullaniciKey)"></span>
                         </td>
-                        <td>{{$index+1}}</td>
+                        <td>{{((KullaniciModel.AktifSayfaNo-1)*KullaniciModel.SayfaKayitAdet)+$index+1}}</td>
                         <td>{{KM.KullaniciAd}}</td>
                         <td>{{KM.Ad}}</td>
                         <td>{{KM.Soyad}}</td>
@@ -121,17 +122,29 @@
         </div>
 
         <div class="row">
-            <div class="col-4">
+            <div class="col-3">
                 <div style="padding-left:10px; margin-top:5px">
-                    {{oKullaniciAraModelPage.length}} / {{ToplamKayitAdet}}
+                    {{KullaniciModelSonuc.length}} / {{KullaniciModel.ToplamKayitAdet}}
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-3">
+                <select class="form-control" ng-model="SayfaKayitAdet"
+                        ng-change="SayfaKayitAdetDegisti($event.target.value)"
+                        style="width:100px">
+                    <option value="50" selected="selected">50</option>
+                    <option value="100">100</option>
+                    <option value="250">250</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                    <option value="0">Tümü</option>
+                </select>
+            </div>
+            <div class="col-3">
                 <ul uib-pagination
-                    ng-model="AktifSayfaNo"
+                    ng-model="KullaniciModel.AktifSayfaNo"
                     ng-change="SayfalamaDegisti()"
-                    total-items="ToplamKayitAdet"
-                    items-per-page="SayfaKayitAdet"
+                    total-items="KullaniciModel.ToplamKayitAdet"
+                    items-per-page="KullaniciModel.SayfaKayitAdet"
                     max-size="10"
                     class="pagination"
                     boundary-links="true"
@@ -140,11 +153,15 @@
                     first-text="&laquo;"
                     last-text="&raquo;"></ul>
             </div>
-            <div class="col-4">
+            <div class="col-3">
                 <div class="float-right" style="padding-right:5px;margin-top:5px">
                     <div>
-                        <span class="fa fa-file-pdf-o fa-fs22" ng-click="ExportPDF()" style="color:#a90329;" aria-hidden="true"></span>
-                        <span class="fa fa-file-excel-o fa-fs22" ng-click="ExportExcel()" style="color:#a90329;" aria-hidden="true"></span>
+                        <button class="btn btn-primary btn-sm" ng-click="ExportPDF()">
+                            <span class="fa fa-file-pdf-o"></span><span style="padding-left:15px"></span>Pdf
+                        </button>
+                        <button class="btn btn-primary btn-sm" ng-click="ExportExcel()">
+                            <span class="fa fa-file-excel-o"></span><span style="padding-left:15px"></span>Excel
+                        </button>
                     </div>
                 </div>
             </div>
@@ -158,3 +175,5 @@
 @section Scripts {
     @Scripts.Render("~/JSNG/Yetki/Kullanici")
 }
+
+

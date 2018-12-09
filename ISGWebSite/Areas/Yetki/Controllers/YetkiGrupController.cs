@@ -1,5 +1,6 @@
 ﻿using Argem.DataServices;
 using ArgemUtil;
+using ISGWebSite.AppCode;
 using ISGWebSite.Areas.Yetki.Models.Kullanici;
 using ISGWebSite.Controllers;
 using ISGWebSite.Models;
@@ -44,7 +45,8 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                         oYetkiGrupModel = new YetkiGrupModel()
                         {
                             YetkiGrupKey = Convert.ToInt32(dr["YetkiGrupKey"]),
-                            YetkiGrupAd = dr["YetkiGrupAd"].ToString()
+                            YetkiGrupAd = dr["YetkiGrupAd"].ToString(),
+                            S = 0
                         };
                         aryYetkiGrupModel.Add(oYetkiGrupModel);
                     }
@@ -83,7 +85,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                     oSQL.CommandText =
                         "insert into public.\"YETKI_GRUP\" " +
                         "       (\"YetkiGrupAd\", \"UKullaniciKey\", \"UTar\") " +
-                        "values ('" + YetkiGrupAd + "'," + Session["OpKullaniciKey"] + ", current_timestamp) " +
+                        "values ('" + YetkiGrupAd + "'," + ArgemSession.OpKullaniciKey + ", current_timestamp) " +
                         "returning \"YetkiGrupKey\" ";
 
                     using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))
@@ -101,7 +103,7 @@ namespace ISGWebSite.Areas.Yetki.Controllers
                     oSQL.CommandText =
                         "update public.\"YETKI_GRUP\" " +
                         "set    \"YetkiGrupAd\" = '" + YetkiGrupAd + "', " +
-                        "       \"UKullaniciKey\" = " + Session["OpKullaniciKey"] + ", " +
+                        "       \"UKullaniciKey\" = " + ArgemSession.OpKullaniciKey + ", " +
                         "       \"UTar\" = current_timestamp ";
                     oSQL.Esit("YetkiGrupKey", YetkiGrupKey, KolonTipi.Int, true);
                     using (DBUtil2 oData = new DBUtil2(DataBaseTipi.Yetki))

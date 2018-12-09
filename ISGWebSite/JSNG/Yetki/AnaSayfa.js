@@ -1,5 +1,5 @@
 ﻿'use strict';
-var ngAppLogin = angular.module('ngaGenel', [])
+appGenel
     .controller('ngcGenel', function ()
     {
-    });
+    })
